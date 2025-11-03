@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import styles from "./Hero.module.css";
+import imgSapatilha from '../../assets/img/img_sapatilha_pricipal.jpg'
+``
 
 export default function Hero() {
   const typingRefs = useRef([]);
@@ -30,7 +32,7 @@ export default function Hero() {
           
           <div
             className={`${styles.lado} ${styles.active}`}
-            style={{ backgroundImage: "url('/img/img_sapatilha_pricipal.jpg')" }}
+            style={{ backgroundImage: `url(${imgSapatilha})` }}
           >
             <div className={styles.conteudo_lado}>
               <div
