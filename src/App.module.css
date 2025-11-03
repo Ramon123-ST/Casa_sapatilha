@@ -1,0 +1,69 @@
+.app {
+  font-family: 'Montserrat', sans-serif;
+  color: #222;
+}
+
+/* Carrinho flutuante */
+.carrinho_overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  pointer-events: none;
+  z-index: 90;
+}
+
+.carrinho_panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 300px;
+  height: 100%;
+  background: #fff;
+  box-shadow: -2px 0 10px rgba(0,0,0,0.3);
+  padding: 20px;
+  z-index: 100;
+  overflow-y: auto;
+}
+
+.carrinho_panel h3 {
+  margin-top: 0;
+}
+
+.carrinho_panel ul {
+  list-style: none;
+  padding: 0;
+}
+
+.carrinho_panel li {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.carrinho_panel button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: red;
+  font-size: 16px;
+}
+
+.carrinho_panel p {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.carrinho_panel button:last-child {
+  margin-top: 10px;
+  background: #e50914;
+  color: #fff;
+  border: none;
+  width: 100%;
+  padding: 10px;
+  cursor: pointer;
+}
+
+
