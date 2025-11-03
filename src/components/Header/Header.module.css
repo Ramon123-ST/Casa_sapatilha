@@ -1,11 +1,26 @@
+/* ==============================
+   CABEÇALHO FIXO - CASA DA SAPATILHA
+============================== */
+
 .header {
   width: 100%;
   background-color: #fff;
   border-bottom: 1px solid #eee;
   font-family: 'Arial', sans-serif;
+  position: fixed;      /* Fixa no topo */
+  top: 0;
+  left: 0;
+  z-index: 1000;        /* Fica acima de tudo */
 }
 
+/* Compensar altura do header fixo */
+body {
+  margin-top: 160px; /* ajuste se o header for mais alto */
+}
 
+/* ==============================
+   BARRA PROMOCIONAL
+============================== */
 .promo_topo {
   background-color: #800020;
   color: white;
@@ -21,14 +36,12 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
-  
 }
 
 .promo_esquerda {
   flex: 1;
   line-height: 1.4;
 }
-
 
 .texto_completo_animado {
   display: inline-block;
@@ -38,7 +51,6 @@
   white-space: nowrap;
   margin-left: -100px;
 }
-
 
 @keyframes pulseText {
   1%, 100% {
@@ -68,7 +80,9 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-
+/* ==============================
+   CABEÇALHO CENTRAL
+============================== */
 .contenedor_cmc {
   max-width: 1200px;
   margin: 0 auto;
@@ -131,6 +145,9 @@
   margin-left: 160px;
 }
 
+/* ==============================
+   NAVEGAÇÃO PRINCIPAL
+============================== */
 .navegacao {
   background-color: #f9f9f9;
   border-top: 1px solid #eee;
@@ -156,17 +173,15 @@
   text-decoration: none;
   font-weight: 600;
   font-size: 14px;
-  transition: all 0.3s ease; 
+  transition: all 0.3s ease;
   transform-origin: center bottom;
 }
 
-
 .navegacao a:hover {
   color: #800020;
-  transform: scale(1.10); 
+  transform: scale(1.10);
   font-weight: 700;
 }
-
 
 @media (hover: none) {
   .navegacao a:active {
@@ -175,8 +190,9 @@
   }
 }
 
-
-
+/* ==============================
+   RESPONSIVIDADE
+============================== */
 @media (max-width: 768px) {
   .contenedor,
   .contenedor_cmc,
@@ -213,6 +229,7 @@
 
   .busca {
     max-width: 100%;
+    margin-left: 0;
   }
 
   .navegacao ul {
