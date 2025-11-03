@@ -1,8 +1,9 @@
 import React from "react";
+import r1 from "/src/assets/img/sapatilha4.jpg";
 import styles from "./MaisProdutos.module.css";
 
 const maisProdutos = [
-  { name: "Sapatilha strass", price: 189.9, img: "img/OIP (6).webp" },
+  { name: "Sapatilha strass", price: 189.9, img: r1},
   { name: "Sapatilha hele", price: 129.9, img: "img/OIP (5).webp" },
   { name: "Sapatilha Casual couro", price: 149.9, img: "img/r2.webp" },
   { name: "Sapatilha bico fino", price: 199.9, img: "img/r3.jpg" },
