@@ -1,173 +1,303 @@
+/* ====================== SEÇÃO PRINCIPAL ====================== */
 .secao_achadinho {
-  background-color: #800020;
-  padding: 60px 20px;
+  background: linear-gradient(135deg, #800020 0%, #a00030 100%);
+  padding: 70px 20px;
   color: white;
   font-family: 'Arial', sans-serif;
-  margin-top: 15px;
-  border-radius: 20px;
+  margin: 20px auto;
+  border-radius: 28px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(128, 0, 32, 0.3);
+  z-index: 0;
 }
 
+/* Textura de fundo sutil (pontinhos) */
+.secao_achadinho::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="20" cy="20" r="1.5" fill="rgba(255,255,255,0.08)"/><circle cx="80" cy="80" r="1.5" fill="rgba(255,255,255,0.08)"/></svg>') repeat;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.6;
+}
+
+/* ====================== CONTAINER ====================== */
 .container {
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 40px;
+  gap: 60px;
   flex-wrap: wrap;
-  
+  position: relative;
+  z-index: 1;
 }
 
+/* ====================== TEXTO ====================== */
 .texto_container {
   flex: 1;
   min-width: 300px;
-  
+  animation: fadeInLeft 0.9s ease-out forwards;
 }
 
+/* Título com gradiente */
 .titulo {
-  font-size: 2.8rem;
+  font-size: clamp(2.3rem, 6.5vw, 3.2rem);
   font-weight: 900;
   line-height: 1.1;
-  margin: 0 0 1rem 0;
+  margin: 0 0 1.3rem 0;
   text-transform: uppercase;
+  letter-spacing: -1.2px;
+  background: linear-gradient(90deg, #ffffff, #ffcccc);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 }
 
 .subtitulo {
-  font-size: 1.1rem;
-  opacity: 0.9;
-  margin-bottom: 1.5rem;
+  font-size: 1.18rem;
+  opacity: 0.94;
+  margin-bottom: 1.9rem;
   font-weight: 400;
+  line-height: 1.65;
+  max-width: 500px;
 }
 
+/* ====================== BOTÃO VER ====================== */
 .botao_ver {
   display: inline-block;
-  background-color: #fff;
+  background: #ffffff;
   color: #800020;
-  padding: 12px 28px;
+  padding: 15px 36px;
   border-radius: 50px;
-  font-weight: bold;
-  font-size: 1rem;
+  font-weight: 800;
+  font-size: 1.08rem;
   text-decoration: none;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.25);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.botao_ver::before {
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 0; height: 0;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+  z-index: -1;
+}
+
+.botao_ver:hover::before {
+  width: 320px;
+  height: 320px;
 }
 
 .botao_ver:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-  background-color: #520115;
+  background: #520115;
   color: white;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
 }
 
+.botao_ver:focus-visible {
+  outline: 3px solid #ffcccc;
+  outline-offset: 3px;
+}
 
+/* ====================== CARTÃO ====================== */
 .cartao {
   position: relative;
-  background-color: white;
+  background: #ffffff;
   color: #333;
-  border-radius: 24px;
-  width: 320px;
+  border-radius: 32px;
+  width: 350px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease;
-  margin-right: -80px;
-  
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.2);
+  transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-right: -100px;
+  z-index: 2;
+  animation: fadeInRight 0.9s ease-out forwards;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
 }
 
 .cartao:hover {
-  transform: translateY(-8px);
-  
+  transform: translateY(-12px) rotateX(6deg) rotateY(-4deg);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.28);
+  border: 1px solid #f0e0e0;
 }
 
+/* ====================== DESCONTO (ANIMADO) ====================== */
 .desconto {
   position: absolute;
-  top: 16px;
-  right: 16px;
-  background-color: #e60000;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, #e60000, #ff1a1a);
   color: white;
-  font-weight: bold;
-  font-size: 0.9rem;
-  padding: 6px 12px;
+  font-weight: 900;
+  font-size: 1rem;
+  padding: 10px 18px;
   border-radius: 50px;
   z-index: 10;
+  box-shadow: 0 6px 16px rgba(230, 0, 0, 0.3);
+  animation: pulse 2s infinite;
+  letter-spacing: 0.5px;
 }
 
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+/* ====================== IMAGEM ====================== */
 .imagem {
   width: 100%;
-  height: 200px;
+  height: 220px;
   object-fit: cover;
+  transition: transform 0.6s ease;
+  background: #f8f8f8;
 }
 
+.cartao:hover .imagem {
+  transform: scale(1.07);
+}
+
+/* ====================== INFO ====================== */
 .info {
-  padding: 20px;
+  padding: 22px;
   text-align: left;
-  
 }
 
 .nome {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin: 0 0 8px 0;
-  color: #333;
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0 0 10px 0;
+  color: #222;
+  line-height: 1.35;
 }
 
 .preco_antigo {
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: #999;
   text-decoration: line-through;
-  margin: 0 0 4px 0;
+  margin: 0 0 6px 0;
+  font-weight: 500;
 }
 
 .preco_novo {
-  font-size: 1.5rem;
+  font-size: 1.65rem;
   font-weight: 900;
   color: #800020;
-  margin: 0 0 12px 0;
+  margin: 0 0 14px 0;
+  letter-spacing: -0.8px;
 }
 
+/* ====================== BOTÃO COMPRAR ====================== */
 .botao_comprar {
   display: block;
-  background-color: #fff;
+  background: transparent;
   color: #800020;
-  border: 2px solid #800020;
-  padding: 10px 20px;
+  border: 2.5px solid #800020;
+  padding: 12px 24px;
   border-radius: 50px;
-  font-weight: bold;
-  font-size: 0.95rem;
+  font-weight: 800;
+  font-size: 1rem;
   text-align: center;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: all 0.35s ease;
+  position: relative;
+  overflow: hidden;
 }
 
 .botao_comprar:hover {
-  background-color: #800020;
+  background: #800020;
   color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(128, 0, 32, 0.3);
 }
 
+.botao_comprar:focus-visible {
+  outline: 3px solid #ffcccc;
+  outline-offset: 2px;
+}
 
+/* ====================== ANIMAÇÕES DE ENTRADA ====================== */
+@keyframes fadeInLeft {
+  from { opacity: 0; transform: translateX(-40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* ====================== RESPONSIVO ====================== */
 @media (max-width: 992px) {
   .container {
     flex-direction: column;
     text-align: center;
+    gap: 40px;
   }
 
   .texto_container {
-    margin-bottom: 2rem;
+    margin-bottom: 0;
   }
 
   .cartao {
     width: 100%;
     max-width: 380px;
+    margin-right: 0;
+  }
+
+  .titulo {
+    text-align: center;
   }
 }
 
 @media (max-width: 576px) {
+  .secao_achadinho {
+    padding: 50px 15px;
+    margin: 15px auto;
+    border-radius: 20px;
+  }
+
   .titulo {
-    font-size: 2.2rem;
+    font-size: 2.1rem;
+  }
+
+  .subtitulo {
+    font-size: 1.05rem;
   }
 
   .botao_ver,
   .botao_comprar {
-    padding: 10px 22px;
+    padding: 12px 26px;
+    font-size: 0.95rem;
+  }
+
+  .cartao {
+    width: 100%;
+    max-width: 340px;
+  }
+
+  .imagem {
+    height: 180px;
+  }
+
+  .desconto {
+    top: 14px;
+    right: 14px;
+    padding: 7px 14px;
     font-size: 0.9rem;
   }
 }

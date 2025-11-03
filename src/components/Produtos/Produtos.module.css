@@ -1,73 +1,246 @@
+/* ====================== TÍTULO ====================== */
 .titulo_secao {
   text-align: center;
-  margin: 50px 0 30px;
-  font-size: 2rem;
-  font-weight: 700;
-  color: #2a2929;
+  margin: 60px 0 35px;
+  font-size: clamp(1.9rem, 5vw, 2.4rem);
+  font-weight: 800;
+  color: #1a1a1a;
+  letter-spacing: -0.5px;
+  position: relative;
 }
 
+.titulo_secao::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 4px;
+  background: #8b0000;
+  margin: 12px auto 0;
+  border-radius: 2px;
+}
+
+/* ====================== CONTAINER ====================== */
 .contenedor_produtos {
-  overflow-x: auto;
-  padding: 20px 0;
+  position: relative;
+  overflow: hidden;
+  padding: 25px 0;
+  mask-image: linear-gradient(90deg, transparent, white 10%, white 90%, transparent);
 }
 
+/* ====================== ROLAGEM ====================== */
 .rolagem_produtos {
   display: flex;
-  gap: 20px;
+  gap: 24px;
   padding: 0 5%;
+  scroll-snap-type: x mandatory;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
 
+.rolagem_produtos::-webkit-scrollbar {
+  display: none;
+}
+
+/* ====================== CARD ====================== */
 .produto {
-  flex: 0 0 auto;
-  width: 220px;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  overflow: hidden;
+  flex: 0 0 240px;
   background: #fff;
-  transition: transform 0.3s;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  scroll-snap-align: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.produto::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(135deg, rgba(139,0,0,0.02), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.produto:hover::before {
+  opacity: 1;
 }
 
 .produto:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e0e0e0;
 }
 
+/* ====================== IMAGEM ====================== */
 .produto img {
   width: 100%;
-  height: 200px;
+  height: 210px;
   object-fit: cover;
+  background: #f5f5f5;
+  transition: transform 0.5s ease;
 }
 
+.produto:hover img {
+  transform: scale(1.06);
+}
+
+/* Skeleton enquanto carrega */
+.produto img:not([src]),
+.produto img[src=""] {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.8s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ====================== INFO ====================== */
 .info_produto {
-  padding: 12px;
+  padding: 16px;
   text-align: center;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .info_produto h3 {
-  font-size: 1rem;
-  margin-bottom: 5px;
-  color: #333;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #222;
+  margin: 0;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .info_produto p {
   color: #8b0000;
-  font-weight: bold;
-  margin-bottom: 10px;
+  font-weight: 800;
+  font-size: 1.2rem;
+  margin: 4px 0 12px;
+  letter-spacing: -0.5px;
 }
 
+/* ====================== BOTÃO ====================== */
 .info_produto button {
   background: #8b0000;
-  color: #fff;
+  color: white;
   border: none;
-  padding: 10px 18px;
-  border-radius: 25px;
+  padding: 11px 20px;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 0.95rem;
   cursor: pointer;
-  font-weight: 600;
   transition: all 0.3s ease;
+  margin-top: auto;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(139, 0, 0, 0.25);
+}
+
+.info_produto button::after {
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 0; height: 0;
+  background: rgba(255,255,255,0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s, height 0.4s;
+}
+
+.info_produto button:active::after {
+  width: 200px;
+  height: 200px;
 }
 
 .info_produto button:hover {
-  background: #b30000;
-  transform: scale(1.05);
+  background: #a00000;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(139, 0, 0, 0.3);
 }
 
+.info_produto button:focus-visible {
+  outline: 3px solid #8b0000;
+  outline-offset: 2px;
+}
+
+/* ====================== SETAS DE NAVEGAÇÃO (OPCIONAL) ====================== */
+.navegacao_esquerda,
+.navegacao_direita {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #eee;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  backdrop-filter: blur(4px);
+}
+
+.navegacao_esquerda { left: 15px; }
+.navegacao_direita { right: 15px; }
+
+.navegacao_esquerda:hover,
+.navegacao_direita:hover {
+  background: #8b0000;
+  border-color: #8b0000;
+  color: white;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.navegacao_esquerda svg,
+.navegacao_direita svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ====================== RESPONSIVO ====================== */
+@media (max-width: 992px) {
+  .produto { flex: 0 0 200px; }
+  .produto img { height: 180px; }
+  .navegacao_esquerda { left: 10px; }
+  .navegacao_direita { right: 10px; }
+}
+
+@media (max-width: 768px) {
+  .rolagem_produtos { gap: 18px; padding: 0 4%; }
+  .produto { flex: 0 0 180px; }
+  .produto img { height: 160px; }
+  .info_produto h3 { font-size: 0.98rem; }
+  .info_produto button { padding: 10px 16px; font-size: 0.9rem; }
+  .navegacao_esquerda,
+  .navegacao_direita { width: 42px; height: 42px; }
+}
+
+@media (max-width: 480px) {
+  .titulo_secao { margin: 45px 0 25px; }
+  .produto { flex: 0 0 155px; }
+  .produto img { height: 140px; }
+  .info_produto { padding: 12px; }
+  .info_produto h3 { font-size: 0.9rem; }
+  .info_produto p { font-size: 1.1rem; }
+  .info_produto button { padding: 9px 14px; font-size: 0.85rem; }
+}
 
