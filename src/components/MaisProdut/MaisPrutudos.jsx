@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./MaisProdutos.module.css";
 
-// Importação com caminhos absolutos (funciona no Vite)
+// Imagens
 import r1 from "/src/assets/img/sapatilha4.jpg";
 import r2 from "/src/assets/img/OIP (5).webp";
 import r3 from "/src/assets/img/r2.webp";
@@ -24,7 +24,7 @@ const maisProdutos = [
 
 export default function MaisProdutos({ adicionarAoCarrinho }) {
   return (
-    <section id="lancamentos" aria-labelledby="titulo-mais-produtos">
+    <section id="lancamentos" aria-labelledby="titulo-mais-produtos" className={styles.secao}>
       <h2 id="titulo-mais-produtos" className={styles.titulo_secao}>
         Mais Produtos
       </h2>
@@ -38,11 +38,7 @@ export default function MaisProdutos({ adicionarAoCarrinho }) {
 
           return (
             <article key={produto.id} className={styles.produto}>
-              <img
-                src={produto.img}
-                alt={produto.name}
-                loading="lazy"
-              />
+              <img src={produto.img} alt={produto.name} loading="lazy" />
               <div className={styles.info_produto}>
                 <h3>{produto.name}</h3>
                 <p>{precoFormatado}</p>
@@ -58,11 +54,11 @@ export default function MaisProdutos({ adicionarAoCarrinho }) {
         })}
       </div>
 
-      {/* BOTÃO VER MAIS */}
-      <div className={styles.ver_mais_container}>
-        <button className={styles.botao_ver_mais}>
-          Ver mais
-        </button>
+      {/* BOTÃO "VER MAIS" → SCROLL NA MESMA PÁGINA */}
+      <div className={styles.botao_mais_container}>
+        <a href="#mais-produtos" className={styles.botao_mais}>
+          VER MAIS
+        </a>
       </div>
     </section>
   );
