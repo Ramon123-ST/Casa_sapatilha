@@ -1,13 +1,15 @@
 import React from "react";
 import styles from "./Achadinho.module.css";
+import achado from "/src/assets/img/achado.jpg"; 
 
 export default function Achadinho() {
   return (
     <section id="achadinho" className={styles.secao_achadinho}>
       <div className={styles.container}>
+        
         <div className={styles.texto_container}>
           <h1 className={styles.titulo}>
-            PROMOÇÃO DO DIA<br />
+            PROMOÇÃO DO DIA <br />
             COM ATÉ 60% OFF
           </h1>
           <p className={styles.subtitulo}>
@@ -18,10 +20,11 @@ export default function Achadinho() {
           </a>
         </div>
 
+        
         <div className={styles.cartao}>
           <div className={styles.desconto}>-40%</div>
           <img
-            src="/img/1_ZFhKxz8zvRK7bnMkHbD8pA.jpg"
+            src={achado} 
             alt="Sapatilha Feminino"
             className={styles.imagem}
           />
@@ -38,6 +41,3 @@ export default function Achadinho() {
     </section>
   );
 }
-
-
-

@@ -1,16 +1,23 @@
 import React from "react";
 import r1 from "/src/assets/img/sapatilha4.jpg";
+import r2 from "/src/assets/img/OIP (5).webp";
+import r3 from "/src/assets/img/r2.webp";
+import r4 from "/src/assets/img/r3.jpg";
+import r5 from "/src/assets/img/r4.webp";
+import r6 from "/src/assets/img/r5.jpg";
+import r7 from "/src/assets/img/r6.webp";
+import r8 from "/src/assets/img/OIP (7).webp";
 import styles from "./MaisProdutos.module.css";
 
 const maisProdutos = [
   { name: "Sapatilha strass", price: 189.9, img: r1},
-  { name: "Sapatilha hele", price: 129.9, img: "img/OIP (5).webp" },
-  { name: "Sapatilha Casual couro", price: 149.9, img: "img/r2.webp" },
-  { name: "Sapatilha bico fino", price: 199.9, img: "img/r3.jpg" },
-  { name: "Sapatolha couro sthey", price: 189.9, img: "img/r4.webp" },
-  { name: "Sapatilha bege", price: 129.9, img: "img/r5.jpg" },
-  { name: "Sapatilha shoes", price: 149.9, img: "img/r6.webp" },
-  { name: "Sapatilha botter", price: 199.9, img: "img/OIP (7).webp" },
+  { name: "Sapatilha hele", price: 129.9, img: r2 },
+  { name: "Sapatilha Casual couro", price: 149.9, img: r3 },
+  { name: "Sapatilha bico fino", price: 199.9, img: r4 },
+  { name: "Sapatolha couro sthey", price: 189.9, img: r5 },
+  { name: "Sapatilha bege", price: 129.9, img: r6 },
+  { name: "Sapatilha shoes", price: 149.9, img: r7 },
+  { name: "Sapatilha botter", price: 199.9, img: r8 },
 ];
 
 export default function MaisProdutos({ adicionarAoCarrinho }) {
