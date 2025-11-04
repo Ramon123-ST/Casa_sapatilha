@@ -22,7 +22,22 @@ const maisProdutos = [
   { id: "m8", name: "Sapatilha botter", price: 199.9, img: r8 },
 ];
 
-export default function MaisProdutos({ adicionarAoCarrinho }) {
+export default function MaisProdutos() {
+  // FUNÇÃO: Abre WhatsApp com mensagem personalizada
+  const abrirWhatsApp = (produto = null) => {
+    let mensagem = "Olá! Gostaria de mais informações sobre seus produtos.";
+
+    if (produto) {
+      mensagem = `Olá! Gostaria de comprar:\n*${produto.name}* - ${produto.price.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      })}`;
+    }
+
+    const textoCodificado = encodeURIComponent(mensagem);
+    window.open(`https://wa.me/5598985101918?text=${textoCodificado}`, "_blank");
+  };
+
   return (
     <section id="lancamentos" aria-labelledby="titulo-mais-produtos">
       <h2 id="titulo-mais-produtos" className={styles.titulo_secao}>
@@ -47,8 +62,8 @@ export default function MaisProdutos({ adicionarAoCarrinho }) {
                 <h3>{produto.name}</h3>
                 <p>{precoFormatado}</p>
                 <button
-                  onClick={() => adicionarAoCarrinho(produto)}
-                  aria-label={`Adicionar ${produto.name} ao carrinho por ${precoFormatado}`}
+                  onClick={() => abrirWhatsApp(produto)}
+                  aria-label={`Comprar ${produto.name} via WhatsApp`}
                 >
                   Comprar
                 </button>
@@ -60,7 +75,11 @@ export default function MaisProdutos({ adicionarAoCarrinho }) {
 
       {/* BOTÃO VER MAIS */}
       <div className={styles.ver_mais_container}>
-        <button className={styles.botao_ver_mais}>
+        <button
+          onClick={() => abrirWhatsApp()} // Sem produto = mensagem genérica
+          className={styles.botao_ver_mais}
+          aria-label="Ver mais produtos no WhatsApp"
+        >
           Ver mais
         </button>
       </div>

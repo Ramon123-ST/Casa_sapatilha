@@ -20,7 +20,7 @@ const produtos = [
   { id: "p7", name: "Sapatilha preta", price: 119.9, img: img7 },
 ];
 
-export default function Produtos({ adicionarAoCarrinho }) {
+export default function Produtos() {
   const scrollRef = useRef(null);
 
   const scrollLeft = () => {
@@ -29,6 +29,14 @@ export default function Produtos({ adicionarAoCarrinho }) {
 
   const scrollRight = () => {
     scrollRef.current?.scrollBy({ left: 260, behavior: "smooth" });
+  };
+
+  // FUNÇÃO: Abre WhatsApp com mensagem opcional
+  const abrirWhatsApp = (produto) => {
+    const mensagem = encodeURIComponent(
+      `Olá! Gostaria de comprar:\n*${produto.name}* - ${produto.price.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}`
+    );
+    window.open(`https://wa.me/5598985101918?text=${mensagem}`, "_blank");
   };
 
   return (
@@ -79,8 +87,8 @@ export default function Produtos({ adicionarAoCarrinho }) {
                   <h3>{produto.name}</h3>
                   <p>{precoFormatado}</p>
                   <button
-                    onClick={() => adicionarAoCarrinho(produto)}
-                    aria-label={`Adicionar ${produto.name} ao carrinho por ${precoFormatado}`}
+                    onClick={() => abrirWhatsApp(produto)}
+                    aria-label={`Comprar ${produto.name} via WhatsApp`}
                   >
                     Comprar
                   </button>

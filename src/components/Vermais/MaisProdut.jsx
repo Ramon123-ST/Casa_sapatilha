@@ -54,7 +54,7 @@ export default function MaisProdutos({ adicionarAoCarrinho }) {
         })}
       </div>
 
-      {/* BOTÃO "VER MAIS" → SCROLL NA MESMA PÁGINA */}
+      
       <div className={styles.botao_mais_container}>
         <a href="#mais-produtos" className={styles.botao_mais}>
           VER MAIS
