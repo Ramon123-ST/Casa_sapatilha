@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./Achadinho.module.css";
 
-// Importação correta da imagem (Vite)
+
 import achado from "/src/assets/img/achado.jpg";
 
 export default function Achadinho() {
@@ -12,7 +12,7 @@ export default function Achadinho() {
       aria-labelledby="titulo-promocao"
     >
       <div className={styles.container}>
-        {/* ========= TEXTO DA PROMOÇÃO ========= */}
+        
         <div className={styles.texto_container}>
           <h1 id="titulo-promocao" className={styles.titulo}>
             PROMOÇÃO DO DIA <br />
@@ -30,7 +30,7 @@ export default function Achadinho() {
           </a>
         </div>
 
-        {/* ========= CARTÃO DO PRODUTO EM DESTAQUE ========= */}
+       
         <article className={styles.cartao} role="region" aria-labelledby="nome-produto">
           <div className={styles.desconto} aria-label="Desconto de 40%">
             -40%

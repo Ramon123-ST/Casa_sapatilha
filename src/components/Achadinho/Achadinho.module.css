@@ -1,4 +1,4 @@
-/* ====================== SEÇÃO PRINCIPAL ====================== */
+
 .secao_achadinho {
   background: linear-gradient(135deg, #800020 0%, #a00030 100%);
   padding: 70px 20px;
@@ -12,7 +12,7 @@
   z-index: 0;
 }
 
-/* Textura de fundo sutil (pontinhos) */
+/* Textura de fundo sutil pontinhos */
 .secao_achadinho::before {
   content: "";
   position: absolute;
@@ -23,7 +23,7 @@
   opacity: 0.6;
 }
 
-/* ====================== CONTAINER ====================== */
+
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -36,14 +36,14 @@
   z-index: 1;
 }
 
-/* ====================== TEXTO ====================== */
+
 .texto_container {
   flex: 1;
   min-width: 300px;
   animation: fadeInLeft 0.9s ease-out forwards;
 }
 
-/* Título com gradiente */
+
 .titulo {
   font-size: clamp(2.3rem, 6.5vw, 3.2rem);
   font-weight: 900;
@@ -67,7 +67,7 @@
   max-width: 500px;
 }
 
-/* ====================== BOTÃO VER ====================== */
+
 .botao_ver {
   display: inline-block;
   background: #ffffff;
@@ -113,7 +113,7 @@
   outline-offset: 3px;
 }
 
-/* ====================== CARTÃO ====================== */
+
 .cartao {
   position: relative;
   background: #ffffff;
@@ -136,7 +136,7 @@
   border: 1px solid #f0e0e0;
 }
 
-/* ====================== DESCONTO (ANIMADO) ====================== */
+
 .desconto {
   position: absolute;
   top: 20px;
@@ -158,7 +158,7 @@
   50% { transform: scale(1.08); }
 }
 
-/* ====================== IMAGEM ====================== */
+
 .imagem {
   width: 100%;
   height: 220px;
@@ -171,7 +171,7 @@
   transform: scale(1.07);
 }
 
-/* ====================== INFO ====================== */
+
 .info {
   padding: 22px;
   text-align: left;
@@ -201,7 +201,7 @@
   letter-spacing: -0.8px;
 }
 
-/* ====================== BOTÃO COMPRAR ====================== */
+
 .botao_comprar {
   display: block;
   background: transparent;
@@ -230,7 +230,7 @@
   outline-offset: 2px;
 }
 
-/* ====================== ANIMAÇÕES DE ENTRADA ====================== */
+/*  ANIMAÇÕES DE ENTRADA  */
 @keyframes fadeInLeft {
   from { opacity: 0; transform: translateX(-40px); }
   to { opacity: 1; transform: translateX(0); }
@@ -241,7 +241,7 @@
   to { opacity: 1; transform: translateX(0); }
 }
 
-/* ====================== RESPONSIVO ====================== */
+/*  RESPONSIVO  */
 @media (max-width: 992px) {
   .container {
     flex-direction: column;

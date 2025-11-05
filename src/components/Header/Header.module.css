@@ -1,26 +1,20 @@
-/* ==============================
-   CABEÇALHO FIXO - CASA DA SAPATILHA
-============================== */
-
 .header {
   width: 100%;
   background-color: #fff;
   border-bottom: 1px solid #eee;
   font-family: 'Arial', sans-serif;
-  position: fixed;      /* Fixa no topo */
+  position: fixed;      
   top: 0;
   left: 0;
-  z-index: 1000;        /* Fica acima de tudo */
+  z-index: 1000;        
 }
 
-/* Compensar altura do header fixo */
+
 body {
-  margin-top: 160px; /* ajuste se o header for mais alto */
+  margin-top: 160px; 
 }
 
-/* ==============================
-   BARRA PROMOCIONAL
-============================== */
+
 .promo_topo {
   background-color: #800020;
   color: white;
@@ -80,9 +74,7 @@ body {
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* ==============================
-   CABEÇALHO CENTRAL
-============================== */
+
 .contenedor_cmc {
   max-width: 1200px;
   margin: 0 auto;
@@ -145,9 +137,7 @@ body {
   margin-left: 160px;
 }
 
-/* ==============================
-   NAVEGAÇÃO PRINCIPAL
-============================== */
+
 .navegacao {
   background-color: #f9f9f9;
   border-top: 1px solid #eee;
@@ -190,9 +180,7 @@ body {
   }
 }
 
-/* ==============================
-   RESPONSIVIDADE - MOBILE / TABLET
-============================== */
+/* RESPONSIVIDADE - MOBILE / TABLET */
 @media (max-width: 1024px) {
   body {
     margin-top: 140px;
@@ -238,9 +226,7 @@ body {
   }
 }
 
-/* ==============================
-   RESPONSIVIDADE - TABLET (entre 769px e 1024px)
-============================== */
+/* TABLET (entre 769px e 1024px) */
 @media (min-width: 769px) and (max-width: 1024px) {
 
   body {
@@ -305,10 +291,10 @@ body {
     padding: 10px 0;
   }
 
-  /* HERO (carrossel / banner) */
+ 
   .conteudo_lado {
     max-width: 550px;
-    margin-right: 450px; /* reduzido em relação ao desktop */
+    margin-right: 450px; 
     padding: 1.5rem;
   }
 
@@ -320,7 +306,7 @@ body {
     font-size: 1rem;
   }
 
-  /* Setas ainda visíveis no tablet */
+ 
   .seta_esq,
   .seta_dir {
     width: 45px;
@@ -331,10 +317,8 @@ body {
 
 
 
+/* TELAS PEQUENAS (CELULARES)*/
 
-/* ==============================
-   TELAS PEQUENAS (CELULARES)
-============================== */
 @media (max-width: 768px) {
   body {
     margin-top: 120px;
@@ -372,20 +356,20 @@ body {
  @media (max-width: 768px) {
   .contenedor_cmc {
     display: flex;
-    flex-direction: row;       /* Mantém logo e busca lado a lado */
-    align-items: center;       /* Alinha verticalmente */
-    justify-content: center;   /* Centraliza horizontalmente */
-    flex-wrap: nowrap;         /* Impede quebra de linha */
+    flex-direction: row;       
+    align-items: center;      
+    justify-content: center;   
+    flex-wrap: nowrap;         
   }
 
   .logotipo {
     font-size: 15px;
     margin: 10px;
-    margin-left: -80px;           /* Evita que a logo encolha */
+    margin-left: -80px;          
   }
 
   .busca {
-    width: 30%;                /* Ajuste conforme o espaço desejado */
+    width: 30%;                
     margin: 10px;
     font-size: 12px;
     

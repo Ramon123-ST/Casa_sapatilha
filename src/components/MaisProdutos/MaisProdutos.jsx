@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./MaisProdutos.module.css";
 
-// Importação com caminhos absolutos (funciona no Vite)
+
 import r1 from "/src/assets/img/sapatilha4.jpg";
 import r2 from "/src/assets/img/OIP (5).webp";
 import r3 from "/src/assets/img/r2.webp";
@@ -23,7 +23,7 @@ const maisProdutos = [
 ];
 
 export default function MaisProdutos() {
-  // FUNÇÃO: Abre WhatsApp com mensagem personalizada
+  
   const abrirWhatsApp = (produto = null) => {
     let mensagem = "Olá! Gostaria de mais informações sobre seus produtos.";
 
@@ -73,7 +73,7 @@ export default function MaisProdutos() {
         })}
       </div>
 
-      {/* BOTÃO VER MAIS */}
+      
       <div className={styles.ver_mais_container}>
         <button
           onClick={() => abrirWhatsApp()} // Sem produto = mensagem genérica

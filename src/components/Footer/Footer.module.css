@@ -1,6 +1,4 @@
-/* ==============================
-   FOOTER - ESTILO ORIGINAL + RESPONSIVO
-============================== */
+
 .footer {
   background: #f5f3ee;
   color: #000;
@@ -51,9 +49,7 @@
   font-size: 0.9rem;
 }
 
-/* ==============================
-   RESPONSIVO - MANTENDO O ESTILO ORIGINAL
-============================== */
+/* RESPONSIVO - MANTENDO O ESTILO ORIGINAL*/
 @media (max-width: 1024px) {
   .footer {
     padding: 40px 6%;

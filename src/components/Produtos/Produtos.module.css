@@ -1,4 +1,4 @@
-/* ====================== TÍTULO ====================== */
+
 .titulo_secao {
   text-align: center;
   margin: 60px 0 35px;
@@ -19,7 +19,7 @@
   border-radius: 2px;
 }
 
-/* ====================== CONTAINER ====================== */
+
 .contenedor_produtos {
   position: relative;
   overflow: hidden;
@@ -27,7 +27,7 @@
   mask-image: linear-gradient(90deg, transparent, white 10%, white 90%, transparent);
 }
 
-/* ====================== ROLAGEM ====================== */
+
 .rolagem_produtos {
   display: flex;
   gap: 24px;
@@ -43,7 +43,7 @@
   display: none;
 }
 
-/* ====================== CARD ====================== */
+
 .produto {
   flex: 0 0 240px;
   background: #fff;
@@ -78,7 +78,7 @@
   border: 1px solid #e0e0e0;
 }
 
-/* ====================== IMAGEM ====================== */
+
 .produto img {
   width: 100%;
   height: 210px;
@@ -91,7 +91,7 @@
   transform: scale(1.06);
 }
 
-/* Skeleton enquanto carrega */
+
 .produto img:not([src]),
 .produto img[src=""] {
   background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
@@ -104,7 +104,7 @@
   100% { background-position: -200% 0; }
 }
 
-/* ====================== INFO ====================== */
+
 .info_produto {
   padding: 16px;
   text-align: center;
@@ -134,7 +134,7 @@
   letter-spacing: -0.5px;
 }
 
-/* ====================== BOTÃO ====================== */
+
 .info_produto button {
   background: #8b0000;
   color: white;
@@ -178,7 +178,7 @@
   outline-offset: 2px;
 }
 
-/* ====================== SETAS DE NAVEGAÇÃO (OPCIONAL) ====================== */
+
 .navegacao_esquerda,
 .navegacao_direita {
   position: absolute;
@@ -216,7 +216,7 @@
   height: 20px;
 }
 
-/* ====================== RESPONSIVO ====================== */
+/*  RESPONSIVO */
 @media (max-width: 992px) {
   .produto { flex: 0 0 200px; }
   .produto img { height: 180px; }

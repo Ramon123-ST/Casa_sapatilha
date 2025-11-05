@@ -1,6 +1,4 @@
-/* ==============================
-   RESET E CONFIGURAÇÕES GERAIS
-============================== */
+
 * {
   margin: 0;
   padding: 0;
@@ -22,9 +20,7 @@ body {
   line-height: 1.6;
 }
 
-/* ==============================
-   HEADER
-============================== */
+
 .cabecalho_principal {
   display: flex;
   justify-content: space-between;
@@ -74,9 +70,7 @@ body {
   transform: scale(1.2);
 }
 
-/* ==============================
-   SEÇÃO MAIS PRODUTOS
-============================== */
+
 .secao_produtos {
   padding: 40px 0;
 }
@@ -89,7 +83,7 @@ body {
   color: #222;
 }
 
-/* Grade de produtos */
+
 .grade_produtos {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -99,7 +93,7 @@ body {
   margin: 0 auto;
 }
 
-/* Produto individual */
+
 .produto {
   position: relative;
   overflow: hidden;
@@ -114,7 +108,7 @@ body {
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* IMAGEM DO PRODUTO */
+
 .imagem_produto {
   width: 100%;
   height: 230px;
@@ -125,7 +119,7 @@ body {
   border-bottom: 1px solid #eee;
 }
 
-/* Badge de desconto */
+
 .emblema {
   position: absolute;
   top: 10px;
@@ -140,7 +134,7 @@ body {
   text-transform: uppercase;
 }
 
-/* Informações do produto */
+
 .info_produto {
   padding: 15px;
   text-align: center;
@@ -153,7 +147,7 @@ body {
   color: #333;
 }
 
-/* Preço antigo riscado */
+
 .preco_antigo {
   text-decoration: line-through;
   color: var(--gray);
@@ -161,7 +155,7 @@ body {
   margin: 5px 0;
 }
 
-/* Preço promocional */
+
 .preco {
   color: #e50914;
   font-size: 18px;
@@ -169,7 +163,7 @@ body {
   margin: 0 0 10px 0;
 }
 
-/* BOTÃO "COMPRAR" */
+
 .botao_comprar {
   background: var(--red);
   color: #fff;
@@ -188,9 +182,7 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
-/* ==============================
-   FOOTER
-============================== */
+
 .footer {
   background: #f9f9f9;
   color: #000;
@@ -237,9 +229,7 @@ body {
   color: #666;
 }
 
-/* ==============================
-   RESPONSIVIDADE
-============================== */
+/* RESPONSIVIDADE */
 @media (max-width: 1024px) {
   .grade_produtos {
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));

@@ -1,14 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom"; // ADICIONADO
+import { Link } from "react-router-dom"; 
 import styles from "./Header.module.css";
 
 export default function Header({ carrinhoCount = 0, abrirCarrinho }) {
-  // Função de scroll suave com offset (não sobrepõe o header)
+  
   const scrollToSection = (e, id) => {
     e.preventDefault();
     const element = document.getElementById(id);
     if (element) {
-      const offset = 160; // Altura do header fixo
+      const offset = 160; 
       const bodyRect = document.body.getBoundingClientRect().top;
       const elementRect = element.getBoundingClientRect().top;
       const elementPosition = elementRect - bodyRect;

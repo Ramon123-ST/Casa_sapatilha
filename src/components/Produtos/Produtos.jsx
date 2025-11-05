@@ -31,7 +31,7 @@ export default function Produtos() {
     scrollRef.current?.scrollBy({ left: 260, behavior: "smooth" });
   };
 
-  // FUNÇÃO: Abre WhatsApp com mensagem opcional
+  
   const abrirWhatsApp = (produto) => {
     const mensagem = encodeURIComponent(
       `Olá! Gostaria de comprar:\n*${produto.name}* - ${produto.price.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}`
@@ -46,7 +46,7 @@ export default function Produtos() {
       </h2>
 
       <div className={styles.contenedor_produtos}>
-        {/* SETA ESQUERDA */}
+        
         <button
           onClick={scrollLeft}
           className={styles.navegacao_esquerda}
@@ -57,7 +57,7 @@ export default function Produtos() {
           </svg>
         </button>
 
-        {/* SETA DIREITA */}
+       
         <button
           onClick={scrollRight}
           className={styles.navegacao_direita}
@@ -68,7 +68,7 @@ export default function Produtos() {
           </svg>
         </button>
 
-        {/* ROLAGEM DOS PRODUTOS */}
+       
         <div ref={scrollRef} className={styles.rolagem_produtos}>
           {produtos.map((produto) => {
             const precoFormatado = produto.price.toLocaleString("pt-BR", {
