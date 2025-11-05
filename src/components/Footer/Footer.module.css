@@ -1,3 +1,6 @@
+/* ==============================
+   FOOTER - ESTILO ORIGINAL + RESPONSIVO
+============================== */
 .footer {
   background: #f5f3ee;
   color: #000;
@@ -5,6 +8,9 @@
   margin-top: 90px;
   font-family: 'Montserrat', sans-serif;
   height: 300px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .gradeRodape {
@@ -37,15 +43,92 @@
 
 .footer a:hover {
   color: black;
- 
-
 }
 
 .footer p {
   text-align: center;
   margin-top: 10px;
   font-size: 0.9rem;
-  
 }
+
+/* ==============================
+   RESPONSIVO - MANTENDO O ESTILO ORIGINAL
+============================== */
+@media (max-width: 1024px) {
+  .footer {
+    padding: 40px 6%;
+    height: auto;
+    min-height: 300px;
+  }
+
+  .gradeRodape {
+    gap: 16px;
+  }
+
+  .footer h3 {
+    margin-bottom: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 40px 6%;
+    margin-top: 60px;
+    height: auto;
+    min-height: 320px;
+  }
+
+  .gradeRodape {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 24px;
+  }
+
+  .footer h3 {
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+  }
+
+  .footer ul {
+    padding: 0;
+  }
+
+  .footer ul li {
+    margin-bottom: 8px;
+  }
+
+  .footer a {
+    display: inline-block;
+    padding: 4px 0;
+  }
+
+  .footer p {
+    margin-top: 20px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: 30px 8px;
+    margin-top: 50px;
+  }
+
+  .footer h3 {
+    font-size: 1rem;
+    margin-bottom: 16px;
+  }
+
+  .footer a {
+    font-size: 0.95rem;
+  }
+
+  .footer p {
+    font-size: 0.8rem;
+  }
+}
+
+
+
 
 

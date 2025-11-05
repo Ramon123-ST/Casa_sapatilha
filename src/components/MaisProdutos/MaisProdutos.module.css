@@ -237,19 +237,34 @@
   .produto img { height: 200px; }
 }
 
+/* CELULARES GRANDES (2 COLUNAS) */
 @media (max-width: 600px) {
   .grade_produtos {
-    grid-template-columns: 1fr;
-    gap: 18px;
+    grid-template-columns: repeat(2, 1fr); /* 2 COLUNAS */
+    gap: 16px;
     padding: 0 3%;
   }
-  .produto { 
-    max-width: 320px; 
-    margin: 0 auto; 
+
+  .produto {
+    max-width: none;
   }
-  .produto img { height: 240px; }
-  .info_produto h3 { font-size: 1.1rem; }
-  .info_produto p { font-size: 1.3rem; }
+
+  .produto img {
+    height: 180px;
+  }
+
+  .info_produto h3 {
+    font-size: 0.95rem;
+  }
+
+  .info_produto p {
+    font-size: 1.15rem;
+  }
+
+  .info_produto button {
+    padding: 10px 18px;
+    font-size: 0.9rem;
+  }
 
   .ver_mais_container {
     padding: 0 3%;
@@ -257,7 +272,37 @@
   }
 
   .botao_ver_mais {
-    padding: 12px 30px;
-    font-size: 0.95rem;
+    padding: 12px 28px;
+    font-size: 0.9rem;
+  }
+}
+
+/* CELULARES PEQUENOS (1 COLUNA) */
+@media (max-width: 480px) {
+  .grade_produtos {
+    grid-template-columns: 1fr; /* 1 COLUNA */
+    gap: 18px;
+    padding: 0 3%;
+  }
+
+  .produto {
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  .produto img {
+    height: 220px;
+  }
+
+  .info_produto h3 {
+    font-size: 1.05rem;
+  }
+
+  .info_produto p {
+    font-size: 1.25rem;
+  }
+
+  .ver_mais_container {
+    margin: 35px auto 10px;
   }
 }
