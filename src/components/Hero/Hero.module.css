@@ -165,21 +165,23 @@ h1 {
 }
 
 
-@media (max-width: 768px) {
-  .carrossel_heroi {
-    height: 70vh;
-  }
-
+/* Tablets e notebooks menores */
+@media (max-width: 1024px) {
   .conteudo_lado {
-    text-align: center;
+    max-width: 500px;
+    margin-right: 150px;  /* aproxima o texto do centro */
     padding: 1.5rem;
   }
 
-  h1 {
-    font-size: 2.5rem;
+  .sobrancelha {
+    font-size: 1rem;
   }
 
-  .sobrancelha {
+  h1 {
+    font-size: 2.8rem;
+  }
+
+  .silenciado {
     font-size: 1rem;
   }
 
@@ -187,20 +189,91 @@ h1 {
     padding: 10px 22px;
     font-size: 0.9rem;
   }
+}
 
+/* seta summir*/
+@media (max-width: 768px) {
   .seta_esq,
   .seta_dir {
-    width: 40px;
-    height: 40px;
-    font-size: 1.2rem;
-  }
-
-  .seta_esq {
-    left: 10px;
-  }
-
-  .seta_dir {
-    right: 10px;
+    display: none;
   }
 }
 
+
+/* Celulares grandes e tablets pequenos */
+@media (max-width: 768px) {
+  .conteudo_lado {
+    max-width: 85%;
+    margin-right: 0;
+    text-align: center;
+    padding: 1rem;
+  }
+
+  .sobrancelha {
+    font-size: 0.95rem;
+    letter-spacing: 1.2px;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+    line-height: 1.2;
+  }
+
+  .silenciado {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .botao {
+    padding: 9px 20px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Celulares médios e pequenos */
+@media (max-width: 480px) {
+  .conteudo_lado {
+    max-width: 90%;
+    margin: 0 auto;
+    padding: 0.8rem;
+    text-align: center;
+  }
+
+  .sobrancelha {
+    font-size: 0.85rem;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+    line-height: 1.3;
+  }
+
+  .silenciado {
+    font-size: 0.85rem;
+  }
+
+  .botao {
+    padding: 8px 18px;
+    font-size: 0.85rem;
+  }
+}
+
+/* Telas muito pequenas (até 360px) */
+@media (max-width: 360px) {
+  .sobrancelha {
+    font-size: 0.8rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  .silenciado {
+    font-size: 0.8rem;
+  }
+
+  .botao {
+    padding: 7px 16px;
+    font-size: 0.8rem;
+  }
+}

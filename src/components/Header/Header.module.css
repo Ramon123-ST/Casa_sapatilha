@@ -191,13 +191,59 @@ body {
 }
 
 /* ==============================
-   RESPONSIVIDADE
+   RESPONSIVIDADE - MOBILE / TABLET
 ============================== */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
+  body {
+    margin-top: 140px;
+  }
+
   .contenedor,
   .contenedor_cmc,
   .navegacao ul {
     padding: 0 16px;
+  }
+
+  .promo_topo {
+    font-size: 13px;
+    text-align: center;
+  }
+
+  .texto_completo_animado {
+    margin-left: 0;
+  }
+
+  .botao {
+    margin-right: 0;
+  }
+
+  .logotipo {
+    margin-left: 0;
+    font-size: 10px;
+  
+  }
+
+  .busca {
+    margin-left: 0;
+    max-width: 200px;
+  }
+
+  .cart_count {
+    margin-left: 100px;
+  }
+
+  .navegacao ul {
+    margin-left: 0;
+    gap: 20px;
+  }
+}
+
+/* ==============================
+   TELAS PEQUENAS (CELULARES)
+============================== */
+@media (max-width: 768px) {
+  body {
+    margin-top: 120px;
   }
 
   .contenedor {
@@ -206,10 +252,15 @@ body {
     text-align: center;
   }
 
+  .promo_topo {
+    padding: 10px 0;
+  }
+
   .texto_completo_animado {
     white-space: normal;
     font-size: 13px;
     animation: pulseTextMobile 2.2s infinite ease-in-out;
+    margin-left: 0;
   }
 
   @keyframes pulseTextMobile {
@@ -222,20 +273,94 @@ body {
     font-size: 12px;
   }
 
+ @media (max-width: 768px) {
   .contenedor_cmc {
-    flex-direction: column;
-    gap: 12px;
+    display: flex;
+    flex-direction: row;       /* Mantém logo e busca lado a lado */
+    align-items: center;       /* Alinha verticalmente */
+    justify-content: center;   /* Centraliza horizontalmente */
+                    /* Espaço entre logo e busca */
+    flex-wrap: nowrap;         /* Impede quebra de linha */
+  }
+
+  .logotipo {
+    font-size: 15px;
+    margin: 0;
+    margin-left: -75px;           /* Evita que a logo encolha */
   }
 
   .busca {
-    max-width: 100%;
-    margin-left: 0;
+    width: 30%;                /* Ajuste conforme o espaço desejado */
+    margin: 0;
+    font-size: 12px;
+    
+  }
+}
+
+
+  .butao_carr {
+    font-size: 22px;
+  }
+
+  .cart_count {
+    top: -6px;
+    margin-left: 50px;
   }
 
   .navegacao ul {
-    gap: 20px;
+    flex-wrap: nowrap;
     overflow-x: auto;
     white-space: nowrap;
+    gap: 16px;
+    justify-content: flex-start;
     padding-bottom: 8px;
+    
+  }
+
+  .navegacao a {
+    font-size: 12px;
+    padding: 12px 0;
+  }
+}
+
+/* ==============================
+   TELAS MUITO PEQUENAS (ATÉ 480px)
+============================== */
+@media (max-width: 480px) {
+  body {
+    margin-top: 110px;
+  }
+
+  .promo_topo {
+    font-size: 12px;
+    padding: 8px 0;
+  }
+
+  .texto_completo_animado {
+    font-size: 12px;
+  }
+
+  .botao {
+    padding: 5px 12px;
+    font-size: 11px;
+  }
+
+  .logotipo {
+    font-size: 18px;
+  }
+
+  .busca {
+    font-size: 13px;
+    padding: 10px 14px;
+  }
+
+  .navegacao a {
+    font-size: 12px;
+  }
+
+  .cart_count {
+    font-size: 11px;
+    width: 16px;
+    height: 16px;
   }
 }
