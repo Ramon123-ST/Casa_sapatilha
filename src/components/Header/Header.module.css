@@ -279,19 +279,18 @@ body {
     flex-direction: row;       /* Mantém logo e busca lado a lado */
     align-items: center;       /* Alinha verticalmente */
     justify-content: center;   /* Centraliza horizontalmente */
-                    /* Espaço entre logo e busca */
     flex-wrap: nowrap;         /* Impede quebra de linha */
   }
 
   .logotipo {
     font-size: 15px;
-    margin: 0;
-    margin-left: -75px;           /* Evita que a logo encolha */
+    margin: 10px;
+    margin-left: -50px;           /* Evita que a logo encolha */
   }
 
   .busca {
     width: 30%;                /* Ajuste conforme o espaço desejado */
-    margin: 0;
+    margin: 10px;
     font-size: 12px;
     
   }
@@ -304,7 +303,7 @@ body {
 
   .cart_count {
     top: -6px;
-    margin-left: 50px;
+    margin-left: 30px;
   }
 
   .navegacao ul {
