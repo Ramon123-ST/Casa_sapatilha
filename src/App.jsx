@@ -6,7 +6,6 @@ import Produtos from "./components/Produtos/Produtos";
 import MaisProdutos from "./components/MaisProdutos/MaisProdutos";
 import Footer from "./components/Footer/Footer";
 
-
 export default function App() {
   const [carrinho, setCarrinho] = useState([]);
   const [carrinhoAberto, setCarrinhoAberto] = useState(false);
@@ -16,21 +15,34 @@ export default function App() {
     setCarrinhoAberto(true);
   };
 
-  const removerDoCarrinho = (index) => {
-    setCarrinho((prev) => prev.filter((_, i) => i !== index));
-  };
-
   const abrirCarrinho = () => setCarrinhoAberto(true);
-  const fecharCarrinho = () => setCarrinhoAberto(false);
 
   return (
     <>
       <Header carrinhoCount={carrinho.length} abrirCarrinho={abrirCarrinho} />
-      <Hero />
-      <Achadinho adicionarAoCarrinho={adicionarAoCarrinho} />
-      <Produtos adicionarAoCarrinho={adicionarAoCarrinho} />
-      <MaisProdutos adicionarAoCarrinho={adicionarAoCarrinho} />*/
-      
+
+      <main>
+        {/* HERO */}
+        <section id="hero">
+          <Hero />
+        </section>
+
+        {/* PROMOÇÕES (usando Achadinho como destaque) */}
+        <section id="promocoes">
+          <Achadinho adicionarAoCarrinho={adicionarAoCarrinho} />
+        </section>
+
+        {/* MAIS VENDIDOS */}
+        <section id="mais-vendidos">
+          <Produtos adicionarAoCarrinho={adicionarAoCarrinho} />
+        </section>
+
+        {/* TODOS OS PRODUTOS */}
+        <section id="produtos">
+          <MaisProdutos adicionarAoCarrinho={adicionarAoCarrinho} />
+        </section>
+      </main>
+
       <Footer />
     </>
   );
