@@ -172,7 +172,9 @@ body {
   transform: scale(1.10);
   font-weight: 700;
 }
-
+/* ===================================
+   🎨 EFEITO DE CLIQUE (apenas mobile)
+=================================== */
 @media (hover: none) {
   .navegacao a:active {
     transform: scale(1.1);
@@ -180,55 +182,10 @@ body {
   }
 }
 
-/* RESPONSIVIDADE - MOBILE / TABLET */
-@media (max-width: 1024px) {
-  body {
-    margin-top: 140px;
-  }
-
-  .contenedor,
-  .contenedor_cmc,
-  .navegacao ul {
-    padding: 0 16px;
-  }
-
-  .promo_topo {
-    font-size: 13px;
-    text-align: center;
-  }
-
-  .texto_completo_animado {
-    margin-left: 0;
-  }
-
-  .botao {
-    margin-right: 0;
-  }
-
-  .logotipo {
-    font-size: 15px;
-    margin-right: 70px;
-  
-  }
-
-  .busca {
-    margin-right: -90px;
-    max-width: 200px;
-  }
-
-  .cart_count {
-    margin-left: 100px;
-  }
-
-  .navegacao ul {
-    margin-left: 0;
-    gap: 20px;
-  }
-}
-
-/* TABLET (entre 769px e 1024px) */
+/* ===================================
+   💻 TABLETS (769px a 1024px)
+=================================== */
 @media (min-width: 769px) and (max-width: 1024px) {
-
   body {
     margin-top: 130px;
   }
@@ -250,13 +207,12 @@ body {
 
   .logotipo {
     font-size: 18px;
-    margin-left: -18px;
+    margin-left: 0;
   }
 
   .busca {
     width: 35%;
     max-width: 280px;
-    margin-right: 20px;
     font-size: 13px;
   }
 
@@ -291,34 +247,14 @@ body {
     padding: 10px 0;
   }
 
- 
-  .conteudo_lado {
-    max-width: 550px;
-    margin-right: 450px; 
-    padding: 1.5rem;
-  }
-
-  h1 {
-    font-size: 3rem;
-  }
-
-  .silenciado {
-    font-size: 1rem;
-  }
-
- 
-  .seta_esq,
-  .seta_dir {
-    width: 45px;
-    height: 45px;
-    font-size: 1.3rem;
+  .menu_hamburguer {
+    display: none;
   }
 }
 
-
-
-/* TELAS PEQUENAS (CELULARES)*/
-
+/* ===================================
+   📱 CELULARES vai ter q arrumar (até 768px)
+=================================== */
 @media (max-width: 768px) {
   body {
     margin-top: 120px;
@@ -351,31 +287,25 @@ body {
     font-size: 12px;
   }
 
-
-
- @media (max-width: 768px) {
   .contenedor_cmc {
     display: flex;
     flex-direction: row;       
     align-items: center;      
     justify-content: center;   
     flex-wrap: nowrap;         
+    gap: 10px;
   }
 
   .logotipo {
     font-size: 15px;
     margin: 10px;
-    margin-left: -80px;          
   }
 
   .busca {
-    width: 30%;                
+    width: 40%;                
     margin: 10px;
     font-size: 12px;
-    
   }
-}
-
 
   .butao_carr {
     font-size: 22px;
@@ -393,7 +323,6 @@ body {
     gap: 16px;
     justify-content: flex-start;
     padding-bottom: 8px;
-    
   }
 
   .navegacao a {
@@ -404,22 +333,92 @@ body {
 
 
 
-@media screen and (max-width: 500px){
-  .header input {
-    display: none;
-
+/* ===================================
+   📱 CELULARES MÉDIOS (376px a 480px)
+=================================== */
+@media (min-width: 376px) and (max-width: 480px) {
+  .contenedor_cmc {
+    justify-content: space-between;
+    padding: 12px 20px;
   }
-  
+
+  .logotipo {
+    font-size: 16px;
+  }
+
+  .busca {
+    width: 75%;
+  }
 }
 
+/* ===================================
+   📱 CELULARES GRANDES / MINI TABLETS (481px a 768px)
+=================================== */
+@media (min-width: 481px) and (max-width: 768px) {
+  .contenedor_cmc {
+    justify-content: space-between;
+    padding: 14px 26px;
+  }
 
-/* ---------- MENU MOBILE ---------- */
+  .logotipo {
+    font-size: 17px;
+  }
 
+  .busca {
+    width: 50%;
+  }
+}
+
+/* ===================================
+   💻 TABLETS GRANDES vai ter q arrumar / NOTEBOOKS (769px a 1280px)
+=================================== */
+@media (min-width: 769px) and (max-width: 1280px) {
+  .contenedor_cmc {
+    justify-content: space-between;
+    padding: 16px 32px;
+  }
+
+  .logotipo {
+    font-size: 18px;
+  }
+
+  .busca {
+    width: 35%;
+  }
+}
+
+/* ===================================
+   💻 NOTEBOOK PEQUENO (1280x800)
+=================================== */
+@media (min-width: 1200px) and (max-width: 1300px) {
+  .contenedor_cmc {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 40px;
+  }
+
+  .logotipo {
+    font-size: 20px;
+  }
+
+  .busca {
+    width: 35%;
+    font-size: 14px;
+  }
+
+  .menu_hamburguer {
+    display: none;
+  }
+}
+
+/* ===================================
+   📱 MENU HAMBÚRGUER MOBILE
+=================================== */
 .menu_mobile {
   display: none;
 }
 
-/* Mobile */
 @media (max-width: 500px) {
   .navegacao ul {
     display: none;
@@ -430,7 +429,7 @@ body {
     left: 0;
     width: 100%;
     border-top: 1px solid #ddd;
-    padding: 12px 1;
+    padding: 12px 0;
     z-index: 999;
   }
 
@@ -445,7 +444,6 @@ body {
     font-size: 26px;
     cursor: pointer;
     color: #800020;
-    
   }
 
   .contenedor_cmc {
@@ -454,92 +452,5 @@ body {
 
   .busca {
     max-width: 100%;
-    margin-left: 0;
   }
 }
-
-/* Desktop */
-@media (min-width: 501px) {
-  .menu_mobile {
-    display: none;
-  }
-}
-
-
-/* ==============================
-   📱 CELULARES PEQUENOS (até 375px)
-============================== */
-@media (max-width: 375px) {
-  .contenedor_cmc {
-    justify-content: space-between;
-    padding: 10px 14px;
-  }
-
-  .logotipo {
-    font-size: 15px;
-    margin-left: 4px;
-  }
-
-  .menu_hamburguer {
-    margin-right: 6px;
-  }
-}
-
-/* ==============================
-   📱 CELULARES MÉDIOS (376px a 480px)
-============================== */
-@media (min-width: 376px) and (max-width: 480px) {
-  .contenedor_cmc {
-    justify-content: space-between;
-    padding: 12px 20px;
-  }
-
-  .logotipo {
-    font-size: 16px;
-    margin-left: 6px;
-  }
-
-  .menu_hamburguer {
-    margin-right: 10px;
-  }
-}
-
-/* ==============================
-   📱 CELULARES GRANDES / MINI TABLETS (481px a 768px)
-============================== */
-@media (min-width: 481px) and (max-width: 768px) {
-  .contenedor_cmc {
-    justify-content: space-between;
-    padding: 14px 26px;
-  }
-
-  .logotipo {
-    font-size: 17px;
-    margin-left: 10px;
-  }
-
-  .menu_hamburguer {
-    margin-right: 14px;
-  }
-}
-
-/* ==============================
-   💻 TABLETS GRANDES (769px a 1280px)
-============================== */
-@media (min-width: 769px) and (max-width: 1280px) {
-  .contenedor_cmc {
-    justify-content: space-between;
-    padding: 16px 32px;
-  }
-
-  .logotipo {
-    font-size: 18px;
-    margin-left: 14px;
-  }
-
-  .menu_hamburguer {
-    margin-right: 18px;
-  }
-}
-
-
