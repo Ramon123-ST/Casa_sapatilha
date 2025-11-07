@@ -465,3 +465,81 @@ body {
   }
 }
 
+
+/* ==============================
+   📱 CELULARES PEQUENOS (até 375px)
+============================== */
+@media (max-width: 375px) {
+  .contenedor_cmc {
+    justify-content: space-between;
+    padding: 10px 14px;
+  }
+
+  .logotipo {
+    font-size: 15px;
+    margin-left: 4px;
+  }
+
+  .menu_hamburguer {
+    margin-right: 6px;
+  }
+}
+
+/* ==============================
+   📱 CELULARES MÉDIOS (376px a 480px)
+============================== */
+@media (min-width: 376px) and (max-width: 480px) {
+  .contenedor_cmc {
+    justify-content: space-between;
+    padding: 12px 20px;
+  }
+
+  .logotipo {
+    font-size: 16px;
+    margin-left: 6px;
+  }
+
+  .menu_hamburguer {
+    margin-right: 10px;
+  }
+}
+
+/* ==============================
+   📱 CELULARES GRANDES / MINI TABLETS (481px a 768px)
+============================== */
+@media (min-width: 481px) and (max-width: 768px) {
+  .contenedor_cmc {
+    justify-content: space-between;
+    padding: 14px 26px;
+  }
+
+  .logotipo {
+    font-size: 17px;
+    margin-left: 10px;
+  }
+
+  .menu_hamburguer {
+    margin-right: 14px;
+  }
+}
+
+/* ==============================
+   💻 TABLETS GRANDES (769px a 1280px)
+============================== */
+@media (min-width: 769px) and (max-width: 1280px) {
+  .contenedor_cmc {
+    justify-content: space-between;
+    padding: 16px 32px;
+  }
+
+  .logotipo {
+    font-size: 18px;
+    margin-left: 14px;
+  }
+
+  .menu_hamburguer {
+    margin-right: 18px;
+  }
+}
+
+
