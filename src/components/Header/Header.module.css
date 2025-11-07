@@ -402,3 +402,13 @@ body {
   }
 }
 
+
+
+@media screen and (max-width: 500px){
+  .header input {
+    display: none;
+
+  }
+  
+}
+
