@@ -412,3 +412,56 @@ body {
   
 }
 
+
+/* ---------- MENU MOBILE ---------- */
+
+.menu_mobile {
+  display: none;
+}
+
+/* Mobile */
+@media (max-width: 500px) {
+  .navegacao ul {
+    display: none;
+    flex-direction: column;
+    background: #ffffff;
+    position: absolute;
+    top: 45px;
+    left: 0;
+    width: 100%;
+    border-top: 1px solid #ddd;
+    padding: 12px 1;
+    z-index: 999;
+  }
+
+  .menu_aberto {
+    display: flex !important;
+  }
+
+  .menu_mobile {
+    display: block;
+    background: none;
+    border: none;
+    font-size: 26px;
+    cursor: pointer;
+    color: #800020;
+    
+  }
+
+  .contenedor_cmc {
+    gap: 8px;
+  }
+
+  .busca {
+    max-width: 100%;
+    margin-left: 0;
+  }
+}
+
+/* Desktop */
+@media (min-width: 501px) {
+  .menu_mobile {
+    display: none;
+  }
+}
+
