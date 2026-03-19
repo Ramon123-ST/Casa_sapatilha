@@ -8,11 +8,12 @@ import MaisProdutos from "./components/MaisProdutos/MaisProdutos";
 import Footer from "./components/Footer/Footer";
 import Admin from "./components/Admin/Admin"; 
 
+// ✅ CAMINHO CORRIGIDO: Agora o Vite vai encontrar o arquivo na pasta certa
+import DetalhesProduto from "./components/DetalhesProduto/DetalhesProduto"; 
+
 export default function App() {
   const [carrinho, setCarrinho] = useState([]);
   const [carrinhoAberto, setCarrinhoAberto] = useState(false);
-  
-  // 🔍 NOVO: Estado para armazenar o que o usuário digita
   const [termoBusca, setTermoBusca] = useState("");
 
   const adicionarAoCarrinho = (produto) => {
@@ -24,7 +25,6 @@ export default function App() {
 
   return (
     <>
-      {/* Passamos a função setTermoBusca para o Header */}
       <Header 
         carrinhoCount={carrinho.length} 
         abrirCarrinho={abrirCarrinho} 
@@ -33,6 +33,7 @@ export default function App() {
 
       <main>
         <Routes>
+          {/* ROTA DA HOME */}
           <Route path="/" element={
             <>
               <section id="hero">
@@ -40,12 +41,10 @@ export default function App() {
               </section>
 
               <section id="promocoes">
-                {/* Opcional: filtrar promoções também */}
                 <Achadinho adicionarAoCarrinho={adicionarAoCarrinho} termoBusca={termoBusca} />
               </section>
 
               <section id="mais-vendidos">
-                {/* Passamos o termo de busca para filtrar os produtos */}
                 <Produtos adicionarAoCarrinho={adicionarAoCarrinho} termoBusca={termoBusca} />
               </section>
 
@@ -54,6 +53,9 @@ export default function App() {
               </section>
             </>
           } />
+
+          {/* ROTA DE DETALHES */}
+          <Route path="/produto/:id" element={<DetalhesProduto />} />
 
           <Route path="/admin" element={<Admin />} />
         </Routes>

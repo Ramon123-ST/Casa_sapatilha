@@ -1,12 +1,12 @@
 import React, { useRef, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // 1. Importamos o hook de navegação
 import styles from "./Produtos.module.css";
 
-// 1. Recebemos o termoBusca do App.jsx
 export default function Produtos({ termoBusca = "" }) {
   const scrollRef = useRef(null);
   const [listaProdutos, setListaProdutos] = useState([]);
+  const navegar = useNavigate(); // 2. Inicializamos a função de navegar
 
-  // useEffect para carregar os produtos do banco (executa uma vez)
   useEffect(() => {
     fetch("http://localhost:3000/produtos")
       .then((res) => res.json())
@@ -16,14 +16,12 @@ export default function Produtos({ termoBusca = "" }) {
       .catch((err) => console.error("Erro ao carregar produtos:", err));
   }, []);
 
-  // 🚀 NOVO: Reseta o scroll para o início sempre que o usuário pesquisar algo
   useEffect(() => {
     if (termoBusca.length > 0) {
       scrollRef.current?.scrollTo({ left: 0, behavior: "smooth" });
     }
   }, [termoBusca]);
 
-  // 🔍 Filtramos a lista baseada no nome
   const produtosFiltrados = listaProdutos.filter((produto) =>
     produto.nome.toLowerCase().includes(termoBusca.toLowerCase())
   );
@@ -36,11 +34,10 @@ export default function Produtos({ termoBusca = "" }) {
     scrollRef.current?.scrollBy({ left: 260, behavior: "smooth" });
   };
 
-  const abrirWhatsApp = (produto) => {
-    const mensagem = encodeURIComponent(
-      `Olá! Gostaria de comprar:\n*${produto.nome}* - ${Number(produto.preco).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}`
-    );
-    window.open(`https://wa.me/5598985101918?text=${mensagem}`, "_blank");
+  // 3. Função atualizada para levar à página de detalhes
+  const irParaDetalhes = (id) => {
+    navegar(`/produto/${id}`);
+    window.scrollTo(0, 0); // Garante que a nova página comece no topo
   };
 
   return (
@@ -50,7 +47,6 @@ export default function Produtos({ termoBusca = "" }) {
       </h2>
 
       <div className={styles.contenedor_produtos}>
-        {/* Só mostra as setas se houver mais de 3 produtos na tela */}
         {produtosFiltrados.length > 3 && (
           <>
             <button onClick={scrollLeft} className={styles.navegacao_esquerda} aria-label="Anterior">
@@ -77,13 +73,16 @@ export default function Produtos({ termoBusca = "" }) {
                     src={produto.imagem}
                     alt={produto.nome}
                     loading="lazy"
+                    onClick={() => irParaDetalhes(produto.id)} // Clique na imagem também navega
+                    style={{ cursor: 'pointer' }}
                   />
                   <div className={styles.info_produto}>
                     <h3>{produto.nome}</h3>
                     <p>{precoFormatado}</p>
+                    {/* 4. Botão agora chama a função de navegação */}
                     <button
-                      onClick={() => abrirWhatsApp(produto)}
-                      aria-label={`Comprar ${produto.nome} via WhatsApp`}
+                      onClick={() => irParaDetalhes(produto.id)}
+                      aria-label={`Ver detalhes de ${produto.nome}`}
                     >
                       Comprar
                     </button>

@@ -1,0 +1,135 @@
+.container {
+  max-width: 1000px; /* Diminuído para concentrar o conteúdo no centro */
+  margin: 200px auto; /* Reduzi o topo para 40px para não empurrar tudo pra baixo */
+  padding:  40px  60px; /* Aumentei o padding para dar mais espaço interno */
+  border-radius: 10px;
+  /* ... seus outros estilos ... */
+  margin-bottom: 0px; /* Cola no que vier abaixo */
+  padding-bottom: 0px;
+  position: relative; 
+  background-color: #fff;
+}
+
+/* Estilo do Botão Fechar (X) */
+.botao_fechar {
+  position: absolute;
+  top: 10px; 
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 35px; /* Um pouco menor para ser elegante */
+  color: #3f3f3f;
+  cursor: pointer;
+  line-height: 1;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.botao_fechar:hover {
+  color: #b51212;
+  transform: scale(1.2);
+}
+
+.vitrine {
+  display: flex;
+  gap: 30px; /* Espaço menor entre foto e texto */
+  flex-wrap: nowrap; /* Força ficarem lado a lado no PC */
+  align-items: center; /* Alinha o texto com o meio da imagem */
+}
+
+.imagem_principal {
+  flex: 1;
+  max-width: 400px; /* Limita a largura da foto */
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+}
+
+.imagem_principal img {
+  width: 100%;
+  max-height: 400px; /* CRUCIAL: Impede que a imagem estique a página para baixo */
+  object-fit: contain;
+}
+
+.infos {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Espaçamento mais apertado para caber tudo */
+}
+
+.nome_produto {
+  font-size: 26px; /* Tamanho mais equilibrado */
+  color: #222;
+  margin: 0;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.marca {
+  color: #777;
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+
+.preco_antigo {
+  text-decoration: line-through;
+  color: #999;
+  font-size: 14px;
+}
+
+.preco_atual {
+  color: #b51212;
+  font-size: 30px;
+  font-weight: bold;
+  margin-top: -5px;
+}
+
+.grade {
+  display: flex;
+  gap: 8px;
+  margin-top: 5px;
+}
+
+.btn_tam {
+  width: 40px; /* Botões de tamanho mais compactos */
+  height: 40px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.btn_tam:hover {
+  border-color: #333;
+  background-color: #f0f0f0;
+}
+
+/* Botão de comprar estilo Bluestok (Verde) */
+.botao_comprar {
+  background-color: #28a745; 
+  color: white;
+  border: none;
+  padding: 15px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 15px;
+  text-transform: uppercase;
+  width: 100%; /* Botão ocupa toda a largura da coluna de texto */
+}
+
+.botao_comprar:hover {
+  background-color: #218838;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .container { margin-top: 20px; }
+  .vitrine { flex-direction: column; text-align: center; }
+  .imagem_principal { max-width: 100%; }
+  .grade { justify-content: center; }
+}

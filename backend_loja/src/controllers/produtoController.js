@@ -1,7 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-// Função que você já tinha
+// Lista todos os produtos
 exports.listarTodos = async (req, res) => {
   try {
     const produtos = await prisma.produtos.findMany({
@@ -13,7 +13,28 @@ exports.listarTodos = async (req, res) => {
   }
 };
 
-// 🚀 NOVA FUNÇÃO: CADASTRAR COM PRISMA
+// ✅ NOVA FUNÇÃO: BUSCAR UM PRODUTO PELO ID
+exports.buscarPorId = async (req, res) => {
+  try {
+    const { id } = req.params; // Pega o ID da URL
+
+    const produto = await prisma.produtos.findUnique({
+      where: { id: parseInt(id) }, // Converte o ID para número inteiro
+      include: { categoria: true }  // Traz os dados da categoria junto
+    });
+
+    if (!produto) {
+      return res.status(404).json({ erro: "Sapatilha não encontrada" });
+    }
+
+    res.json(produto);
+  } catch (error) {
+    console.error("Erro ao buscar por ID:", error);
+    res.status(500).json({ erro: "Erro ao buscar detalhes do produto", detalhes: error.message });
+  }
+};
+
+// CADASTRAR COM PRISMA
 exports.cadastrar = async (req, res) => {
   try {
     const { nome, descricao, preco, estoque, imagem, categoria_id } = req.body;
@@ -22,10 +43,9 @@ exports.cadastrar = async (req, res) => {
       data: {
         nome: nome,
         descricao: descricao,
-        preco: parseFloat(preco), // O Prisma exige que o preço seja um número decimal/float
-        estoque: parseInt(estoque), // Garante que o estoque seja um número inteiro
+        preco: parseFloat(preco), 
+        estoque: parseInt(estoque), 
         imagem: imagem,
-        // Conexão com a categoria (chave estrangeira)
         categoria: {
           connect: { id: parseInt(categoria_id) }
         }

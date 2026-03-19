@@ -1,31 +1,33 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // 1. Importar o hook de navegação
 import styles from "./Achadinho.module.css";
 
 export default function Achadinho() {
   const [oferta, setOferta] = useState(null);
+  const navegar = useNavigate(); // 2. Inicializar o navegador
 
   useEffect(() => {
     fetch("http://localhost:3000/produtos")
       .then((res) => res.json())
       .then((dados) => {
-        // Aqui pegamos o produto que tem o 'preco_antigo' preenchido
+        // Pega o produto que tem 'preco_antigo' ou o quarto item da lista
         const produtoEmOferta = dados.find(p => p.preco_antigo > 0) || dados[3]; 
         setOferta(produtoEmOferta);
       })
       .catch((err) => console.error("Erro ao carregar oferta:", err));
   }, []);
 
-  if (!oferta) return null; // Não mostra nada enquanto carrega
+  // 3. Função para ir aos detalhes
+  const irParaDetalhes = (id) => {
+    navegar(`/produto/${id}`);
+    window.scrollTo(0, 0);
+  };
 
-  // Cálculo automático da porcentagem de desconto
+  if (!oferta) return null;
+
   const porcentagem = oferta.preco_antigo 
     ? Math.round(((oferta.preco_antigo - oferta.preco) / oferta.preco_antigo) * 100)
     : 40;
-
-  const abrirWhatsApp = () => {
-    const mensagem = encodeURIComponent(`Olá! Vi a oferta do dia: *${oferta.nome}* por R$ ${oferta.preco}. Ainda tem estoque?`);
-    window.open(`https://wa.me/5598985101918?text=${mensagem}`, "_blank");
-  };
 
   return (
     <section id="achadinho" className={styles.secao_achadinho} aria-labelledby="titulo-promocao">
@@ -54,6 +56,8 @@ export default function Achadinho() {
             alt={oferta.nome}
             className={styles.imagem}
             loading="lazy"
+            onClick={() => irParaDetalhes(oferta.id)} // Clique na imagem
+            style={{ cursor: "pointer" }}
           />
 
           <div className={styles.info}>
@@ -69,7 +73,11 @@ export default function Achadinho() {
               R$ {Number(oferta.preco).toFixed(2).replace('.', ',')}
             </p>
             
-            <button onClick={abrirWhatsApp} className={styles.botao_comprar}>
+            {/* 4. Botão atualizado para navegar aos detalhes */}
+            <button 
+              onClick={() => irParaDetalhes(oferta.id)} 
+              className={styles.botao_comprar}
+            >
               Comprar Agora
             </button>
           </div>
