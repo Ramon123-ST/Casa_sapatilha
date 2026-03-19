@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model usuarios {
+  id         Int        @id @default(autoincrement())
+  nome       String     @db.VarChar(100)
+  email      String     @unique @db.VarChar(150)
+  senha      String     @db.VarChar(255)
+  telefone   String?    @db.VarChar(20)
+  criado_em  DateTime?  @default(now()) @db.Timestamp(0)
+  pedidos    pedidos[]
+  carrinho   carrinho[]
+}
+
+model categorias {
+  id       Int        @id @default(autoincrement())
+  nome     String     @db.VarChar(100)
+  produtos produtos[]
+}
+
+model produtos {
+  id           Int             @id @default(autoincrement())
+  nome         String          @db.VarChar(150)
+  descricao    String?         @db.Text
+  preco        Decimal         @db.Decimal(10, 2)
+  estoque      Int
+  imagem       String?         @db.VarChar(255)
+  categoria_id Int
+  criado_em    DateTime?       @default(now()) @db.Timestamp(0)
+  categoria    categorias      @relation(fields: [categoria_id], references: [id])
+  itens_pedido itens_pedido[]
+  carrinho     carrinho[]
+
+  @@index([categoria_id], map: "categoria_id")
+}
+
+model pedidos {
+  id           Int            @id @default(autoincrement())
+  usuario_id   Int
+  status       String?        @db.VarChar(50)
+  total        Decimal?       @db.Decimal(10, 2)
+  criado_em    DateTime?      @default(now()) @db.Timestamp(0)
+  usuario      usuarios       @relation(fields: [usuario_id], references: [id])
+  itens_pedido itens_pedido[]
+
+  @@index([usuario_id], map: "usuario_id")
+}
+
+model itens_pedido {
+  id             Int      @id @default(autoincrement())
+  pedido_id      Int
+  produto_id     Int
+  quantidade     Int
+  preco_unitario Decimal  @db.Decimal(10, 2)
+  pedido         pedidos  @relation(fields: [pedido_id], references: [id])
+  produto        produtos @relation(fields: [produto_id], references: [id])
+
+  @@index([pedido_id], map: "pedido_id")
+  @@index([produto_id], map: "produto_id")
+}
+
+model carrinho {
+  id         Int      @id @default(autoincrement())
+  usuario_id Int
+  produto_id Int
+  quantidade Int
+  usuario    usuarios @relation(fields: [usuario_id], references: [id])
+  produto    produtos @relation(fields: [produto_id], references: [id])
+
+  @@index([produto_id], map: "produto_id")
+  @@index([usuario_id], map: "usuario_id")
+}

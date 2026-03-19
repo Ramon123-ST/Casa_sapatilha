@@ -1,3 +1,11 @@
+.vazio {
+  width: 100%;
+  text-align: center;
+  padding: 40px;
+  color: #666;
+  font-weight: bold;
+  grid-column: 1 / -1; /* Se usar grid */
+}
 
 .titulo_secao {
   text-align: center;

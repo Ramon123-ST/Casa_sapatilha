@@ -2,15 +2,16 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom"; 
 import styles from "./Header.module.css";
 
-export default function Header({ carrinhoCount = 0, abrirCarrinho }) {
+export default function Header({ carrinhoCount = 0, abrirCarrinho, aoBuscar }) {
   
   const [menuAberto, setMenuAberto] = useState(false);
 
   const scrollToSection = (e, id) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     const element = document.getElementById(id);
     if (element) {
-      const offset = 160;
+      // 🎯 AJUSTE DE ALTURA: Diminuímos para -20 para a sapatilha ficar bem visível
+      const offset = -20; 
       const bodyRect = document.body.getBoundingClientRect().top;
       const elementRect = element.getBoundingClientRect().top;
       const elementPosition = elementRect - bodyRect;
@@ -21,7 +22,6 @@ export default function Header({ carrinhoCount = 0, abrirCarrinho }) {
         behavior: "smooth",
       });
 
-      // Fecha o menu no mobile após clicar
       setMenuAberto(false);
     }
   };
@@ -31,11 +31,21 @@ export default function Header({ carrinhoCount = 0, abrirCarrinho }) {
       <div className={styles.contenedor_cmc}>
         <div className={styles.logotipo}>Casa da Sapatilha</div>
 
+        {/* 🔍 BUSCA COM FOCO NO PRODUTO */}
         <input
           type="text"
           className={styles.busca}
           placeholder="Estou buscando..."
           aria-label="Buscar produtos"
+          onChange={(e) => {
+            const valor = e.target.value;
+            aoBuscar(valor); 
+
+            // Quando o cliente digita, o site desce "na medida" para o produto
+            if (valor.length >= 2) {
+              scrollToSection(null, "tendencias"); 
+            }
+          }}
         />
 
         <button
@@ -46,7 +56,6 @@ export default function Header({ carrinhoCount = 0, abrirCarrinho }) {
           <span className={styles.cart_count}>{carrinhoCount}</span>
         </button>
 
-        {/* BOTÃO HAMBURGUER */}
         <button
           className={styles.menu_mobile}
           onClick={() => setMenuAberto(!menuAberto)}
@@ -63,7 +72,7 @@ export default function Header({ carrinhoCount = 0, abrirCarrinho }) {
             </Link>
           </li>
           <li>
-            <Link to="/#mais-vendidos" onClick={(e) => scrollToSection(e, "mais-vendidos")}>
+            <Link to="/#mais-vendidos" onClick={(e) => scrollToSection(e, "tendencias")}>
               Mais vendidos
             </Link>
           </li>
@@ -86,7 +95,7 @@ export default function Header({ carrinhoCount = 0, abrirCarrinho }) {
           <Link
             to="/#comprar"
             className={styles.botao}
-            onClick={(e) => scrollToSection(e, "comprar")}
+            onClick={(e) => scrollToSection(e, "tendencias")}
           >
             Comprar agora
           </Link>
