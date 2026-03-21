@@ -1,19 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const produtoController = require('../controllers/produtoController');
+const usuarioController = require('../controllers/usuarioController');
 
 router.get('/', (req, res) => {
-  res.send("API funcionando 🚀");
+  res.send("API funcionando 🚀 - Casa da Sapatilha");
 });
 
-// Listar todas as sapatilhas
+// 👟 ROTAS DE PRODUTOS
 router.get('/produtos', produtoController.listarTodos);
-
-// ✅ NOVA ROTA: Buscar uma sapatilha específica pelo ID
-// O :id é o que permite o React pedir /produtos/1, /produtos/2, etc.
 router.get('/produtos/:id', produtoController.buscarPorId);
-
-// Cadastrar nova sapatilha
 router.post('/produtos', produtoController.cadastrar);
+
+// 👤 ROTAS DE USUÁRIO
+// Dica: Use nomes simples para o fetch do React ficar fácil: /usuarios e /login
+router.post('/usuarios', usuarioController.cadastrar);
+router.post('/login', usuarioController.login);
 
 module.exports = router;

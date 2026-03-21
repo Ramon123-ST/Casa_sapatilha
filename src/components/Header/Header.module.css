@@ -9,12 +9,11 @@
   z-index: 1000;        
 }
 
-
 body {
   margin-top: 160px; 
 }
 
-
+/* --- Promo Topo --- */
 .promo_topo {
   background-color: #800020;
   color: white;
@@ -32,27 +31,16 @@ body {
   padding: 0 20px;
 }
 
-.promo_esquerda {
-  flex: 1;
-  line-height: 1.4;
-}
-
 .texto_completo_animado {
   display: inline-block;
   font-size: 16px;
   font-weight: 700;
   animation: pulseText 2.2s infinite ease-in-out;
-  white-space: nowrap;
-  margin-left: -100px;
 }
 
 @keyframes pulseText {
-  1%, 100% {
-    transform: scale(1);
-  }
-  30% {
-    transform: scale(1.14);
-  }
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
 }
 
 .botao {
@@ -63,18 +51,10 @@ body {
   font-weight: bold;
   font-size: 13px;
   text-decoration: none;
-  transition: all 0.10s ease;
-  white-space: nowrap;
-  margin-right: -160px;
+  transition: all 0.2s ease;
 }
 
-.botao:hover {
-  background-color: #f8f8f8;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-
+/* --- Conteúdo Central do Header --- */
 .contenedor_cmc {
   max-width: 1200px;
   margin: 0 auto;
@@ -89,25 +69,63 @@ body {
   font-size: 24px;
   font-weight: 900;
   color: #800020;
-  letter-spacing: -0.5px;
-  margin-left: -150px;
+  text-decoration: none;
+  white-space: nowrap;
 }
 
 .busca {
   flex: 1;
-  max-width: 700px;
-  padding: 12px 16px;
-  border: 1px solid #b1afaf;
+  max-width: 500px;
+  padding: 12px 20px;
+  border: 1px solid #ddd;
   border-radius: 50px;
   font-size: 15px;
   outline: none;
-  transition: border 0.3s ease;
-  margin-left: -290px;
 }
 
-.busca:focus {
-  border-color: #800020;
-  box-shadow: 0 0 0 2px rgba(128, 0, 32, 0.1);
+/* ✅ NOVA ÁREA DE AÇÕES (LOGIN + CARRINHO) */
+.acoes_usuario {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.perfil_logado {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 100px;
+}
+
+.saudacao {
+  font-size: 13px;
+  font-weight: bold;
+  color: #333;
+}
+
+.btn_sair {
+  background: none;
+  border: none;
+  color: #800020;
+  font-size: 11px;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.btn_login {
+  background-color: #800020;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn_login:hover {
+  opacity: 0.9;
 }
 
 .butao_carr {
@@ -118,13 +136,12 @@ body {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 6px;
 }
 
 .cart_count {
   background-color: #800020;
   color: white;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: bold;
   width: 18px;
   height: 18px;
@@ -133,11 +150,11 @@ body {
   align-items: center;
   justify-content: center;
   position: absolute;
-  top: -8px;
-  margin-left: 160px;
+  top: -5px;
+  right: -10px;
 }
 
-
+/* --- Navegação --- */
 .navegacao {
   background-color: #f9f9f9;
   border-top: 1px solid #eee;
@@ -149,357 +166,55 @@ body {
   padding: 0 20px;
   list-style: none;
   display: flex;
-  gap: 32px;
-  justify-content: flex-start;
-  overflow-x: auto;
-  white-space: nowrap;
-  margin-left: 35px;
+  gap: 30px;
 }
 
 .navegacao a {
   display: block;
-  padding: 14px 0;
+  padding: 12px 0;
   color: #333;
   text-decoration: none;
   font-weight: 600;
   font-size: 14px;
-  transition: all 0.3s ease;
-  transform-origin: center bottom;
+  transition: color 0.2s;
 }
 
 .navegacao a:hover {
   color: #800020;
-  transform: scale(1.10);
-  font-weight: 700;
-}
-/* ===================================
-   🎨 EFEITO DE CLIQUE (apenas mobile)
-=================================== */
-@media (hover: none) {
-  .navegacao a:active {
-    transform: scale(1.1);
-    color: #800020;
-  }
 }
 
-/* ===================================
-   💻 TABLETS (769px a 1024px)
-=================================== */
-@media (min-width: 769px) and (max-width: 1024px) {
-  body {
-    margin-top: 130px;
-  }
-
-  .contenedor {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 24px;
-    gap: 12px;
-  }
-
-  .contenedor_cmc {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 24px;
-  }
-
-  .logotipo {
-    font-size: 18px;
-    margin-left: 0;
-  }
-
-  .busca {
-    width: 35%;
-    max-width: 280px;
-    font-size: 13px;
-  }
-
-  .promo_topo {
-    font-size: 14px;
-    text-align: center;
-  }
-
-  .botao {
-    font-size: 13px;
-    padding: 8px 18px;
-  }
-
-  .butao_carr {
-    font-size: 24px;
-  }
-
-  .cart_count {
-    top: -6px;
-    margin-left: -10px;
-  }
-
-  .navegacao ul {
-    justify-content: center;
-    gap: 24px;
-    flex-wrap: wrap;
-    padding: 10px 0;
-  }
-
-  .navegacao a {
-    font-size: 14px;
-    padding: 10px 0;
-  }
-
-  .menu_hamburguer {
-    display: none;
-  }
-}
-
-/* ===================================
-   📱 CELULARES (até 768px)
-=================================== */
+/* --- Media Queries Essenciais --- */
 @media (max-width: 768px) {
-  body {
-    margin-top: 120px;
-  }
-
-  .contenedor {
-    flex-direction: column;
-    gap: 8px;
-    text-align: center;
-  }
-
-  .promo_topo {
-    padding: 10px 0;
-  }
-
-  .texto_completo_animado {
-    white-space: normal;
-    font-size: 13px;
-    animation: pulseTextMobile 2.2s infinite ease-in-out;
-    margin-left: 0;
-  }
-
-  @keyframes pulseTextMobile {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.03); }
-  }
-
-  .botao {
-    padding: 6px 14px;
-    font-size: 12px;
-  }
-
-  .contenedor_cmc {
-    display: flex;
-    flex-direction: row;       
-    align-items: center;      
-    justify-content: center;   
-    flex-wrap: nowrap;         
-    gap: 10px;
-  }
-
-  .logotipo {
-    font-size: 15px;
-    margin: 10px;
-  }
-
-  .busca {
-    width: 40%;                
-    margin: 10px;
-    font-size: 12px;
-  }
-
-  .butao_carr {
-    font-size: 22px;
-  }
-
-  .cart_count {
-    top: -6px;
-    margin-left: 55px;
-  }
-
-  .navegacao ul {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    white-space: nowrap;
-    gap: 16px;
-    justify-content: flex-start;
-    padding-bottom: 8px;
-  }
-
-  .navegacao a {
-    font-size: 12px;
-    padding: 12px 0;
-  }
-}
-
-/* ===================================
-   📱 CELULARES MÉDIOS (376px a 480px)
-=================================== */
-@media (min-width: 376px) and (max-width: 480px) {
-  .contenedor_cmc {
-    justify-content: space-between;
-    padding: 12px 20px;
-  }
-
-  .logotipo {
-    font-size: 14px;
-    margin-left: -10px;
-  }
-
-  .busca {
-    width: 70%;
-  }
-}
-
-/* ===================================
-   📱 CELULARES GRANDES / MINI TABLETS (481px a 768px)
-=================================== */
-@media (min-width: 481px) and (max-width: 768px) {
-  .contenedor_cmc {
-    justify-content: space-between;
-    padding: 14px 49px;
-  }
-
-  .logotipo {
-    font-size: 17px;
-    margin-left: -30px;
-  }
-
-  .busca {
-    width: 50%;
-  }
-}
-
-/* ===================================
-   💻 TABLETS GRANDES / NOTEBOOKS (769px a 1280px)
-=================================== */
-@media (min-width: 769px) and (max-width: 1280px) {
-  .contenedor_cmc {
-    justify-content: space-between;
-    padding: 16px 32px;
-  }
-
-  .logotipo {
-    font-size: 18px;
-  }
-
-  .busca {
-    width: 35%;
-    margin-left: -130px;
-  }
-}
-
-/* ===================================
-   💻 NOTEBOOK PEQUENO (1280x800)
-=================================== */
-@media (min-width: 1200px) and (max-width: 1300px) {
-  .contenedor_cmc {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 40px;
-  }
-
-  .logotipo {
-    font-size: 20px;
-    margin-left: -30px;
-  }
-
-  .busca {
-    width: 35%;
-    font-size: 14px;
-  }
-
-  .menu_hamburguer {
-    display: none;
-  }
-}
-
-/* ===================================
-   📱 MENU HAMBÚRGUER MOBILE
-=================================== */
-.menu_mobile {
-  display: none;
+  body { margin-top: 140px; }
+  
+  .logotipo { font-size: 18px; }
+  
+  .busca { display: none; } /* Esconde busca no mobile para caber login */
+  
+  .saudacao { display: none; } /* Mostra só "Sair" ou ícone no mobile */
+  
+  .contenedor_cmc { padding: 10px 15px; }
 }
 
 @media (max-width: 500px) {
-  .navegacao ul {
-    display: none;
-    flex-direction: column;
-    background: #ffffff;
-    position: absolute;
-    top: 45px;
-    left: 0;
-    width: 100%;
-    border-top: 1px solid #ddd;
-    padding: 12px 0;
-    z-index: 999;
-  }
-
-  .menu_aberto {
-    display: flex !important;
-  }
-
   .menu_mobile {
     display: block;
     background: none;
     border: none;
     font-size: 26px;
-    cursor: pointer;
     color: #800020;
+    cursor: pointer;
   }
 
-  .contenedor_cmc {
-    gap: 8px;
-  }
-
-  .busca {
-    max-width: 100%;
+  .menu_aberto {
+    display: flex !important;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: white;
+    flex-direction: column;
+    padding: 20px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
   }
 }
-
-/* ===================================
-   ✅ CORREÇÃO — CELULARES ALTOS (720×1600, 740×1600, 750×1600)
-   👉 Mostra menu hambúrguer e esconde menu normal
-=================================== */
-@media (min-width: 700px) and (max-width: 760px) and (min-height: 1500px) and (max-height: 1700px) {
-  /* Esconde menu normal */
-  .navegacao ul {
-    display: none !important;
-  }
-
-  /* Mostra o menu hambúrguer */
-  .menu_mobile {
-    display: block !important;
-    background: none;
-    border: none;
-    font-size: 28px;
-    cursor: pointer;
-    color: #800020;
-  }
-
-  /* Mantém o carrinho visível */
-  .butao_carr,
-  .cart_count {
-    display: inline-block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    margin-right: 50px;
-  }
-
-  /* Ajuste de layout */
-  .contenedor_cmc {
-    justify-content: space-between !important;
-    gap: 10px !important;
-    padding: 12px 24px !important;
-  }
-
-  .busca {
-    width: 45% !important;
-    max-width: 300px !important;
-  }
-
-  .logotipo {
-    font-size: 18px !important;
-  }
-}
-

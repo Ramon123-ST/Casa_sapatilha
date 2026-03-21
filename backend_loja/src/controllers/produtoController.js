@@ -13,14 +13,13 @@ exports.listarTodos = async (req, res) => {
   }
 };
 
-// ✅ NOVA FUNÇÃO: BUSCAR UM PRODUTO PELO ID
+// BUSCAR UM PRODUTO PELO ID (Usado na página DetalhesProduto.jsx)
 exports.buscarPorId = async (req, res) => {
   try {
-    const { id } = req.params; // Pega o ID da URL
-
+    const { id } = req.params;
     const produto = await prisma.produtos.findUnique({
-      where: { id: parseInt(id) }, // Converte o ID para número inteiro
-      include: { categoria: true }  // Traz os dados da categoria junto
+      where: { id: parseInt(id) },
+      include: { categoria: true }
     });
 
     if (!produto) {
@@ -29,23 +28,35 @@ exports.buscarPorId = async (req, res) => {
 
     res.json(produto);
   } catch (error) {
-    console.error("Erro ao buscar por ID:", error);
     res.status(500).json({ erro: "Erro ao buscar detalhes do produto", detalhes: error.message });
   }
 };
 
-// CADASTRAR COM PRISMA
+// CADASTRAR COM PRISMA (Adicionado campos de cor, tamanho e promo)
 exports.cadastrar = async (req, res) => {
   try {
-    const { nome, descricao, preco, estoque, imagem, categoria_id } = req.body;
+    const { 
+      nome, 
+      descricao, 
+      preco, 
+      preco_antigo, 
+      estoque, 
+      imagem, 
+      cor, 
+      tamanho_disponivel, 
+      categoria_id 
+    } = req.body;
 
     const novoProduto = await prisma.produtos.create({
       data: {
-        nome: nome,
-        descricao: descricao,
+        nome,
+        descricao,
         preco: parseFloat(preco), 
+        preco_antigo: preco_antigo ? parseFloat(preco_antigo) : null,
         estoque: parseInt(estoque), 
-        imagem: imagem,
+        imagem,
+        cor,
+        tamanho_disponivel,
         categoria: {
           connect: { id: parseInt(categoria_id) }
         }

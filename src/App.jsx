@@ -9,23 +9,28 @@ import Footer from "./components/Footer/Footer";
 import Admin from "./components/Admin/Admin"; 
 import DetalhesProduto from "./components/DetalhesProduto/DetalhesProduto"; 
 import Carrinho from "./components/Carrinho/Carrinho"; 
+import Cadastro from "./components/Cadastro/Cadastro"; 
 
 export default function App() {
   const [carrinhoAberto, setCarrinhoAberto] = useState(false);
+  const [cadastroAberto, setCadastroAberto] = useState(false); // ✅ NOVO: Controle do Modal de Cadastro
   const [termoBusca, setTermoBusca] = useState("");
 
   const abrirCarrinho = () => setCarrinhoAberto(true);
+  const abrirCadastro = () => setCadastroAberto(true); // ✅ NOVO: Função para abrir o Cadastro
 
   return (
     <>
-      {/* O Header recebe a função para abrir o modal do carrinho visual */}
+      {/* O Header agora recebe a função para abrir o Cadastro também */}
       <Header 
         abrirCarrinho={abrirCarrinho} 
+        abrirCadastro={abrirCadastro} 
         aoBuscar={setTermoBusca} 
       />
 
-      {/* O componente visual do Carrinho (Modal/Sidebar) */}
+      {/* Modais: Eles ficam aqui fora das rotas para aparecerem por cima de qualquer página */}
       <Carrinho aberto={carrinhoAberto} setAberto={setCarrinhoAberto} />
+      <Cadastro aberto={cadastroAberto} setAberto={setCadastroAberto} />
 
       <main>
         <Routes>
@@ -49,6 +54,7 @@ export default function App() {
             </>
           } />
 
+          {/* Removi a Rota /cadastro porque agora ele é um Componente Suspenso (Modal) */}
           <Route path="/produto/:id" element={<DetalhesProduto />} />
           <Route path="/admin" element={<Admin />} />
         </Routes>

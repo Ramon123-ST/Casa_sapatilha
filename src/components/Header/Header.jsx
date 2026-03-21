@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; 
-// ✅ AJUSTADO: ../../ sobe duas pastas e 'context' em minúsculo
 import { useCart } from "../../Context/CartContext"; 
+import { useAuth } from "../../Context/AuthContext"; // ✅ NOVO: Importando autenticação
 import styles from "./Header.module.css";
 
-export default function Header({ abrirCarrinho, aoBuscar }) {
+export default function Header({ abrirCarrinho, abrirCadastro, aoBuscar }) {
   const [menuAberto, setMenuAberto] = useState(false);
-  const { carrinho } = useCart(); 
+  const { quantidadeTotal } = useCart(); // ✅ Usando a soma total que criamos no Context
+  const { usuario, logado, logout } = useAuth(); // ✅ Pegando dados do usuário
   const navegar = useNavigate();
-
-  const totalItens = carrinho.reduce((sum, item) => sum + item.quantidade, 0);
 
   const scrollToSection = (e, id) => {
     if (e) e.preventDefault();
@@ -53,18 +52,36 @@ export default function Header({ abrirCarrinho, aoBuscar }) {
             if (aoBuscar) aoBuscar(valor); 
 
             if (valor.length >= 2 && window.location.pathname === "/") {
-              scrollToSection(null, "tendencias"); 
+              scrollToSection(null, "promocoes"); 
             }
           }}
         />
 
-        <button
-          className={styles.butao_carr}
-          onClick={abrirCarrinho}
-          title="Abrir carrinho"
-        >
-          <span className={styles.cart_count}>{totalItens}</span>
-        </button>
+        <div className={styles.acoes_usuario}>
+          {/* ✅ ÁREA DE LOGIN DINÂMICA */}
+          {logado ? (
+            <div className={styles.perfil_logado}>
+              <span className={styles.saudacao}>Olá, {usuario.nome.split(' ')[0]}</span>
+              <button onClick={logout} className={styles.btn_sair}>Sair</button>
+            </div>
+          ) : (
+            <button 
+              className={styles.btn_login} 
+              onClick={abrirCadastro}
+              title="Entrar ou Cadastrar"
+            >
+              Entrar
+            </button>
+          )}
+
+          <button
+            className={styles.butao_carr}
+            onClick={abrirCarrinho}
+            title="Abrir carrinho"
+          >
+            <span className={styles.cart_count}>{quantidadeTotal}</span>
+          </button>
+        </div>
 
         <button
           className={styles.menu_mobile}
@@ -82,7 +99,7 @@ export default function Header({ abrirCarrinho, aoBuscar }) {
             </Link>
           </li>
           <li>
-            <Link to="/#mais-vendidos" onClick={(e) => scrollToSection(e, "tendencias")}>
+            <Link to="/#mais-vendidos" onClick={(e) => scrollToSection(e, "mais-vendidos")}>
               Mais vendidos
             </Link>
           </li>
@@ -105,7 +122,7 @@ export default function Header({ abrirCarrinho, aoBuscar }) {
           <Link
             to="/#comprar"
             className={styles.botao}
-            onClick={(e) => scrollToSection(e, "tendencias")}
+            onClick={(e) => scrollToSection(e, "promocoes")}
           >
             Comprar agora
           </Link>
