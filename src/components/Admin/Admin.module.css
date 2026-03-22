@@ -1,16 +1,130 @@
 .admin_container {
-  max-width: 500px;
-  margin: 80px auto;
+  max-width: 800px; /* Aumentado para caber a grade de estoque */
+  margin: 100px auto;
   padding: 40px;
   background: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-.titulo { color: #800000; text-align: center; margin-bottom: 20px; }
-.formulario { display: flex; flex-direction: column; gap: 15px; }
-.formulario input { padding: 12px; border: 1px solid #ccc; border-radius: 5px; }
+
+.admin_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #f0f0f0;
+  margin-bottom: 30px;
+  padding-bottom: 10px;
+}
+
+.titulo { 
+  color: #800000; 
+  margin: 0;
+  font-size: 24px;
+}
+
+.badge_adm {
+  background: #800000;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.formulario { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 25px; 
+}
+
+.secao_principal h3, .secao_estoque h3 {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 15px;
+  border-left: 4px solid #800000;
+  padding-left: 10px;
+}
+
+/* Grid para Nome, Preço, Cor e Imagem */
+.grid_inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.formulario input { 
+  padding: 12px; 
+  border: 1px solid #ddd; 
+  border-radius: 6px; 
+  font-size: 14px;
+  transition: border-color 0.3s;
+}
+
+.formulario input:focus {
+  border-color: #800000;
+  outline: none;
+}
+
+/* ✅ ESTILO DA GRADE DE ESTOQUE (PONTO 1 DA LISTA) */
+.grid_estoque {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 15px;
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
+.item_estoque {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  text-align: center;
+}
+
+.item_estoque label {
+  font-size: 12px;
+  font-weight: bold;
+  color: #666;
+}
+
+.item_estoque input {
+  text-align: center;
+  padding: 8px;
+  font-weight: bold;
+  color: #800000;
+}
+
 .botao_salvar { 
-  background: #800000; color: white; padding: 12px; 
-  border: none; border-radius: 5px; cursor: pointer; font-weight: bold;
+  background: #800000; 
+  color: white; 
+  padding: 16px; 
+  border: none; 
+  border-radius: 8px; 
+  cursor: pointer; 
+  font-weight: bold;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  margin-top: 10px;
 }
-.botao_salvar:hover { background: #a00000; }
+
+.botao_salvar:hover { 
+  background: #a00000; 
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(128, 0, 0, 0.2);
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 600px) {
+  .grid_inputs {
+    grid-template-columns: 1fr;
+  }
+  
+  .admin_container {
+    margin: 20px;
+    padding: 20px;
+  }
+}

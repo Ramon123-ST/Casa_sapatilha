@@ -1,17 +1,62 @@
-import React from "react";
-// ✅ IMPORTANTE: Verifique se a pasta é 'context' (minúsculo) ou 'Context' (Maiúsculo). 
-// Se a pasta for minúscula, deixe como está abaixo:
+import React, { useState } from "react";
 import { useCart } from "../../Context/CartContext"; 
+import { useAuth } from "../../Context/AuthContext"; // Importante para pegar o usuario_id
 import styles from "./Carrinho.module.css";
 
 export default function Carrinho({ aberto, setAberto }) {
-  const { carrinho, removerDoCarrinho } = useCart();
+  const { carrinho, removerDoCarrinho, limparCarrinho } = useCart();
+  const { usuario } = useAuth(); // Ponto 6: Precisamos saber quem está comprando
+  const [carregando, setCarregando] = useState(false);
 
-  // Calcula o valor total do carrinho convertendo para número para evitar erros de cálculo
   const total = carrinho.reduce((acc, item) => {
     const preco = Number(item.preco) || 0;
     return acc + (preco * item.quantidade);
   }, 0);
+
+  // 🚀 FUNÇÃO PARA FINALIZAR NO SISTEMA (PONTO 2 E 6)
+  const finalizarPedidoNoSistema = async () => {
+    if (!usuario) {
+      alert("Por favor, faça login para finalizar a compra!");
+      return;
+    }
+
+    setCarregando(true);
+
+    const dadosPedido = {
+      usuario_id: usuario.id,
+      valor_frete: 0, // Ponto 13: Pode ser calculado futuramente
+      total_geral: total,
+      itens: carrinho.map(item => ({
+        produto_id: item.id,
+        quantidade: item.quantidade,
+        preco_unitario: item.preco,
+        tamanho_escolhido: item.tamanho // CRÍTICO: Para o Back-end saber qual estoque baixar
+      }))
+    };
+
+    try {
+      const resposta = await fetch("http://localhost:3000/pedidos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dadosPedido)
+      });
+
+      const resultado = await resposta.json();
+
+      if (resposta.ok) {
+        alert("✅ Pedido confirmado e estoque atualizado!");
+        limparCarrinho(); // Você precisa criar essa função no CartContext
+        setAberto(false);
+      } else {
+        alert(`❌ Erro: ${resultado.erro}`);
+      }
+    } catch (error) {
+      console.error("Erro ao finalizar:", error);
+      alert("Erro na conexão com o servidor.");
+    } finally {
+      setCarregando(false);
+    }
+  };
 
   if (!aberto) return null;
 
@@ -56,7 +101,14 @@ export default function Carrinho({ aberto, setAberto }) {
                 {total.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
               </span>
             </div>
-            <button className={styles.btn_finalizar}>Finalizar no WhatsApp</button>
+            {/* PONTO 6: Botão agora finaliza no seu Banco de Dados */}
+            <button 
+              className={styles.btn_finalizar} 
+              onClick={finalizarPedidoNoSistema}
+              disabled={carregando}
+            >
+              {carregando ? "PROCESSANDO..." : "FINALIZAR PEDIDO"}
+            </button>
           </div>
         )}
       </aside>

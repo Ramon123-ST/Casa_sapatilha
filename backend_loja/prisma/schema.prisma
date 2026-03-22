@@ -15,6 +15,8 @@ model usuarios {
   telefone  String?   @db.VarChar(20)
   cep       String?   @db.VarChar(9)
   endereco  String?   @db.VarChar(255)
+  // Ponto 14: Diferenciar Admin de Cliente
+  tipo      String    @default("cliente") @db.VarChar(20) 
   criado_em DateTime? @default(now()) @db.Timestamp(0)
   pedidos   pedidos[]
 }
@@ -26,47 +28,64 @@ model categorias {
 }
 
 model produtos {
-  id                 Int            @id @default(autoincrement())
-  nome               String         @db.VarChar(150)
-  descricao          String?        @db.Text
-  preco              Decimal        @db.Decimal(10, 2)
-  preco_antigo       Decimal?       @db.Decimal(10, 2)
-  estoque            Int?           @default(0)
-  imagem             String?        @db.VarChar(255)
-  cor                String?        @db.VarChar(50)
-  tamanho_disponivel String?        @db.VarChar(50)
-  categoria_id       Int?
-  criado_em          DateTime?      @default(now()) @db.Timestamp(0)
-  itens_pedido       itens_pedido[]
-  categoria          categorias?    @relation(fields: [categoria_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "produtos_ibfk_1")
+  id            Int            @id @default(autoincrement())
+  nome          String         @db.VarChar(150)
+  descricao     String?        @db.Text
+  preco         Decimal        @db.Decimal(10, 2)
+  preco_antigo  Decimal?       @db.Decimal(10, 2)
+  imagem        String?        @db.VarChar(255)
+  cor           String?        @db.VarChar(50)
+  // Ponto 5: Soft Delete (Ativo/Inativo)
+  status        String         @default("ativo") @db.VarChar(20)
+  categoria_id  Int?
+  criado_em     DateTime?      @default(now()) @db.Timestamp(0)
+  
+  // Relacionamentos
+  categoria     categorias?    @relation(fields: [categoria_id], references: [id])
+  estoque       estoque[]      // Ponto 1: Estoque por variação
+  itens_pedido  itens_pedido[]
 
   @@index([categoria_id], map: "categoria_id")
+}
+
+// ✅ NOVO MODEL: Ponto 1, 2 e 11 (Controle de Estoque por Tamanho)
+model estoque {
+  id         Int      @id @default(autoincrement())
+  tamanho    Int
+  quantidade Int      @default(0)
+  produto_id Int
+  produto    produtos @relation(fields: [produto_id], references: [id], onDelete: Cascade)
+
+  @@index([produto_id])
 }
 
 model pedidos {
   id             Int            @id @default(autoincrement())
   usuario_id     Int?
-  status         String?        @default("Pendente") @db.VarChar(50)
+  // Ponto 18: Status Avançado
+  status         String?        @default("Pendente") @db.VarChar(50) 
   total_produtos Decimal?       @db.Decimal(10, 2)
   valor_frete    Decimal?       @db.Decimal(10, 2)
   total_geral    Decimal?       @db.Decimal(10, 2)
   criado_em      DateTime?      @default(now()) @db.Timestamp(0)
   atualizado_em  DateTime?      @default(now()) @db.Timestamp(0)
+  
   itens_pedido   itens_pedido[]
-  usuario        usuarios?      @relation(fields: [usuario_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "pedidos_ibfk_1")
+  usuario        usuarios?      @relation(fields: [usuario_id], references: [id])
 
   @@index([usuario_id], map: "usuario_id")
 }
 
 model itens_pedido {
-  id                Int       @id @default(autoincrement())
+  id                Int      @id @default(autoincrement())
   pedido_id         Int?
   produto_id        Int?
   quantidade        Int?
-  preco_unitario    Decimal?  @db.Decimal(10, 2)
+  preco_unitario    Decimal? @db.Decimal(10, 2)
   tamanho_escolhido Int?
-  pedido            pedidos?  @relation(fields: [pedido_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "itens_pedido_ibfk_1")
-  produto           produtos? @relation(fields: [produto_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "itens_pedido_ibfk_2")
+  
+  pedido            pedidos?  @relation(fields: [pedido_id], references: [id])
+  produto           produtos? @relation(fields: [produto_id], references: [id])
 
   @@index([pedido_id], map: "pedido_id")
   @@index([produto_id], map: "produto_id")
