@@ -1,0 +1,124 @@
+.admin_container {
+  display: flex;
+  /* Trava o painel no tamanho da tela, impedindo a rolagem do 'body' global */
+  height: 100vh; 
+  width: 100vw;
+  background-color: #f0f2f5; 
+  margin: 0;
+  padding: 0;
+  overflow: hidden; 
+}
+
+.sidebar {
+  width: 260px;
+  background-color: #1e272e; 
+  color: white;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  position: fixed; 
+  top: 0;
+  left: 0;
+  height: 100vh;
+  box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+.logo_admin {
+  margin-bottom: 40px;
+}
+
+.logo_admin h2 {
+  color: #ffa801; 
+  margin-bottom: 5px;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.logo_admin span {
+  font-size: 0.75rem;
+  color: #808e9b;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.nav_links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+.link {
+  color: #d2dae2;
+  text-decoration: none;
+  padding: 12px 15px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.link:hover {
+  background-color: #485460;
+  color: white;
+  transform: translateX(5px);
+}
+
+.link_active {
+  background-color: #ffa801;
+  color: #1e272e;
+}
+
+.btn_loja {
+  margin-top: 20px;
+  background: transparent;
+  border: 1px solid #ffa801;
+  color: #ffa801;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 600;
+  display: block;
+}
+
+.btn_loja:hover {
+  background: #ffa801;
+  color: #1e272e;
+}
+
+/* ÁREA DE CONTEÚDO COM ROLAGEM INDEPENDENTE */
+.conteudo_principal {
+  flex: 1;
+  margin-left: 260px; 
+  padding: 0 40px; 
+  height: 100vh;
+  background-color: #f0f2f5;
+  
+  /* Permite rolagem apenas aqui dentro */
+  overflow-y: auto; 
+  scroll-behavior: smooth; 
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.admin_footer {
+  margin-top: auto;
+  border-top: 1px solid #485460;
+  padding: 25px 0;
+  font-size: 0.85rem;
+  color: #808e9b;
+}
+
+.admin_footer strong {
+  color: #d2dae2;
+  display: block;
+  margin-top: 5px;
+}

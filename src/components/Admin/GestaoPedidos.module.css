@@ -1,0 +1,14 @@
+.container { padding: 20px; font-family: sans-serif; }
+.filtros { margin-bottom: 20px; display: flex; gap: 10px; }
+.filtros button { padding: 8px 15px; cursor: pointer; border: 1px solid #ddd; background: #fff; }
+
+.tabela { width: 100%; border-collapse: collapse; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+.tabela th, .tabela td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+
+.pendente { color: #f39c12; font-weight: bold; }
+.pago { color: #27ae60; font-weight: bold; }
+.enviado { color: #2980b9; font-weight: bold; }
+.cancelado { color: #c0392b; font-weight: bold; }
+
+.btn_pago { background: #27ae60; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+.btn_enviar { background: #2980b9; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }

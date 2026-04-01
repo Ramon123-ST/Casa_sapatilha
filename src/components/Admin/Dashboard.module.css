@@ -1,0 +1,90 @@
+.container {
+  width: 100%;
+  margin: 0;
+  padding: 0; 
+  display: flex;
+  flex-direction: column;
+}
+
+.titulo {
+  margin: 0; 
+  padding-top: 40px; 
+  margin-bottom: 40px;
+  
+  color: #1e272e;
+  font-size: 2.2rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 25px;
+}
+
+.card {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+}
+
+.card h3 {
+  font-size: 0.9rem;
+  color: #808e9b;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 12px;
+}
+
+.valor {
+  font-size: 2.6rem; /* Aumentei para dar mais destaque aos números */
+  font-weight: 900;
+  color: #1e272e;
+  margin-bottom: 8px;
+}
+
+.card span {
+  font-size: 0.85rem;
+  color: #adb5bd;
+  display: block;
+}
+
+/* Indicadores de status coloridos */
+.faturamento { border-top: 6px solid #05c46b; }
+.vendas { border-top: 6px solid #3c40c6; }
+.ticket { border-top: 6px solid #ef5777; }
+
+.info_extra {
+  margin-top: 50px;
+  padding: 20px;
+  background: #ffffff;
+  border-left: 6px solid #ffa801;
+  color: #485460;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.02);
+  font-size: 1rem;
+}
+
+.info_extra strong {
+  color: #ffa801;
+}
+
+.loading { 
+  text-align: center; 
+  padding: 100px; 
+  font-size: 1.2rem; 
+  color: #808e9b; 
+}

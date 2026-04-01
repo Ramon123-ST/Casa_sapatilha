@@ -1,0 +1,116 @@
+.container {
+  padding: 40px;
+  background-color: #f4f7f6;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container h2 {
+  color: #2d3436;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+/* Formulário de Cadastro */
+.formulario {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 40px;
+}
+
+.formulario input, .formulario select {
+  padding: 12px;
+  border: 1px solid #dfe6e9;
+  border-radius: 8px;
+  outline: none;
+  font-size: 1rem;
+}
+
+.formulario input:focus {
+  border-color: #0984e3;
+}
+
+.btnSalvar {
+  background-color: #00b894;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+  grid-column: 1 / -1; /* Ocupa a linha toda no grid */
+}
+
+.btnSalvar:hover {
+  background-color: #00a887;
+}
+
+/* Tabela de Produtos */
+.tabelaContainer {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  overflow-x: auto;
+}
+
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabela th {
+  background-color: #f8f9fa;
+  color: #636e72;
+  text-align: left;
+  padding: 15px;
+  border-bottom: 2px solid #eee;
+}
+
+.tabela td {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  color: #2d3436;
+  vertical-align: middle;
+}
+
+.fotoProduto {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #eee;
+}
+
+/* Botões de Ação */
+.acoes {
+  display: flex;
+  gap: 10px;
+}
+
+.btnEditar {
+  background-color: #0984e3;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btnDesativar {
+  background-color: #d63031;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btnEditar:hover { opacity: 0.9; }
+.btnDesativar:hover { opacity: 0.9; }

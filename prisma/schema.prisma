@@ -1,0 +1,45 @@
+// Configuração do Cliente Prisma
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+// Conexão com o seu Banco PostgreSQL (Vem do seu arquivo .env)
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// MODELO DE PRODUTO (A sapatilha)
+model Produto {
+  id           Int       @id @default(autoincrement())
+  nome         String
+  preco        Decimal   @db.Decimal(10, 2)
+  preco_antigo Decimal?  @db.Decimal(10, 2) // O "?" permite ser vazio (nulo)
+  
+  // FOTOS: Adicionando as 3 colunas necessárias
+  imagem       String    // Foto principal (Obrigatória)
+  imagem_2     String?   // Foto extra 1 (Opcional)
+  imagem_3     String?   // Foto extra 2 (Opcional)
+  
+  categoria    String?
+  descricao    String?   @db.Text
+  
+  // RELACIONAMENTO: Um produto tem vários itens no estoque (tamanhos)
+  estoque      Estoque[]
+
+  @@map("produtos") // Nome da tabela no banco de dados
+}
+
+// MODELO DE ESTOQUE (Tamanhos e Quantidades)
+model Estoque {
+  id         Int     @id @default(autoincrement())
+  tamanho    Int     // Ex: 35, 36, 37
+  quantidade Int     // Quantas unidades tem desse tamanho
+  
+  // Ligação com o Produto
+  produtoId  Int
+  produto    Produto @relation(fields: [produtoId], references: [id], onDelete: Cascade)
+
+  @@map("estoque")
+}

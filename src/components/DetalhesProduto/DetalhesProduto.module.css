@@ -1,0 +1,235 @@
+/* CONTAINER PRINCIPAL */
+.container {
+  max-width: 1000px;
+  margin: 50px auto;
+  padding: 30px 50px;
+  background-color: #fff;
+  position: relative;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+  animation: fadeIn 0.6s ease-out;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  overflow: hidden;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* BOTÃO DE FECHAR (X) */
+.botao_fechar {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #f5f5f5;
+  border: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  font-size: 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+  color: #666;
+}
+
+.botao_fechar:hover {
+  background: #b51212;
+  color: #fff;
+  transform: rotate(90deg);
+}
+
+/* ESTRUTURA LADO A LADO */
+.vitrine {
+  display: flex;
+  gap: 50px;
+  align-items: flex-start;
+}
+
+/* COLUNA DA ESQUERDA - FOTOS (MANTIDAS) */
+.area_fotos {
+  flex: 1.2;
+  display: flex;
+  flex-direction: column;
+  gap: 15px; 
+  max-width: 480px;
+}
+
+.imagem_principal {
+  width: 100%;
+  height: 350px; 
+  background: #fdfdfd;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+}
+
+.imagem_principal img {
+  max-width: 85%;
+  max-height: 85%;
+  object-fit: contain;
+}
+
+.miniaturas {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 12px;
+  width: 100%;
+  margin-top: 5px;
+}
+
+.miniatura {
+  width: 100%; 
+  height: 80px; 
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 5px;
+  background: #fff;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.miniatura:hover {
+  transform: scale(1.05);
+  border-color: #999;
+}
+
+.miniatura_ativa {
+  border-color: #b51212 !important;
+  border-width: 2px;
+  box-shadow: 0 4px 10px rgba(181, 18, 18, 0.15);
+}
+
+/* COLUNA DA DIREITA - INFORMAÇÕES */
+.infos {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.nome_produto {
+  font-size: 28px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.preco_atual {
+  font-size: 30px;
+  color: #b51212;
+  font-weight: 700;
+  margin-bottom: 25px;
+}
+
+/* GRADE DE TAMANHOS COM EFEITO */
+.secao_tamanhos {
+  border-top: 1px solid #f5f5f5;
+  padding-top: 20px;
+  margin-bottom: 30px;
+}
+
+.grade {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  max-width: 350px;
+}
+
+.btn_tam {
+  width: 44px;
+  height: 44px;
+  border: 1px solid #e0e0e0;
+  background: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  color: #050505;
+}
+
+.btn_tam:hover {
+  border-color: #222;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.btn_tam.ativo {
+  background: #222 !important;
+  color: #fff !important;
+  border-color: #222;
+  transform: scale(1.05);
+}
+
+/* BOTÕES DE AÇÃO COM EFEITOS TOPS */
+.acoes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.botao_finalizar {
+  background: #089420;
+  color: #fff;
+  border: none;
+  padding: 18px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 0px #006414; /* Efeito 3D de profundidade */
+}
+
+.botao_finalizar:hover {
+  background: #09a324;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0px #006414;
+}
+
+.botao_finalizar:active {
+  transform: translateY(2px); /* Efeito de "afundar" ao clicar */
+  box-shadow: 0 0px 0px #006414;
+}
+
+.botao_comprar {
+  background: #fff;
+  color: #444;
+  border: 1px solid #444;
+  padding: 16px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+
+.botao_comprar:hover {
+  background: #444;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.botao_comprar:active {
+  transform: scale(0.98);
+}
+
+/* RESPONSIVO */
+@media (max-width: 850px) {
+  .vitrine { flex-direction: column; gap: 20px; }
+  .container { margin: 10px; padding: 20px; }
+  .imagem_principal { height: 300px; }
+}

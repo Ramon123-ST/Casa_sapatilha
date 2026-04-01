@@ -1,0 +1,225 @@
+/* --- GERAL E TÍTULO --- */
+.secao_produtos {
+  padding: 20px 0;
+  background-color: #fff;
+}
+
+.titulo_secao {
+  text-align: center;
+  margin: 60px 0 35px;
+  font-size: clamp(1.9rem, 5vw, 2.4rem);
+  font-weight: 800;
+  color: #1a1a1a;
+  letter-spacing: -0.5px;
+  position: relative;
+}
+
+.titulo_secao::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 4px;
+  background: #8b0000;
+  margin: 12px auto 0;
+  border-radius: 2px;
+}
+
+/* --- CONTÊINER DE ROLAGEM --- */
+.contenedor_produtos {
+  position: relative;
+  overflow: hidden;
+  padding: 25px 0;
+  /* Efeito de fade nas bordas para suavizar a rolagem */
+  mask-image: linear-gradient(90deg, transparent, white 10%, white 90%, transparent);
+}
+
+.rolagem_produtos {
+  display: flex;
+  gap: 24px;
+  padding: 0 5%;
+  scroll-snap-type: x mandatory;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.rolagem_produtos::-webkit-scrollbar {
+  display: none;
+}
+
+/* --- CARD DO PRODUTO --- */
+.produto {
+  flex: 0 0 260px;
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  scroll-snap-align: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid transparent;
+}
+
+.produto:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e0e0e0;
+}
+
+/* --- IMAGEM E EFEITOS --- */
+.imagem_produto {
+  width: 100%;
+  height: 210px;
+  object-fit: contain; /* Ajustado para sapatilhas não cortarem */
+  background: #fdfdfd;
+  transition: transform 0.5s ease;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.produto:hover .imagem_produto {
+  transform: scale(1.08);
+}
+
+/* Etiqueta de Promoção (OFF) */
+.tag_promo {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #8b0000;
+  color: #fff;
+  padding: 5px 12px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  border-radius: 20px;
+  z-index: 5;
+  box-shadow: 0 4px 8px rgba(139, 0, 0, 0.3);
+}
+
+/* --- INFORMAÇÕES DO PRODUTO --- */
+.info_produto {
+  padding: 16px;
+  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #fff;
+}
+
+.nome_produto {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #222;
+  margin: 0;
+  line-height: 1.35;
+  height: 2.7rem; /* Garante alinhamento de 2 linhas */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Área de Preços */
+.area_precos {
+  display: flex;
+  flex-direction: column;
+  margin: 4px 0 12px;
+}
+
+.preco_antigo {
+  font-size: 0.9rem;
+  color: #999;
+  text-decoration: line-through;
+  margin-bottom: -4px;
+}
+
+.preco_atual {
+  color: #8b0000;
+  font-weight: 800;
+  font-size: 1.3rem;
+  letter-spacing: -0.5px;
+}
+
+/* --- BOTÃO COMPRAR --- */
+.botao_comprar {
+  background: #8b0000;
+  color: white;
+  border: none;
+  padding: 11px 20px;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: auto;
+  box-shadow: 0 4px 12px rgba(139, 0, 0, 0.25);
+}
+
+.botao_comprar:hover {
+  background: #a00000;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(139, 0, 0, 0.3);
+}
+
+/* --- NAVEGAÇÃO (SETAS) --- */
+.navegacao_esquerda,
+.navegacao_direita {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #eee;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.navegacao_esquerda { left: 15px; }
+.navegacao_direita { right: 15px; }
+
+.navegacao_esquerda:hover,
+.navegacao_direita:hover {
+  background: #8b0000;
+  color: white;
+  border-color: #8b0000;
+}
+
+/* --- ESTADOS DE CARREGAMENTO E VAZIO --- */
+.carregando, .vazio {
+  width: 100%;
+  text-align: center;
+  padding: 60px;
+  color: #666;
+  font-weight: bold;
+}
+
+/* --- RESPONSIVIDADE --- */
+@media (max-width: 992px) {
+  .produto { flex: 0 0 210px; }
+  .imagem_produto { height: 180px; }
+}
+
+@media (max-width: 768px) {
+  .rolagem_produtos { gap: 18px; padding: 0 8%; }
+  .produto { flex: 0 0 190px; }
+  .imagem_produto { height: 160px; }
+  .nome_produto { font-size: 0.95rem; }
+  .navegacao_esquerda, .navegacao_direita { display: none; } /* Esconde setas no mobile */
+}
+
+@media (max-width: 480px) {
+  .produto { flex: 0 0 165px; }
+  .imagem_produto { height: 140px; }
+  .preco_atual { font-size: 1.1rem; }
+}
