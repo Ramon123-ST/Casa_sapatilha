@@ -23,6 +23,28 @@ body {
   font-weight: 600;
 }
 
+.botao {
+  background-color: #ffffff; 
+  color: #8b0202;
+  border-radius: 50px;       
+  padding: 10px 25px;        
+  text-decoration: none;
+  font-weight: bold;         
+  display: inline-block;
+  font-size: 14px;
+  border: none;              
+  cursor: pointer;
+  text-transform: uppercase; 
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.botao:hover {
+  transform: translateY(-3px); 
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  background-color: #ffffff;
+  color: #5e0202;
+}
+
 .contenedor {
   max-width: 1200px;
   margin: 0 auto;
@@ -95,7 +117,7 @@ body {
 .acoes_usuario {
   display: flex;
   align-items: center;
-  gap: 15px; /* Ajustado conforme sua primeira definição de proximidade */
+  gap: 15px; 
 }
 
 /* Padronização dos botões de ação */
