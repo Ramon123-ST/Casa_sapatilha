@@ -1,85 +1,205 @@
 .container {
-  max-width: 600px;
-  margin: 0 auto 50px; 
-  padding: 30px;
+  max-width: 850px; /* Aumentei para caber as duas colunas */
+  margin: 40px auto; 
+  padding: 40px;
   background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
 .container h2 {
-  color: #ffa801; 
-  margin-bottom: 25px;
+  color: #ff6b35; 
+  margin-bottom: 5px;
   text-align: center;
-  border-bottom: 2px solid #f0f0f0;
-  padding-bottom: 10px;
 }
 
-.form {
+.subtitulo {
+  text-align: center;
+  color: #7f8fa6;
+  font-size: 0.9rem;
+  margin-bottom: 30px;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.colunas {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+}
+
+.lado_dados {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-.form input {
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 1rem;
-  outline: none;
+.grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
-.form input:focus {
-  border-color: #ffa801;
+.grupo label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #2f3640;
+}
+
+.dupla {
+  display: flex;
+  gap: 15px;
+}
+
+.dupla .grupo {
+  flex: 1;
+}
+
+.lado_dados input, .lado_dados textarea {
+  padding: 12px;
+  border: 1px solid #dcdde1;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #f9f9f9;
+  transition: all 0.3s;
+}
+
+.lado_dados input:focus, .lado_dados textarea:focus {
+  border-color: #ff6b35;
+  background-color: #fff;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+.lado_foto {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.preview_container {
+  width: 100%;
+  height: 300px;
+  border: 2px dashed #dcdde1;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  overflow: hidden;
+  background-color: #f5f6fa;
+  transition: border-color 0.3s;
+}
+
+.preview_container:hover {
+  border-color: #ff6b35;
+}
+
+.foto_preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.placeholder_foto {
+  text-align: center;
+  color: #7f8fa6;
+  font-size: 0.85rem;
+  padding: 20px;
+}
+
+.input_escondido {
+  display: none;
+}
+
+/* Grade de Estoque */
+.divisor {
+  border: 0;
+  border-top: 1px solid #eee;
+  margin: 10px 0;
+}
+
+.container h3 {
+  font-size: 1.1rem;
+  color: #2f3640;
+  margin-bottom: 15px;
 }
 
 .grade {
-  background: #f9f9f9;
-  padding: 15px;
-  border-radius: 8px;
-  margin-top: 10px;
-}
-
-.grade h3 {
-  font-size: 1rem;
-  color: #666;
-  margin-bottom: 15px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 15px;
+  background: #fdfdfd;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #f0f0f0;
 }
 
 .item_grade {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-  padding: 5px 0;
-  border-bottom: 1px dashed #eee;
+  gap: 8px;
 }
 
-.item_grade label {
-  font-weight: bold;
-  color: #444;
+.label_tam {
+  font-weight: 800;
+  color: #1a1e26;
+  font-size: 0.9rem;
 }
 
 .item_grade input {
-  width: 80px;
-  padding: 5px;
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #dcdde1;
+  border-radius: 6px;
   text-align: center;
+  font-weight: bold;
 }
 
+/* Botão Salvar */
 .btn_salvar {
-  background-color: #27ae60;
+  background-color: #ff6b35;
   color: white;
-  padding: 15px;
+  padding: 18px;
   border: none;
-  border-radius: 6px;
+  border-radius: 10px;
   font-size: 1.1rem;
-  font-weight: bold;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   cursor: pointer;
-  transition: background 0.3s;
-  margin-top: 10px;
+  transition: transform 0.2s, background 0.3s;
+  margin-top: 20px;
 }
 
 .btn_salvar:hover {
-  background-color: #219150;
+  background-color: #e65c2a;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(230, 92, 42, 0.3);
+}
+
+.btn_salvar:active {
+  transform: translateY(0);
+}
+
+/* Responsivo para Celular */
+@media (max-width: 768px) {
+  .colunas {
+    flex-direction: column;
+    align-items: center;
+  }
+  .lado_foto {
+    width: 100%;
+  }
+  .preview_container {
+    height: 250px;
+  }
 }

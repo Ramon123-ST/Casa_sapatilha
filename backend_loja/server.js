@@ -1,9 +1,12 @@
 require('dotenv').config();
 const express = require('express');
+const mysql = require('mysql2/promise'); 
 const cors = require('cors');
 const path = require('path'); 
 const fs = require('fs'); 
 const cron = require('node-cron'); 
+const multer = require('multer'); 
+const { v4: uuidv4 } = require('uuid'); 
 
 // Importação de Rotas e Controllers
 const routes = require('./src/routes');
@@ -11,38 +14,107 @@ const pedidoController = require('./src/controllers/pedidoController');
 
 const app = express();
 
+const pool = mysql.createPool({
+  host: 'localhost',
+  user: 'root',
+  password: '123456', // <--- SENHA DEFINIDA DIRETAMENTE AQUI
+  database: 'loja_sapatilhas',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
+});
+
+// Teste de conexão imediato para conferir no terminal
+pool.getConnection()
+  .then(conn => {
+    console.log("✅ Conexão SQL Direta (Pool/Robô) OK!");
+    conn.release();
+  })
+  .catch(err => {
+    console.error("❌ ERRO CRÍTICO NO BANCO:", err.message);
+  });
+
 // --- MIDDLEWARES ---
 app.use(cors());
 app.use(express.json());
 
-// ---  CONFIGURAÇÃO DE ARQUIVOS ESTÁTICOS (IMAGENS) ---
-// Tentamos encontrar a pasta 'public/img' ou 'img' para servir as fotos
-const caminhosPossiveis = [
-    path.join(__dirname, 'public'),
-    path.join(__dirname, 'public', 'img'),
-    path.join(__dirname, 'img')
-];
+// --- CONFIGURAÇÃO DE UPLOAD (MULTER) ---
+const pastaImagens = path.resolve(__dirname, 'img');
 
-caminhosPossiveis.forEach(caminho => {
-    if (fs.existsSync(caminho)) {
-        console.log(`✅ Servindo arquivos estáticos de: ${caminho}`);
-        app.use(express.static(caminho));
-        // Criei um apelido '/img' para facilitar a busca no Frontend
-        app.use('/img', express.static(caminho));
-    }
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    if (!fs.existsSync(pastaImagens)) fs.mkdirSync(pastaImagens, { recursive: true });
+    cb(null, pastaImagens);
+  },
+  filename: (req, file, cb) => {
+    const extensao = path.extname(file.originalname).toLowerCase();
+    cb(null, `sap-${uuidv4().slice(0, 8)}${extensao}`);
+  }
 });
 
-// --- ROTAS DA API ---
+const upload = multer({ 
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) cb(null, true);
+    else cb(new Error('Apenas imagens são permitidas!'));
+  }
+});
+
+// --- SERVINDO ARQUIVOS ESTÁTICOS ---
+app.use('/img', express.static(pastaImagens));
+
+// --- ROTA DE CADASTRO PROFISSIONAL (PRODUTO + GRADE + FOTO) ---
+app.post('/produtos/cadastrar', upload.single('imagemFile'), async (req, res) => {
+  let conn;
+  try {
+    const { nome, preco, cor, descricao, grade } = req.body;
+    const gradeArray = JSON.parse(grade || '[]'); 
+    const nomeImagem = req.file ? req.file.filename : 'placeholder.webp';
+
+    conn = await pool.getConnection();
+    await conn.beginTransaction(); 
+
+    // 1. Inserir o Produto (Ajustado para a tabela 'produtos' no plural)
+    const [resProd] = await conn.execute(
+      'INSERT INTO produtos (nome, preco, cor, descricao, imagem, status, categoria_id) VALUES (?, ?, ?, ?, ?, "Ativo", 1)',
+      [nome, preco, cor, descricao, nomeImagem]
+    );
+
+    const produtoId = resProd.insertId;
+
+    // 2. Inserir a Grade de Estoque
+    if (gradeArray.length > 0) {
+      for (const item of gradeArray) {
+        await conn.execute(
+          'INSERT INTO estoque (produto_id, tamanho, quantidade) VALUES (?, ?, ?)',
+          [produtoId, String(item.tamanho), Number(item.quantidade)]
+        );
+      }
+    }
+
+    await conn.commit(); 
+    res.status(201).json({ mensagem: "Sapatilha cadastrada com sucesso!", id: produtoId });
+
+  } catch (err) {
+    if (conn) await conn.rollback(); 
+    console.error("❌ Erro ao cadastrar:", err);
+    res.status(500).json({ erro: "Erro ao salvar no banco.", detalhes: err.message });
+  } finally {
+    if (conn) conn.release();
+  }
+});
+
+// --- DEMAIS ROTAS DA API ---
 app.use(routes);
 
 // --- 🤖 ROBÔ DE AGENDAMENTO (Cron Job) ---
-// Roda a cada 5 minutos para limpar pedidos que não foram pagos
 cron.schedule('*/5 * * * *', async () => {
   try {
     console.log("🤖 Robô: Verificando pedidos expirados...");
     await pedidoController.cancelarPedidosExpirados();
   } catch (err) {
-    console.error("❌ Erro no robô de cancelamento:", err);
+    console.error("❌ Erro no robô de cancelamento:", err.message);
   }
 });
 
@@ -51,11 +123,11 @@ const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`
-  🚀 API da Casa da Sapatilha Online!
-  -----------------------------------------
-  🔥 Porta: ${PORT}
-  📂 Backend: D:\\documento_proa\\Casa_sapatilha\\backend_loja
-  📸 Teste de imagem: http://localhost:${PORT}/img/NOME_DA_SUA_FOTO.jpg
-  -----------------------------------------
+  🚀 API da Casa da Sapatilha v2.0 Ativa!
+  ---------------------------------------------------------
+  🔥 Servidor: http://localhost:${PORT}
+  📸 Uploads: Habilitado (Pasta: /img)
+  📦 Banco: MySQL (Porta 3306)
+  ---------------------------------------------------------
   `);
 });

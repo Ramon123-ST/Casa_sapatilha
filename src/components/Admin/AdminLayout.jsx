@@ -1,49 +1,75 @@
 import React from "react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
 import styles from "./AdminLayout.module.css";
 
 export default function AdminLayout() {
   const navigate = useNavigate();
+  const location = useLocation(); // Para saber qual link está ativo
+
+  // Função para verificar se a rota está ativa e aplicar estilo
+  const isActive = (path) => location.pathname === path ? styles.active : "";
 
   return (
-    /* ADICIONEI A ID AQUI PARA CONTROLAR O INDEX.CSS */
     <div id="admin-root" className={styles.admin_container}>
       
-      {/*  MENU LATERAL (SIDEBAR) */}
+      {/* SIDEBAR PROFISSIONAL */}
       <aside className={styles.sidebar}>
-        <div className={styles.logo_admin}>
-          <h2>Casa da Sapatilha</h2>
-          <span>Painel de Controle</span>
+        <div className={styles.logo_section}>
+          <div className={styles.logo_icon}>👟</div>
+          <div className={styles.logo_text}>
+            <h2>Casa da Sapatilha</h2>
+            <span>Painel Administrativo</span>
+          </div>
         </div>
 
         <nav className={styles.nav_links}>
-          <Link to="/admin/dashboard" className={styles.link}>
-            📊 Dashboard
-          </Link>
-          <Link to="/admin/pedidos" className={styles.link}>
-            📦 Gestão de Pedidos
-          </Link>
-          <Link to="/admin/cadastrar" className={styles.link}>
-            ➕ Cadastrar Produto
+          <small className={styles.menu_label}>Principal</small>
+          
+          <Link to="/admin/dashboard" className={`${styles.link} ${isActive("/admin/dashboard")}`}>
+            <span className={styles.icon}>📊</span> Dashboard
           </Link>
           
-          {/* Botão para voltar à loja */}
+          <Link to="/admin/pedidos" className={`${styles.link} ${isActive("/admin/pedidos")}`}>
+            <span className={styles.icon}>📦</span> Gestão de Pedidos
+          </Link>
+          
+          <Link to="/admin/cadastrar" className={`${styles.link} ${isActive("/admin/cadastrar")}`}>
+            <span className={styles.icon}>✨</span> Cadastrar Produto
+          </Link>
+          
+          <div className={styles.divider}></div>
+          <small className={styles.menu_label}>Sistema</small>
+
           <button 
             className={styles.btn_loja} 
             onClick={() => navigate("/")}
           >
-            🏠 Voltar para a Loja
+            <span className={styles.icon}>🏠</span> Ir para a Loja
           </button>
         </nav>
 
-        <div className={styles.admin_footer}>
-          <p>Logado como: <strong>Ramon</strong></p>
+        <div className={styles.admin_profile}>
+          <div className={styles.avatar}>R</div>
+          <div className={styles.profile_info}>
+            <p>Ramon</p>
+            <span>Administrador</span>
+          </div>
         </div>
       </aside>
 
-      {/*  ÁREA DE CONTEÚDO (Onde aparece o Dashboard/Pedidos) */}
       <main className={styles.conteudo_principal}>
-        <Outlet /> 
+        <header className={styles.top_bar}>
+          <div className={styles.breadcrumb}>
+            Admin / <strong>{location.pathname.split("/").pop()}</strong>
+          </div>
+          <div className={styles.top_actions}>
+             <button className={styles.notificacao}>🔔</button>
+          </div>
+        </header>
+        
+        <section className={styles.fade_in_content}>
+          <Outlet /> 
+        </section>
       </main>
     </div>
   );

@@ -1,45 +1,78 @@
-// Configuração do Cliente Prisma
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
-// Conexão com o seu Banco PostgreSQL (Vem do seu arquivo .env)
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
-// MODELO DE PRODUTO (A sapatilha)
-model Produto {
-  id           Int       @id @default(autoincrement())
-  nome         String
-  preco        Decimal   @db.Decimal(10, 2)
-  preco_antigo Decimal?  @db.Decimal(10, 2) // O "?" permite ser vazio (nulo)
-  
-  // FOTOS: Adicionando as 3 colunas necessárias
-  imagem       String    // Foto principal (Obrigatória)
-  imagem_2     String?   // Foto extra 1 (Opcional)
-  imagem_3     String?   // Foto extra 2 (Opcional)
-  
-  categoria    String?
-  descricao    String?   @db.Text
-  
-  // RELACIONAMENTO: Um produto tem vários itens no estoque (tamanhos)
-  estoque      Estoque[]
-
-  @@map("produtos") // Nome da tabela no banco de dados
+model usuarios {
+  id         Int       @id @default(autoincrement())
+  nome       String    @db.VarChar(100)
+  email      String    @unique @db.VarChar(150)
+  senha      String    @db.VarChar(255)
+  telefone   String?   @db.VarChar(20)
+  tipo       String?   @default("cliente") @db.VarChar(20)
+  criado_em  DateTime? @default(now()) @db.Timestamp(0)
+  pedidos    pedidos[]
 }
 
-// MODELO DE ESTOQUE (Tamanhos e Quantidades)
-model Estoque {
-  id         Int     @id @default(autoincrement())
-  tamanho    Int     // Ex: 35, 36, 37
-  quantidade Int     // Quantas unidades tem desse tamanho
-  
-  // Ligação com o Produto
-  produtoId  Int
-  produto    Produto @relation(fields: [produtoId], references: [id], onDelete: Cascade)
+model categorias {
+  id       Int        @id @default(autoincrement())
+  nome     String     @db.VarChar(100)
+  produtos produtos[]
+}
 
-  @@map("estoque")
+model produtos {
+  id           Int            @id @default(autoincrement())
+  nome         String         @db.VarChar(150)
+  descricao    String?        @db.Text
+  cor          String?        @default("Padrão") @db.VarChar(50)
+  preco        Decimal        @db.Decimal(10, 2)
+  preco_antigo Decimal?       @db.Decimal(10, 2)
+  imagem       String?        @db.VarChar(255)
+  imagem_2     String?        @db.VarChar(255)
+  imagem_3     String?        @db.VarChar(255)
+  status       String?        @default("Ativo") @db.VarChar(20)
+  categoria_id Int?
+  criado_em    DateTime?      @default(now()) @db.Timestamp(0)
+  estoque      estoque[]
+  itens_pedido itens_pedido[]
+  categoria    categorias?    @relation(fields: [categoria_id], references: [id])
+}
+
+model estoque {
+  id         Int      @id @default(autoincrement())
+  produto_id Int
+  tamanho    String   @db.VarChar(10)
+  quantidade Int?     @default(0)
+  produto    produtos @relation(fields: [produto_id], references: [id], onDelete: Cascade)
+}
+
+model pedidos {
+  id             Int            @id @default(autoincrement())
+  usuario_id     Int?
+  status         String?        @default("Pendente") @db.VarChar(50)
+  rua            String?        @db.VarChar(255)
+  numero         String?        @db.VarChar(20)
+  bairro         String?        @db.VarChar(100)
+  cep            String?        @db.VarChar(9)
+  total_produtos Decimal?       @db.Decimal(10, 2)
+  valor_frete    Decimal?       @db.Decimal(10, 2)
+  total_geral    Decimal?       @db.Decimal(10, 2)
+  criado_em      DateTime?      @default(now()) @db.Timestamp(0)
+  itens_pedido   itens_pedido[]
+  usuario        usuarios?      @relation(fields: [usuario_id], references: [id])
+}
+
+model itens_pedido {
+  id                Int       @id @default(autoincrement())
+  pedido_id         Int?
+  produto_id        Int?
+  quantidade        Int?
+  preco_unitario    Decimal?  @db.Decimal(10, 2)
+  tamanho_escolhido String?   @db.VarChar(10)
+  pedido            pedidos?  @relation(fields: [pedido_id], references: [id], onDelete: Cascade)
+  produto           produtos? @relation(fields: [produto_id], references: [id])
 }

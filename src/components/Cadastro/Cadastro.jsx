@@ -1,11 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./Cadastro.module.css";
-//  IMPORTAR O HOOK DE AUTENTICAÇÃO
 import { useAuth } from "../../Context/AuthContext"; 
 
 export default function Cadastro({ aberto, setAberto }) {
-  const { login } = useAuth(); //  PEGAR A FUNÇÃO LOGIN DO CONTEXTO
-  const [modo, setModo] = useState("cadastro"); 
+  const { login, usuario } = useAuth(); 
+  
+  // --- LÓGICA DE MEMÓRIA DE VISITA ---
+  // Verifica se o navegador já tem a marca de que o usuário já visitou o site antes
+  const jaVisitou = localStorage.getItem("jaVisitou");
+  
+  // Se já visitou, começa no Login. Se é a 1ª vez, começa no Cadastro.
+  const [modo, setModo] = useState(jaVisitou ? "login" : "cadastro"); 
+
   const [formData, setFormData] = useState({
     nome: "",
     email: "",
@@ -13,12 +19,30 @@ export default function Cadastro({ aberto, setAberto }) {
     telefone: ""
   });
 
-  if (!aberto) return null;
+  useEffect(() => {
+    // 1. Marca que o usuário já visitou o site para a próxima vez
+    localStorage.setItem("jaVisitou", "true");
+
+    // 2. Lógica de abertura automática para quem não está logado
+    const jaFechouAgora = sessionStorage.getItem("modalFechado");
+
+    if (!usuario && !jaFechouAgora) {
+      const timer = setTimeout(() => {
+        setAberto(true);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [usuario, setAberto]);
+
+  const fecharModalManual = () => {
+    setAberto(false);
+    sessionStorage.setItem("modalFechado", "true");
+  };
+
+  if (!aberto || usuario) return null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Ajustei para bater com o usuarioController que criamos: /usuarios ou /login
     const rota = modo === "cadastro" ? "usuarios" : "login";
 
     try {
@@ -28,15 +52,11 @@ export default function Cadastro({ aberto, setAberto }) {
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json(); //  PEGAR A RESPOSTA DO BACKEND
+      const data = await response.json();
 
       if (response.ok) {
-        //  AVISAR O SITE QUE O USUÁRIO ESTÁ LOGADO
-        // O backend retorna { usuario: {...} } no login e o objeto direto no cadastro
         const usuarioLogado = data.usuario || data;
         login(usuarioLogado); 
-
-        alert(modo === "cadastro" ? "Conta criada! 👟" : `Bem-vindo, ${usuarioLogado.nome}! 👋`);
         setAberto(false); 
       } else {
         alert(data.erro || "Erro. Verifique os dados inseridos.");
@@ -46,22 +66,22 @@ export default function Cadastro({ aberto, setAberto }) {
     }
   };
 
-  // Função para limpar os campos ao trocar de modo
   const trocarModo = (novoModo) => {
     setModo(novoModo);
     setFormData({ nome: "", email: "", senha: "", telefone: "" });
   };
 
   return (
-    <div className={styles.overlay} onClick={() => setAberto(false)}>
+    <div className={styles.overlay} onClick={fecharModalManual}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-        <button className={styles.btn_fechar} onClick={() => setAberto(false)}>&times;</button>
         
-        <h2>{modo === "cadastro" ? "Criar Conta" : "Fazer Login"}</h2>
-        <p>
+        <button className={styles.btn_fechar} onClick={fecharModalManual}>&times;</button>
+        
+        <h2>{modo === "cadastro" ? "Criar minha Conta" : "Bem-vindo de volta!"}</h2>
+        <p className={styles.subtitulo}>
           {modo === "cadastro" 
-            ? "Cadastre-se para aproveitar as ofertas." 
-            : "Entre com seus dados para continuar."}
+            ? "Crie sua conta para garantir as melhores sapatilhas." 
+            : "Acesse sua conta para ver seus pedidos."}
         </p>
 
         <form onSubmit={handleSubmit} className={styles.form}>
@@ -101,17 +121,21 @@ export default function Cadastro({ aberto, setAberto }) {
           )}
           
           <button type="submit" className={styles.btn_enviar}>
-            {modo === "cadastro" ? "Finalizar Cadastro" : "Entrar"}
+            {modo === "cadastro" ? "Finalizar Cadastro 👟" : "Entrar na Conta"}
           </button>
         </form>
 
         <div className={styles.switch}>
           {modo === "cadastro" ? (
-            <p>Já tem uma conta? <button onClick={() => trocarModo("login")}>Fazer Login</button></p>
+            <p>Já tem uma conta? <button type="button" onClick={() => trocarModo("login")}>Fazer Login</button></p>
           ) : (
-            <p>Novo por aqui? <button onClick={() => trocarModo("cadastro")}>Criar uma conta</button></p>
+            <p>Novo por aqui? <button type="button" onClick={() => trocarModo("cadastro")}>Criar uma conta</button></p>
           )}
         </div>
+        
+        <button className={styles.btn_continuar_navegando} onClick={fecharModalManual}>
+          Continuar navegando sem logar
+        </button>
       </div>
     </div>
   );

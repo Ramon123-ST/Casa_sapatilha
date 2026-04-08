@@ -2,7 +2,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 module.exports = {
-  // RF01: Cadastrar conta
+  // Cadastrar conta
   async cadastrar(req, res) {
     try {
       const { nome, email, senha, telefone, cep, endereco } = req.body;
@@ -21,7 +21,7 @@ module.exports = {
         data: {
           nome,
           email,
-          senha, // Lembre-se do bcrypt no futuro, Ramon! 
+          senha, 
           telefone,
           cep,
           endereco
@@ -38,7 +38,7 @@ module.exports = {
     }
   },
 
-  // RF02: Fazer login
+  //  Fazer login
   async login(req, res) {
     try {
       const { email, senha } = req.body;

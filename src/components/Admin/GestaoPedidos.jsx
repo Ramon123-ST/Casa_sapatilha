@@ -3,14 +3,15 @@ import styles from "./GestaoPedidos.module.css";
 
 export default function GestaoPedidos() {
   const [pedidos, setPedidos] = useState([]);
-  const [filtro, setFiltro] = useState("Pendente");
+  const [filtro, setFiltro] = useState("Pago");
+  const [pedidoSelecionado, setPedidoSelecionado] = useState(null);
 
-  // Busca os pedidos do Back-end
+  // 1. CARREGAR PEDIDOS DO BACK-END
   const carregarPedidos = async () => {
     try {
-      const resposta = await fetch("http://localhost:3000/pedidos"); // Você precisará criar essa rota GET no backend
+      const resposta = await fetch("http://localhost:3000/pedidos");
       const dados = await resposta.json();
-      setPedidos(dados);
+      setPedidos(Array.isArray(dados) ? dados : []);
     } catch (error) {
       console.error("Erro ao buscar pedidos:", error);
     }
@@ -20,7 +21,7 @@ export default function GestaoPedidos() {
     carregarPedidos();
   }, []);
 
-  //  FUNÇÃO PARA MUDAR STATUS 
+  // 2. ATUALIZAR STATUS (PAGO -> ENVIADO)
   const mudarStatus = async (id, novoStatus) => {
     try {
       const resposta = await fetch(`http://localhost:3000/pedidos/${id}/status`, {
@@ -30,65 +31,163 @@ export default function GestaoPedidos() {
       });
 
       if (resposta.ok) {
-        alert(`Pedido atualizado para: ${novoStatus}`);
-        carregarPedidos(); // Recarrega a lista
+        setPedidoSelecionado(null);
+        carregarPedidos(); 
       }
     } catch (error) {
       alert("Erro ao atualizar status.");
     }
   };
 
+  // 3. GERAR RELATÓRIO PDF
+  const gerarPDF = () => {
+    if (!window.jspdf) {
+      return alert("Biblioteca de PDF não encontrada no index.html");
+    }
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.text(`Relatorio de Envios - ${filtro} - Casa da Sapatilha`, 14, 15);
+    doc.save(`envios_${filtro.toLowerCase()}.pdf`);
+  };
+
   return (
     <div className={styles.container}>
-      <h1>📦 Gestão de Pedidos</h1>
+      {/* CABEÇALHO */}
+      <header className={styles.header_gestao}>
+        <div className={styles.titulo_pdf}>
+           <h1>📦 Fluxo de Expedição</h1>
+           <button onClick={gerarPDF} className={styles.btn_pdf}>📄 Baixar PDF</button>
+        </div>
+        <p>Gerencie a separação e o envio dos produtos vendidos.</p>
+      </header>
       
+      {/* BOTÕES DE FILTRO */}
       <div className={styles.filtros}>
-        <button onClick={() => setFiltro("Pendente")}>Pendentes</button>
-        <button onClick={() => setFiltro("Pago")}>Pagos</button>
-        <button onClick={() => setFiltro("Enviado")}>Enviados</button>
+        <button className={filtro === "Pago" ? styles.active : ""} onClick={() => setFiltro("Pago")}>
+          <span className={styles.badge}>{pedidos.filter(p => p.status === "Pago").length}</span>
+          💰 Pagos
+        </button>
+        <button className={filtro === "Enviado" ? styles.active : ""} onClick={() => setFiltro("Enviado")}>
+           <span className={styles.badge}>{pedidos.filter(p => p.status === "Enviado").length}</span>
+           🚚 Enviados
+        </button>
       </div>
 
-      <table className={styles.tabela}>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Cliente</th>
-            <th>Itens (Tam)</th>
-            <th>Total</th>
-            <th>Status</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {pedidos.filter(p => p.status === filtro).map((pedido) => (
-            <tr key={pedido.id}>
-              <td>#{pedido.id}</td>
-              <td>{pedido.usuario?.nome || "Cliente Local"}</td>
-              <td>
-                {pedido.itens_pedido.map(item => (
-                  <div key={item.id}>
-                    {item.produto?.nome} (Tam: {item.tamanho_escolhido})
-                  </div>
-                ))}
-              </td>
-              <td>R$ {pedido.total_geral}</td>
-              <td className={styles[pedido.status.toLowerCase()]}>{pedido.status}</td>
-              <td>
-                {pedido.status === "Pendente" && (
-                  <button className={styles.btn_pago} onClick={() => mudarStatus(pedido.id, "Pago")}>
-                    Confirmar Pagamento
-                  </button>
-                )}
-                {pedido.status === "Pago" && (
-                  <button className={styles.btn_enviar} onClick={() => mudarStatus(pedido.id, "Enviado")}>
-                    Marcar como Enviado
-                  </button>
-                )}
-              </td>
+      {/* TABELA PRINCIPAL */}
+      <div className={styles.tabela_wrapper}>
+        <table className={styles.tabela}>
+          <thead>
+            <tr>
+              <th>PEDIDO / CLIENTE</th>
+              <th>ENDEREÇO DE ENTREGA</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {pedidos.filter(p => p.status === filtro).map((pedido) => (
+              <tr key={pedido.id} onClick={() => setPedidoSelecionado(pedido)} className={styles.linha_clicavel}>
+                <td className={styles.col_pedido_nome}>
+                  <strong>#{pedido.id}</strong>
+                  <span>{pedido.usuario?.nome || "Cliente não identificado"}</span>
+                </td>
+                <td className={styles.col_endereco_simples}>
+                  <p>{pedido.rua}, {pedido.numero}</p>
+                  <span>{pedido.bairro}</span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* GAVETA LATERAL (DRAWER) */}
+      {pedidoSelecionado && (
+        <div className={styles.modal_overlay} onClick={() => setPedidoSelecionado(null)}>
+          <div className={styles.detalhes_drawer} onClick={(e) => e.stopPropagation()}>
+            
+            <div className={styles.drawer_header}>
+              <button onClick={() => setPedidoSelecionado(null)}>✕ Fechar</button>
+              <h2>Pedido #{pedidoSelecionado.id}</h2>
+              
+              {pedidoSelecionado.status === "Pago" && (
+                <button className={styles.btn_enviar_topo} onClick={() => mudarStatus(pedidoSelecionado.id, "Enviado")}>
+                  🚀 MARCAR COMO ENVIADO
+                </button>
+              )}
+            </div>
+
+            <div className={styles.drawer_corpo}>
+              {/* TABELA CLIENTE COM TELEFONE */}
+              <section className={styles.info_sessao}>
+                <h3>👤 Informações do Cliente</h3>
+                <table className={styles.tabela_detalhes}>
+                  <tbody>
+                    <tr>
+                      <td><strong>Nome:</strong></td>
+                      <td>{pedidoSelecionado.usuario?.nome || "N/A"}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Gmail:</strong></td>
+                      <td>{pedidoSelecionado.usuario?.email || "N/A"}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Telefone:</strong></td>
+                      <td>{pedidoSelecionado.usuario?.telefone || "Não cadastrado"}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+
+              {/* TABELA ENDEREÇO */}
+              <section className={styles.info_sessao}>
+                <h3>📍 Endereço de Entrega</h3>
+                <table className={styles.tabela_detalhes}>
+                  <tbody>
+                    <tr>
+                      <td><strong>Rua/Nº:</strong></td>
+                      <td>{pedidoSelecionado.rua}, {pedidoSelecionado.numero}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Bairro:</strong></td>
+                      <td>{pedidoSelecionado.bairro}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>CEP:</strong></td>
+                      <td>{pedidoSelecionado.cep}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+
+              {/* TABELA PRODUTOS */}
+              <section className={styles.info_sessao}>
+                <h3>👟 Itens no Pedido</h3>
+                <table className={styles.tabela_produtos_detalhe}>
+                  <thead>
+                    <tr>
+                      <th>Modelo</th>
+                      <th>Cor</th>
+                      <th>Tam</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {pedidoSelecionado.itens_pedido?.map((item) => (
+                      <tr key={item.id}>
+                        <td>{item.produto?.nome}</td>
+                        <td>{item.produto?.cor}</td>
+                        <td><strong>{item.tamanho_escolhido}</strong></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </section>
+              
+              <div className={styles.total_drawer}>
+                Total Pago: <strong>R$ {pedidoSelecionado.total_geral}</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

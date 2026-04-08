@@ -1,15 +1,13 @@
-const prisma = require('../database'); 
+const { prisma } = require('../database'); 
 
-//  Validação de Inicialização
-if (!prisma || !prisma.produtos) {
-  console.error("❌ ERRO CRÍTICO: O Prisma não foi carregado no Controller.");
+if (!prisma) {
+  console.error("❌ ERRO CRÍTICO: O objeto Prisma não foi exportado corretamente do database.js.");
 }
 
 // 1. LISTAR TODOS (Vitrine)
 exports.listarTodos = async (req, res) => {
   try {
     const produtos = await prisma.produtos.findMany({
-      where: { status: "ativo" }, 
       include: { 
         categoria: true,
         estoque: true 
@@ -18,6 +16,7 @@ exports.listarTodos = async (req, res) => {
     });
     res.json(produtos);
   } catch (error) {
+    console.error("Erro ao listar produtos:", error.message);
     res.status(500).json({ erro: "Erro ao buscar produtos", detalhes: error.message });
   }
 };
@@ -39,7 +38,7 @@ exports.buscarPorId = async (req, res) => {
   }
 };
 
-// 3. CADASTRAR (Com Galeria de Imagens)
+// 3. CADASTRAR (Com Galeria de Imagens e Tratamento de Dados)
 exports.cadastrar = async (req, res) => {
   try {
     const { 
@@ -57,13 +56,15 @@ exports.cadastrar = async (req, res) => {
         imagem,
         imagem_2, 
         imagem_3, 
-        cor,
-        status: "ativo",
+        cor: cor || "Padrão",
+        status: "Ativo",
+        // Conexão com categoria garantindo que seja um número
         categoria: categoria_id ? { connect: { id: Number(categoria_id) } } : undefined,
+        // Garante que tamanhos sejam Strings e quantidades sejam Números
         estoque: {
           create: variacoes ? variacoes.map(v => ({
-            tamanho: Number(v.tamanho),
-            quantidade: Number(v.quantidade)
+            tamanho: String(v.tamanho),
+            quantidade: parseInt(v.quantidade) || 0
           })) : []
         }
       },
@@ -72,7 +73,8 @@ exports.cadastrar = async (req, res) => {
 
     res.status(201).json(novoProduto);
   } catch (error) {
-    res.status(500).json({ erro: "Erro ao cadastrar produto", detalhes: error.message });
+    console.error("Erro no cadastro (Prisma):", error.message);
+    res.status(500).json({ erro: "Erro ao salvar no banco.", detalhes: error.message });
   }
 };
 
@@ -106,12 +108,14 @@ exports.atualizar = async (req, res) => {
   }
 };
 
-// 5. DELETAR (REMOVER)
+// 5. DELETAR
 exports.deletar = async (req, res) => {
   try {
     const { id } = req.params;
+    
     await prisma.estoque.deleteMany({ where: { produto_id: Number(id) } });
     await prisma.produtos.delete({ where: { id: Number(id) } });
+    
     res.json({ mensagem: "Produto removido com sucesso!" });
   } catch (error) {
     res.status(500).json({ erro: "Erro ao deletar", detalhes: error.message });

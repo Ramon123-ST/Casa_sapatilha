@@ -1,0 +1,124 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal {
+  background: #f8f9fa;
+  width: 90%;
+  max-width: 850px;
+  border-radius: 20px;
+  padding: 40px;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.btn_fechar {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.user_info_topo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.avatar_placeholder {
+  width: 60px;
+  height: 60px;
+  background: #ddd;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatar_placeholder img { width: 40px; }
+
+.btn_logout {
+  color: #d93025;
+  background: none;
+  border: 1px solid #d93025;
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.abas {
+  display: flex;
+  gap: 20px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 30px;
+}
+
+.abas button {
+  background: none;
+  border: none;
+  padding-bottom: 10px;
+  cursor: pointer;
+  color: #666;
+}
+
+.aba_ativa {
+  border-bottom: 2px solid #000 !important;
+  color: #000 !important;
+  font-weight: bold;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.campo label {
+  font-size: 13px;
+  font-weight: bold;
+  color: #333;
+}
+
+.campo input, .campo select {
+  padding: 12px 15px;
+  border-radius: 25px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+.btn_salvar {
+  margin-top: 30px;
+  width: 100%;
+  padding: 15px;
+  background: #000;
+  color: #fff;
+  border-radius: 30px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}

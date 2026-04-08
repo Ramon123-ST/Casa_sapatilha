@@ -1,129 +1,90 @@
-.admin_container {
-  max-width: 800px; /* Aumentado para caber a grade de estoque */
-  margin: 100px auto;
-  padding: 40px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+.dashboard_container {
+  padding: 10px;
+  animation: fadeIn 0.6s ease-out;
 }
 
-.admin_header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 2px solid #f0f0f0;
+.dashboard_container h2 {
+  font-size: 1.8rem;
+  color: #1b2559;
+  font-weight: 800;
   margin-bottom: 30px;
-  padding-bottom: 10px;
+  letter-spacing: -0.5px;
 }
 
-.titulo { 
-  color: #800000; 
-  margin: 0;
-  font-size: 24px;
+/* CONTAINER DOS CARDS */
+.cards_resumo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 25px;
 }
 
-.badge_adm {
-  background: #800000;
-  color: white;
-  padding: 4px 12px;
+/* ESTILO DO CARD INDIVIDUAL */
+.card {
+  background: #ffffff;
+  padding: 25px;
   border-radius: 20px;
-  font-size: 12px;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-.formulario { 
-  display: flex; 
-  flex-direction: column; 
-  gap: 25px; 
-}
-
-.secao_principal h3, .secao_estoque h3 {
-  font-size: 18px;
-  color: #333;
-  margin-bottom: 15px;
-  border-left: 4px solid #800000;
-  padding-left: 10px;
-}
-
-/* Grid para Nome, Preço, Cor e Imagem */
-.grid_inputs {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
-}
-
-.formulario input { 
-  padding: 12px; 
-  border: 1px solid #ddd; 
-  border-radius: 6px; 
-  font-size: 14px;
-  transition: border-color 0.3s;
-}
-
-.formulario input:focus {
-  border-color: #800000;
-  outline: none;
-}
-
-.grid_estoque {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-  gap: 15px;
-  background: #f9f9f9;
-  padding: 20px;
-  border-radius: 8px;
-  border: 1px solid #eee;
-}
-
-.item_estoque {
+  box-shadow: 0px 18px 40px rgba(112, 144, 176, 0.12); /* Sombra suave profissional */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(224, 225, 230, 0.5);
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  text-align: center;
+  justify-content: center;
 }
 
-.item_estoque label {
-  font-size: 12px;
-  font-weight: bold;
-  color: #666;
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 25px 50px rgba(112, 144, 176, 0.2);
 }
 
-.item_estoque input {
-  text-align: center;
-  padding: 8px;
-  font-weight: bold;
-  color: #800000;
+.card h3 {
+  font-size: 0.95rem;
+  color: #a3aed0; 
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+  font-weight: 700;
 }
 
-.botao_salvar { 
-  background: #800000; 
-  color: white; 
-  padding: 16px; 
-  border: none; 
-  border-radius: 8px; 
-  cursor: pointer; 
-  font-weight: bold;
-  font-size: 16px;
-  transition: all 0.3s ease;
-  margin-top: 10px;
+.card p {
+  font-size: 1.5rem;
+  color: #1b2559;
+  font-weight: 800;
+  margin: 0;
 }
 
-.botao_salvar:hover { 
-  background: #a00000; 
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(128, 0, 0, 0.2);
+/* CORES DE DESTAQUE PARA OS CARDS */
+.card:nth-child(1) p {
+  color: #4318ff; /* Azul para produtos */
 }
 
-/* Responsividade para telas menores */
-@media (max-width: 600px) {
-  .grid_inputs {
-    grid-template-columns: 1fr;
+.card:nth-child(2) p {
+  color: #05cd99; /* Verde para pedidos/dinheiro */
+}
+
+.card:nth-child(3) p {
+  color: #ee5d50; /* Vermelho para alertas/estoque baixo */
+}
+
+/* ANIMAÇÃO DE ENTRADA */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 768px) {
+  .dashboard_container h2 {
+    font-size: 1.5rem;
+    text-align: center;
   }
   
-  .admin_container {
-    margin: 20px;
-    padding: 20px;
+  .cards_resumo {
+    grid-template-columns: 1fr;
   }
 }

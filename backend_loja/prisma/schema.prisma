@@ -7,86 +7,104 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// --- USUÁRIOS (CLIENTES E ADM) ---
 model usuarios {
-  id        Int       @id @default(autoincrement())
-  nome      String    @db.VarChar(100)
-  email     String    @unique(map: "email") @db.VarChar(150)
-  senha     String    @db.VarChar(255)
-  telefone  String?   @db.VarChar(20)
-  cep       String?   @db.VarChar(9)
-  endereco  String?   @db.VarChar(255)
-  tipo      String    @default("cliente") @db.VarChar(20)
-  criado_em DateTime? @default(now()) @db.Timestamp(0)
-  pedidos   pedidos[]
+  id         Int       @id @default(autoincrement())
+  nome       String    @db.VarChar(100)
+  email      String    @unique(map: "email") @db.VarChar(150)
+  senha      String    @db.VarChar(255)
+  telefone   String?   @db.VarChar(20) // Campo que adicionamos para contato
+  tipo       String?   @default("cliente") @db.VarChar(20)
+  criado_em  DateTime? @default(now()) @db.Timestamp(0)
+  
+  pedidos    pedidos[]
+
+  @@map("usuarios")
 }
 
+// --- CATEGORIAS ---
 model categorias {
   id       Int        @id @default(autoincrement())
   nome     String     @db.VarChar(100)
   produtos produtos[]
+
+  @@map("categorias")
 }
 
+// --- PRODUTOS (SAPATILHAS) ---
 model produtos {
-  id            Int            @id @default(autoincrement())
-  nome          String         @db.VarChar(150)
-  descricao     String?        @db.Text
-  preco         Decimal        @db.Decimal(10, 2)
-  preco_antigo  Decimal?       @db.Decimal(10, 2)
-  imagem        String?        @db.VarChar(255)
+  id           Int            @id @default(autoincrement())
+  nome         String         @db.VarChar(150)
+  descricao    String?        @db.Text
+  cor          String?        @default("Padrão") @db.VarChar(50)
+  preco        Decimal        @db.Decimal(10, 2)
+  preco_antigo Decimal?       @db.Decimal(10, 2)
+  imagem       String?        @db.VarChar(255)
+  imagem_2     String?        @db.VarChar(255)
+  imagem_3     String?        @db.VarChar(255)
+  status       String?        @default("Ativo") @db.VarChar(20)
+  categoria_id Int?
+  criado_em    DateTime?      @default(now()) @db.Timestamp(0)
   
-  // ✅ COLUNAS PARA AS 3 FOTOS
-  imagem_2      String?        @db.VarChar(255)
-  imagem_3      String?        @db.VarChar(255)
-  
-  cor           String?        @db.VarChar(50)
-  status        String         @default("ativo") @db.VarChar(20)
-  categoria_id  Int?
-  criado_em     DateTime?      @default(now()) @db.Timestamp(0)
-  
-  categoria     categorias?    @relation(fields: [categoria_id], references: [id])
-  estoque       estoque[]
-  itens_pedido  itens_pedido[]
+  estoque      estoque[]
+  itens_pedido itens_pedido[]
+  categoria    categorias?    @relation(fields: [categoria_id], references: [id], onUpdate: NoAction, map: "produtos_ibfk_1")
 
-  @@index([categoria_id], map: "categoria_id")
+  @@index([categoria_id], map: "produtos_ibfk_1")
+  @@map("produtos")
 }
 
+// --- ESTOQUE (TAMANHOS DISPONÍVEIS) ---
 model estoque {
   id         Int      @id @default(autoincrement())
-  tamanho    Int      // Alterado para Int para calçados
-  quantidade Int      @default(0)
   produto_id Int
-  produto    produtos @relation(fields: [produto_id], references: [id], onDelete: Cascade)
+  tamanho    String   @db.VarChar(10) // Mantido como String para aceitar P, M, G ou números
+  quantidade Int?     @default(0)
+  produto    produtos @relation(fields: [produto_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "estoque_ibfk_1")
 
-  @@index([produto_id])
+  @@index([produto_id], map: "estoque_ibfk_1")
+  @@map("estoque")
 }
 
+// --- PEDIDOS (A VENDA REALIZADA) ---
 model pedidos {
   id             Int            @id @default(autoincrement())
   usuario_id     Int?
-  status         String?        @default("Pendente") @db.VarChar(50)
+  status         String?        @default("Pago") @db.VarChar(50) // Ajustado para "Pago" como padrão do seu filtro
+  
+  // DADOS DE ENTREGA (Essenciais para o seu Front-end)
+  rua            String?        @db.VarChar(255)
+  numero         String?        @db.VarChar(20)
+  bairro         String?        @db.VarChar(100)
+  cep            String?        @db.VarChar(9)
+  
   total_produtos Decimal?       @db.Decimal(10, 2)
   valor_frete    Decimal?       @db.Decimal(10, 2)
   total_geral    Decimal?       @db.Decimal(10, 2)
+  
   criado_em      DateTime?      @default(now()) @db.Timestamp(0)
   atualizado_em  DateTime?      @default(now()) @db.Timestamp(0)
   
   itens_pedido   itens_pedido[]
-  usuario        usuarios?      @relation(fields: [usuario_id], references: [id])
+  usuario        usuarios?      @relation(fields: [usuario_id], references: [id], onUpdate: NoAction, map: "pedidos_ibfk_1")
 
-  @@index([usuario_id], map: "usuario_id")
+  @@index([usuario_id], map: "pedidos_ibfk_1")
+  @@map("pedidos")
 }
 
+// --- ITENS DO PEDIDO (O QUE FOI COMPRADO) ---
 model itens_pedido {
-  id                Int      @id @default(autoincrement())
+  id                Int       @id @default(autoincrement())
   pedido_id         Int?
   produto_id        Int?
-  quantidade        Int?
-  preco_unitario    Decimal? @db.Decimal(10, 2)
-  tamanho_escolhido Int?
+  quantidade        Int?      @default(1)
+  preco_unitario    Decimal?  @db.Decimal(10, 2)
+  tamanho_escolhido String?   @db.VarChar(10) // Ajustado para String para bater com a tabela estoque
   
-  pedido            pedidos? @relation(fields: [pedido_id], references: [id])
-  produto           produtos? @relation(fields: [produto_id], references: [id])
+  pedido            pedidos?  @relation(fields: [pedido_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "itens_pedido_ibfk_1")
+  produto           produtos? @relation(fields: [produto_id], references: [id], onUpdate: NoAction, map: "itens_pedido_ibfk_2")
 
-  @@index([pedido_id], map: "pedido_id")
-  @@index([produto_id], map: "produto_id")
+  @@index([pedido_id], map: "itens_pedido_ibfk_1")
+  @@index([produto_id], map: "itens_pedido_ibfk_2")
+  @@map("itens_pedido")
 }
