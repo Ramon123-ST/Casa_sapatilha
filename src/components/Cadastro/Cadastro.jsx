@@ -4,13 +4,8 @@ import { useAuth } from "../../Context/AuthContext";
 
 export default function Cadastro({ aberto, setAberto }) {
   const { login, usuario } = useAuth(); 
-  
-  // --- LÓGICA DE MEMÓRIA DE VISITA ---
-  // Verifica se o navegador já tem a marca de que o usuário já visitou o site antes
-  const jaVisitou = localStorage.getItem("jaVisitou");
-  
-  // Se já visitou, começa no Login. Se é a 1ª vez, começa no Cadastro.
-  const [modo, setModo] = useState(jaVisitou ? "login" : "cadastro"); 
+  const [modo, setModo] = useState("login"); 
+  const [mostrarSenha, setMostrarSenha] = useState(false);
 
   const [formData, setFormData] = useState({
     nome: "",
@@ -19,13 +14,69 @@ export default function Cadastro({ aberto, setAberto }) {
     telefone: ""
   });
 
+  // --- LÓGICA DO GOOGLE (NATIVA) ---
   useEffect(() => {
-    // 1. Marca que o usuário já visitou o site para a próxima vez
-    localStorage.setItem("jaVisitou", "true");
+    if (aberto && window.google) {
+      window.google.accounts.id.initialize({
+        client_id: "274377688121-0e2f7ugbt4gbbj7m30norh7s4jj7pri7.apps.googleusercontent.com",
+        callback: handleGoogleResponse,
+      });
 
-    // 2. Lógica de abertura automática para quem não está logado
+      window.google.accounts.id.renderButton(
+        document.getElementById("btnGoogle"),
+        { theme: "outline", size: "large", width: "100%", text: "continue_with" }
+      );
+    }
+  }, [aberto, modo]); 
+
+  const handleGoogleResponse = async (response) => {
+    try {
+      const base64Url = response.credential.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const payload = JSON.parse(window.atob(base64));
+
+  
+      if (modo === "cadastro") {
+        setFormData({
+          ...formData,
+          nome: payload.name,
+          email: payload.email,
+          senha: "GOOGLE_USER" 
+        });
+        alert("Dados importados do Google! Confira seu nome e clique em Finalizar.");
+      } else {
+        // Se estiver no modo LOGIN, entra direto para ser mais rápido
+        const res = await fetch("http://localhost:3000/login-google", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ 
+            token: response.credential,
+            googleId: payload.sub,
+            email: payload.email,
+            nome: payload.name
+          }),
+        });
+        
+        const data = await res.json();
+        if (res.ok) {
+          login(data.usuario);
+          setAberto(false);
+        }
+      }
+    } catch (error) {
+      console.error("Erro no login Google:", error);
+    }
+  };
+
+  // --- LÓGICA DO MODAL ---
+  useEffect(() => {
+    const jaVisitou = localStorage.getItem("jaVisitou");
+    if (!jaVisitou) {
+      setModo("cadastro");
+      localStorage.setItem("jaVisitou", "true");
+    }
+
     const jaFechouAgora = sessionStorage.getItem("modalFechado");
-
     if (!usuario && !jaFechouAgora) {
       const timer = setTimeout(() => {
         setAberto(true);
@@ -39,11 +90,17 @@ export default function Cadastro({ aberto, setAberto }) {
     sessionStorage.setItem("modalFechado", "true");
   };
 
-  if (!aberto || usuario) return null;
+  const trocarModo = (novoModo) => {
+    setModo(novoModo);
+    setFormData({ nome: "", email: "", senha: "", telefone: "" });
+    setMostrarSenha(false);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const rota = modo === "cadastro" ? "usuarios" : "login";
+    
+    const isGoogleSocial = formData.senha === "GOOGLE_USER";
+    const rota = isGoogleSocial ? "login-google" : (modo === "cadastro" ? "usuarios" : "login");
 
     try {
       const response = await fetch(`http://localhost:3000/${rota}`, {
@@ -51,12 +108,9 @@ export default function Cadastro({ aberto, setAberto }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-
       const data = await response.json();
-
       if (response.ok) {
-        const usuarioLogado = data.usuario || data;
-        login(usuarioLogado); 
+        login(data.usuario || data); 
         setAberto(false); 
       } else {
         alert(data.erro || "Erro. Verifique os dados inseridos.");
@@ -66,10 +120,7 @@ export default function Cadastro({ aberto, setAberto }) {
     }
   };
 
-  const trocarModo = (novoModo) => {
-    setModo(novoModo);
-    setFormData({ nome: "", email: "", senha: "", telefone: "" });
-  };
+  if (!aberto || usuario) return null;
 
   return (
     <div className={styles.overlay} onClick={fecharModalManual}>
@@ -77,18 +128,29 @@ export default function Cadastro({ aberto, setAberto }) {
         
         <button className={styles.btn_fechar} onClick={fecharModalManual}>&times;</button>
         
-        <h2>{modo === "cadastro" ? "Criar minha Conta" : "Bem-vindo de volta!"}</h2>
-        <p className={styles.subtitulo}>
-          {modo === "cadastro" 
-            ? "Crie sua conta para garantir as melhores sapatilhas." 
-            : "Acesse sua conta para ver seus pedidos."}
-        </p>
+        <div className={styles.cabecalho_modal}>
+            <h2>{modo === "cadastro" ? "Criar minha Conta" : "Bem-vindo de volta!"}</h2>
+            <p className={styles.subtitulo}>
+            {modo === "cadastro" 
+                ? "Crie sua conta para garantir as melhores sapatilhas." 
+                : "Acesse sua conta para ver seus pedidos."}
+            </p>
+        </div>
+
+        <div className={styles.google_container}>
+          <div id="btnGoogle"></div>
+        </div>
+
+        <div className={styles.divisor}>
+          <span>ou use seu e-mail</span>
+        </div>
 
         <form onSubmit={handleSubmit} className={styles.form}>
           {modo === "cadastro" && (
             <input 
               type="text" 
               placeholder="Nome Completo" 
+              className={styles.input_padrao}
               value={formData.nome}
               onChange={(e) => setFormData({...formData, nome: e.target.value})} 
               required 
@@ -98,28 +160,31 @@ export default function Cadastro({ aberto, setAberto }) {
           <input 
             type="email" 
             placeholder="E-mail" 
+            className={styles.input_padrao}
             value={formData.email}
             onChange={(e) => setFormData({...formData, email: e.target.value})} 
             required 
           />
 
-          <input 
-            type="password" 
-            placeholder="Senha" 
-            value={formData.senha}
-            onChange={(e) => setFormData({...formData, senha: e.target.value})} 
-            required 
-          />
-
-          {modo === "cadastro" && (
+          <div className={styles.senha_wrapper}>
             <input 
-              type="text" 
-              placeholder="Telefone" 
-              value={formData.telefone}
-              onChange={(e) => setFormData({...formData, telefone: e.target.value})} 
+              type={mostrarSenha ? "text" : "password"} 
+              placeholder="Senha" 
+              className={styles.input_padrao}
+              value={formData.senha}
+              disabled={formData.senha === "GOOGLE_USER"}
+              onChange={(e) => setFormData({...formData, senha: e.target.value})} 
+              required 
             />
-          )}
-          
+            <button 
+              type="button" 
+              className={styles.btn_olho} 
+              onClick={() => setMostrarSenha(!mostrarSenha)}
+            >
+              {mostrarSenha ? "🙈" : "👁️"}
+            </button>
+          </div>
+
           <button type="submit" className={styles.btn_enviar}>
             {modo === "cadastro" ? "Finalizar Cadastro 👟" : "Entrar na Conta"}
           </button>
@@ -132,10 +197,6 @@ export default function Cadastro({ aberto, setAberto }) {
             <p>Novo por aqui? <button type="button" onClick={() => trocarModo("cadastro")}>Criar uma conta</button></p>
           )}
         </div>
-        
-        <button className={styles.btn_continuar_navegando} onClick={fecharModalManual}>
-          Continuar navegando sem logar
-        </button>
       </div>
     </div>
   );

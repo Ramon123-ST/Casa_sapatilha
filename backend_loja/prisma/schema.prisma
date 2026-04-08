@@ -9,15 +9,16 @@ datasource db {
 
 // --- USUÁRIOS (CLIENTES E ADM) ---
 model usuarios {
-  id         Int       @id @default(autoincrement())
-  nome       String    @db.VarChar(100)
-  email      String    @unique(map: "email") @db.VarChar(150)
-  senha      String    @db.VarChar(255)
-  telefone   String?   @db.VarChar(20) // Campo que adicionamos para contato
-  tipo       String?   @default("cliente") @db.VarChar(20)
-  criado_em  DateTime? @default(now()) @db.Timestamp(0)
+  id        Int       @id @default(autoincrement())
+  nome      String    @db.VarChar(100)
+  email     String    @unique(map: "email") @db.VarChar(150)
+  senha     String    @db.VarChar(255)
+  googleId  String?   @unique @db.VarChar(255) // Campo essencial para o login social
+  telefone  String?   @db.VarChar(20)
+  tipo      String?   @default("cliente") @db.VarChar(20)
+  criado_em DateTime? @default(now()) @db.Timestamp(0)
   
-  pedidos    pedidos[]
+  pedidos   pedidos[]
 
   @@map("usuarios")
 }
@@ -58,7 +59,7 @@ model produtos {
 model estoque {
   id         Int      @id @default(autoincrement())
   produto_id Int
-  tamanho    String   @db.VarChar(10) // Mantido como String para aceitar P, M, G ou números
+  tamanho    String   @db.VarChar(10)
   quantidade Int?     @default(0)
   produto    produtos @relation(fields: [produto_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "estoque_ibfk_1")
 
@@ -70,9 +71,8 @@ model estoque {
 model pedidos {
   id             Int            @id @default(autoincrement())
   usuario_id     Int?
-  status         String?        @default("Pago") @db.VarChar(50) // Ajustado para "Pago" como padrão do seu filtro
+  status         String?        @default("Pago") @db.VarChar(50)
   
-  // DADOS DE ENTREGA (Essenciais para o seu Front-end)
   rua            String?        @db.VarChar(255)
   numero         String?        @db.VarChar(20)
   bairro         String?        @db.VarChar(100)
@@ -99,7 +99,7 @@ model itens_pedido {
   produto_id        Int?
   quantidade        Int?      @default(1)
   preco_unitario    Decimal?  @db.Decimal(10, 2)
-  tamanho_escolhido String?   @db.VarChar(10) // Ajustado para String para bater com a tabela estoque
+  tamanho_escolhido String?   @db.VarChar(10)
   
   pedido            pedidos?  @relation(fields: [pedido_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "itens_pedido_ibfk_1")
   produto           produtos? @relation(fields: [produto_id], references: [id], onUpdate: NoAction, map: "itens_pedido_ibfk_2")

@@ -8,14 +8,20 @@ datasource db {
 }
 
 model usuarios {
-  id         Int       @id @default(autoincrement())
-  nome       String    @db.VarChar(100)
-  email      String    @unique @db.VarChar(150)
-  senha      String    @db.VarChar(255)
-  telefone   String?   @db.VarChar(20)
-  tipo       String?   @default("cliente") @db.VarChar(20)
-  criado_em  DateTime? @default(now()) @db.Timestamp(0)
-  pedidos    pedidos[]
+  id        Int       @id @default(autoincrement())
+  nome      String    @db.VarChar(100)
+  email     String    @unique @db.VarChar(150)
+  
+  // Senha agora é opcional (?) para aceitar login via Google
+  senha     String?   @db.VarChar(255) 
+  
+  // Campo para identificar o login social
+  googleId  String?   @unique @db.VarChar(255)
+
+  telefone  String?   @db.VarChar(20)
+  tipo      String?   @default("cliente") @db.VarChar(20)
+  criado_em DateTime? @default(now()) @db.Timestamp(0)
+  pedidos   pedidos[]
 }
 
 model categorias {
@@ -25,21 +31,21 @@ model categorias {
 }
 
 model produtos {
-  id           Int            @id @default(autoincrement())
-  nome         String         @db.VarChar(150)
-  descricao    String?        @db.Text
-  cor          String?        @default("Padrão") @db.VarChar(50)
-  preco        Decimal        @db.Decimal(10, 2)
-  preco_antigo Decimal?       @db.Decimal(10, 2)
-  imagem       String?        @db.VarChar(255)
-  imagem_2     String?        @db.VarChar(255)
-  imagem_3     String?        @db.VarChar(255)
-  status       String?        @default("Ativo") @db.VarChar(20)
-  categoria_id Int?
-  criado_em    DateTime?      @default(now()) @db.Timestamp(0)
-  estoque      estoque[]
-  itens_pedido itens_pedido[]
-  categoria    categorias?    @relation(fields: [categoria_id], references: [id])
+  id            Int            @id @default(autoincrement())
+  nome          String         @db.VarChar(150)
+  descricao     String?        @db.Text
+  cor           String?        @default("Padrão") @db.VarChar(50)
+  preco         Decimal        @db.Decimal(10, 2)
+  preco_antigo  Decimal?       @db.Decimal(10, 2)
+  imagem        String?        @db.VarChar(255)
+  imagem_2      String?        @db.VarChar(255)
+  imagem_3      String?        @db.VarChar(255)
+  status        String?        @default("Ativo") @db.VarChar(20)
+  categoria_id  Int?
+  criado_em     DateTime?      @default(now()) @db.Timestamp(0)
+  estoque       estoque[]
+  itens_pedido  itens_pedido[]
+  categoria     categorias?    @relation(fields: [categoria_id], references: [id])
 }
 
 model estoque {

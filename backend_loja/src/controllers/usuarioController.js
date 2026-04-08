@@ -2,12 +2,11 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 module.exports = {
-  // Cadastrar conta
+  // --- CADASTRAR CONTA MANUAL ---
   async cadastrar(req, res) {
     try {
       const { nome, email, senha, telefone, cep, endereco } = req.body;
 
-      // 1. Verifica se o e-mail já existe (Boa prática!)
       const usuarioExistente = await prisma.usuarios.findUnique({
         where: { email }
       });
@@ -16,7 +15,6 @@ module.exports = {
         return res.status(400).json({ erro: "Este e-mail já está cadastrado." });
       }
 
-      // 2. Cria o novo usuário com os campos de endereço
       const novoUsuario = await prisma.usuarios.create({
         data: {
           nome,
@@ -28,9 +26,7 @@ module.exports = {
         }
       });
 
-      // 3. Remove a senha por segurança
       const { senha: _, ...usuarioSemSenha } = novoUsuario;
-      
       return res.status(201).json(usuarioSemSenha);
     } catch (error) {
       console.error("Erro no Cadastro:", error);
@@ -38,22 +34,19 @@ module.exports = {
     }
   },
 
-  //  Fazer login
+  // --- FAZER LOGIN MANUAL ---
   async login(req, res) {
     try {
       const { email, senha } = req.body;
 
-      // 1. Busca o usuário pelo e-mail
       const usuario = await prisma.usuarios.findUnique({
         where: { email }
       });
 
-      // 2. Validação: Usuário existe e a senha bate?
       if (!usuario || usuario.senha !== senha) {
         return res.status(401).json({ erro: "E-mail ou senha incorretos." });
       }
 
-      // 3. Retorna os dados do usuário logado (sem a senha)
       const { senha: _, ...dadosUsuario } = usuario;
       return res.json({ 
         mensagem: "Login realizado com sucesso!", 
@@ -62,6 +55,46 @@ module.exports = {
     } catch (error) {
       console.error("Erro no Login:", error);
       return res.status(500).json({ erro: "Erro ao processar login" });
+    }
+  },
+
+  // --- LOGIN/CADASTRO VIA GOOGLE ---
+  async loginGoogle(req, res) {
+    try {
+      const { email, nome, googleId } = req.body;
+
+      // 1. Tenta achar o usuário pelo e-mail
+      let usuario = await prisma.usuarios.findUnique({
+        where: { email }
+      });
+
+      if (!usuario) {
+        usuario = await prisma.usuarios.create({
+          data: {
+            nome: nome,
+            email: email,
+            googleId: googleId,
+            tipo: "cliente",
+          }
+        });
+      } else {
+        if (!usuario.googleId) {
+          usuario = await prisma.usuarios.update({
+            where: { email },
+            data: { googleId }
+          });
+        }
+      }
+
+      const { senha: _, ...dadosUsuario } = usuario;
+      return res.json({
+        mensagem: "Login com Google realizado!",
+        usuario: dadosUsuario
+      });
+
+    } catch (error) {
+      console.error("Erro no Login Google Controller:", error);
+      return res.status(500).json({ erro: "Erro ao processar login social" });
     }
   }
 };
