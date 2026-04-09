@@ -1,23 +1,21 @@
 .container {
-  max-width: 1000px; /* Diminuído para concentrar o conteúdo no centro */
-  margin: 200px auto; /* Reduzi o topo para 40px para não empurrar tudo pra baixo */
-  padding:  40px  60px; /* Aumentei o padding para dar mais espaço interno */
+  max-width: 1000px;
+  margin: 120px auto 40px; /* Ajustado para não ficar colado no topo nem muito longe */
+  padding: 40px 60px;
   border-radius: 10px;
-  /* ... seus outros estilos ... */
-  margin-bottom: 0px; /* Cola no que vier abaixo */
-  padding-bottom: 0px;
-  position: relative; 
   background-color: #fff;
+  position: relative;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* Um leve sombreado para dar profundidade */
 }
 
 /* Estilo do Botão Fechar (X) */
 .botao_fechar {
   position: absolute;
-  top: 10px; 
-  right: 10px;
+  top: 15px; 
+  right: 20px;
   background: none;
   border: none;
-  font-size: 35px; /* Um pouco menor para ser elegante */
+  font-size: 35px;
   color: #3f3f3f;
   cursor: pointer;
   line-height: 1;
@@ -32,23 +30,23 @@
 
 .vitrine {
   display: flex;
-  gap: 30px; /* Espaço menor entre foto e texto */
-  flex-wrap: nowrap; /* Força ficarem lado a lado no PC */
-  align-items: center; /* Alinha o texto com o meio da imagem */
+  gap: 50px; /* Espaço ideal entre foto e informações */
+  align-items: flex-start;
 }
 
 .imagem_principal {
   flex: 1;
-  max-width: 400px; /* Limita a largura da foto */
+  max-width: 450px;
   background-color: #f9f9f9;
   border-radius: 8px;
   display: flex;
   justify-content: center;
+  padding: 20px;
 }
 
 .imagem_principal img {
   width: 100%;
-  max-height: 400px; /* CRUCIAL: Impede que a imagem estique a página para baixo */
+  max-height: 450px;
   object-fit: contain;
 }
 
@@ -56,21 +54,27 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 15px; /* Espaçamento mais apertado para caber tudo */
+  gap: 15px;
 }
 
 .nome_produto {
-  font-size: 26px; /* Tamanho mais equilibrado */
+  font-size: 28px;
   color: #222;
   margin: 0;
   text-transform: uppercase;
   font-weight: 700;
+  line-height: 1.2;
 }
 
 .marca {
   color: #777;
-  font-size: 13px;
+  font-size: 14px;
   margin-bottom: 5px;
+}
+
+.precos {
+  display: flex;
+  flex-direction: column;
 }
 
 .preco_antigo {
@@ -81,45 +85,62 @@
 
 .preco_atual {
   color: #b51212;
-  font-size: 30px;
+  font-size: 32px;
   font-weight: bold;
-  margin-top: -5px;
+  margin-top: 2px;
+}
+
+.tamanhos p {
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-size: 15px;
 }
 
 .grade {
   display: flex;
-  gap: 8px;
-  margin-top: 5px;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .btn_tam {
-  width: 40px; /* Botões de tamanho mais compactos */
-  height: 40px;
+  width: 45px;
+  height: 45px;
   border: 1px solid #ddd;
   background: white;
   cursor: pointer;
   font-size: 14px;
-  transition: 0.2s;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border-radius: 4px;
 }
 
 .btn_tam:hover {
   border-color: #333;
-  background-color: #f0f0f0;
+  background-color: #f8f8f8;
 }
 
-/* Botão de comprar estilo Bluestok (Verde) */
+/* ✅ ESTA É A CLASSE QUE FAZ O CLIQUE FUNCIONAR VISUALMENTE */
+.btn_tam.ativo {
+  background-color: #222 !important;
+  color: #fff !important;
+  border-color: #222;
+  transform: translateY(-2px); /* Efeito de 'levante' ao selecionar */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
 .botao_comprar {
   background-color: #28a745; 
   color: white;
   border: none;
-  padding: 15px;
+  padding: 18px;
   font-size: 16px;
   font-weight: bold;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
-  margin-top: 15px;
+  margin-top: 20px;
   text-transform: uppercase;
-  width: 100%; /* Botão ocupa toda a largura da coluna de texto */
+  width: 100%;
+  transition: background 0.3s;
 }
 
 .botao_comprar:hover {
@@ -128,8 +149,16 @@
 
 /* Responsividade */
 @media (max-width: 768px) {
-  .container { margin-top: 20px; }
-  .vitrine { flex-direction: column; text-align: center; }
+  .container { 
+    margin: 80px 15px; 
+    padding: 30px 20px;
+  }
+  .vitrine { 
+    flex-direction: column; 
+    text-align: center; 
+    gap: 30px;
+  }
   .imagem_principal { max-width: 100%; }
   .grade { justify-content: center; }
+  .nome_produto { font-size: 22px; }
 }

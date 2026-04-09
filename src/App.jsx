@@ -7,33 +7,29 @@ import Produtos from "./components/Produtos/Produtos";
 import MaisProdutos from "./components/MaisProdutos/MaisProdutos";
 import Footer from "./components/Footer/Footer";
 import Admin from "./components/Admin/Admin"; 
-
-// ✅ CAMINHO CORRIGIDO: Agora o Vite vai encontrar o arquivo na pasta certa
 import DetalhesProduto from "./components/DetalhesProduto/DetalhesProduto"; 
+// 1. Importar o componente visual do Carrinho que criamos
+import Carrinho from "./components/Carrinho/Carrinho"; 
 
 export default function App() {
-  const [carrinho, setCarrinho] = useState([]);
   const [carrinhoAberto, setCarrinhoAberto] = useState(false);
   const [termoBusca, setTermoBusca] = useState("");
-
-  const adicionarAoCarrinho = (produto) => {
-    setCarrinho((prev) => [...prev, produto]);
-    setCarrinhoAberto(true);
-  };
 
   const abrirCarrinho = () => setCarrinhoAberto(true);
 
   return (
     <>
+      {/* 2. O Header agora só precisa da função de abrir e a busca */}
       <Header 
-        carrinhoCount={carrinho.length} 
         abrirCarrinho={abrirCarrinho} 
         aoBuscar={setTermoBusca} 
       />
 
+      {/* 3. O componente visual do Carrinho fica aqui, "escutando" o estado aberto/fechado */}
+      <Carrinho aberto={carrinhoAberto} setAberto={setCarrinhoAberto} />
+
       <main>
         <Routes>
-          {/* ROTA DA HOME */}
           <Route path="/" element={
             <>
               <section id="hero">
@@ -41,22 +37,21 @@ export default function App() {
               </section>
 
               <section id="promocoes">
-                <Achadinho adicionarAoCarrinho={adicionarAoCarrinho} termoBusca={termoBusca} />
+                {/* Removido props de adicionarAoCarrinho pois os componentes usarão o Context */}
+                <Achadinho termoBusca={termoBusca} />
               </section>
 
               <section id="mais-vendidos">
-                <Produtos adicionarAoCarrinho={adicionarAoCarrinho} termoBusca={termoBusca} />
+                <Produtos termoBusca={termoBusca} />
               </section>
 
               <section id="produtos">
-                <MaisProdutos adicionarAoCarrinho={adicionarAoCarrinho} termoBusca={termoBusca} />
+                <MaisProdutos termoBusca={termoBusca} />
               </section>
             </>
           } />
 
-          {/* ROTA DE DETALHES */}
           <Route path="/produto/:id" element={<DetalhesProduto />} />
-
           <Route path="/admin" element={<Admin />} />
         </Routes>
       </main>

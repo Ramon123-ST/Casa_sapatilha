@@ -1,37 +1,50 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom"; 
+import { Link, useNavigate } from "react-router-dom"; 
+import { useCart } from "../context/CartContext";
 import styles from "./Header.module.css";
 
-export default function Header({ carrinhoCount = 0, abrirCarrinho, aoBuscar }) {
-  
+export default function Header({ abrirCarrinho, aoBuscar }) {
   const [menuAberto, setMenuAberto] = useState(false);
+  const { carrinho } = useCart(); // 2. Pega os dados do carrinho
+  const navegar = useNavigate();
+
+  // Calcula a quantidade total de itens no carrinho
+  const totalItens = carrinho.reduce((sum, item) => sum + item.quantidade, 0);
 
   const scrollToSection = (e, id) => {
     if (e) e.preventDefault();
-    const element = document.getElementById(id);
-    if (element) {
-      // 🎯 AJUSTE DE ALTURA: Diminuímos para -20 para a sapatilha ficar bem visível
-      const offset = -20; 
-      const bodyRect = document.body.getBoundingClientRect().top;
-      const elementRect = element.getBoundingClientRect().top;
-      const elementPosition = elementRect - bodyRect;
-      const offsetPosition = elementPosition - offset;
+    
+    // Se estivermos em outra página (ex: Detalhes), primeiro volta pra Home
+    if (window.location.pathname !== "/") {
+      navegar("/");
+      setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) element.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    } else {
+      const element = document.getElementById(id);
+      if (element) {
+        const offset = -20; 
+        const bodyRect = document.body.getBoundingClientRect().top;
+        const elementRect = element.getBoundingClientRect().top;
+        const elementPosition = elementRect - bodyRect;
+        const offsetPosition = elementPosition - offset;
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth",
-      });
-
-      setMenuAberto(false);
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
+      }
     }
+    setMenuAberto(false);
   };
 
   return (
     <header className={styles.header}>
       <div className={styles.contenedor_cmc}>
-        <div className={styles.logotipo}>Casa da Sapatilha</div>
+        {/* Logotipo agora é um Link para a Home */}
+        <Link to="/" className={styles.logotipo}>Casa da Sapatilha</Link>
 
-        {/* 🔍 BUSCA COM FOCO NO PRODUTO */}
         <input
           type="text"
           className={styles.busca}
@@ -39,21 +52,21 @@ export default function Header({ carrinhoCount = 0, abrirCarrinho, aoBuscar }) {
           aria-label="Buscar produtos"
           onChange={(e) => {
             const valor = e.target.value;
-            aoBuscar(valor); 
+            if (aoBuscar) aoBuscar(valor); 
 
-            // Quando o cliente digita, o site desce "na medida" para o produto
-            if (valor.length >= 2) {
+            if (valor.length >= 2 && window.location.pathname === "/") {
               scrollToSection(null, "tendencias"); 
             }
           }}
         />
 
+        {/* Botão de Carrinho agora usa o totalItens do Contexto */}
         <button
           className={styles.butao_carr}
           onClick={abrirCarrinho}
           title="Abrir carrinho"
         >
-          <span className={styles.cart_count}>{carrinhoCount}</span>
+          <span className={styles.cart_count}>{totalItens}</span>
         </button>
 
         <button
