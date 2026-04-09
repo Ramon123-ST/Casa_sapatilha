@@ -5,7 +5,7 @@ import "./index.css";
 import { BrowserRouter } from "react-router-dom"; 
 
 // ✅ Agora o caminho é direto, pois a pasta 'context' está na raiz da 'src'
-import { CartProvider } from "../context/CartContext"; 
+import { CartProvider } from "./Context/CartContext"; 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

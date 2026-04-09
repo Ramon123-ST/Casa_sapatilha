@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-// ✅ Ajustado para 'context' minúsculo e caminho correto saindo de components/DetalhesProduto
-import { useCart } from ".../../context/CartContext"; 
+// ✅ AJUSTE: ../../ sai de DetalhesProduto e de components para achar a pasta context na src
+import { useCart } from "../../Context/CartContext"; 
 import styles from "./DetalhesProduto.module.css";
 
 export default function DetalhesProduto() {

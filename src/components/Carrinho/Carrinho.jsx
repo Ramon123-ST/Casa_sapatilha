@@ -1,7 +1,7 @@
 import React from "react";
 // ✅ IMPORTANTE: Verifique se a pasta é 'context' (minúsculo) ou 'Context' (Maiúsculo). 
 // Se a pasta for minúscula, deixe como está abaixo:
-import { useCart } from ".../../context/CartContext"; 
+import { useCart } from "../../Context/CartContext"; 
 import styles from "./Carrinho.module.css";
 
 export default function Carrinho({ aberto, setAberto }) {
