@@ -1,13 +1,17 @@
 import React from "react";
-// ✅ Caminho corrigido para quem está dentro de components/Carrinho
-import { useCart } from "../context/CartContext"; 
+// ✅ IMPORTANTE: Verifique se a pasta é 'context' (minúsculo) ou 'Context' (Maiúsculo). 
+// Se a pasta for minúscula, deixe como está abaixo:
+import { useCart } from ".../../context/CartContext"; 
 import styles from "./Carrinho.module.css";
 
 export default function Carrinho({ aberto, setAberto }) {
   const { carrinho, removerDoCarrinho } = useCart();
 
-  // Calcula o valor total do carrinho
-  const total = carrinho.reduce((acc, item) => acc + (Number(item.preco) * item.quantidade), 0);
+  // Calcula o valor total do carrinho convertendo para número para evitar erros de cálculo
+  const total = carrinho.reduce((acc, item) => {
+    const preco = Number(item.preco) || 0;
+    return acc + (preco * item.quantidade);
+  }, 0);
 
   if (!aberto) return null;
 

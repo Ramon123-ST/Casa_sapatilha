@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useCart } from "../context/CartContext"; 
+// ✅ Ajustado para 'context' minúsculo e caminho correto saindo de components/DetalhesProduto
+import { useCart } from ".../../context/CartContext"; 
 import styles from "./DetalhesProduto.module.css";
 
 export default function DetalhesProduto() {
@@ -11,19 +12,17 @@ export default function DetalhesProduto() {
   const { adicionarAoCarrinho } = useCart();
 
   useEffect(() => {
+    // Note: No deploy, certifique-se que sua API/JSON está acessível
     fetch(`http://localhost:3000/produtos/${id}`)
       .then((res) => res.json())
       .then((dados) => setProduto(dados))
       .catch((err) => console.error("Erro ao carregar detalhes:", err));
   }, [id]);
 
-  // ✅ Função para marcar e desmarcar o tamanho
   const alternarTamanho = (tam) => {
     if (tamanhoSelecionado === tam) {
-      // Se clicar no que já está ativo, desmarca (volta para null)
       setTamanhoSelecionado(null);
     } else {
-      // Se clicar em um diferente, marca o novo
       setTamanhoSelecionado(tam);
     }
   };
@@ -69,7 +68,6 @@ export default function DetalhesProduto() {
                 <button 
                   key={tam} 
                   className={`${styles.btn_tam} ${tamanhoSelecionado === tam ? styles.ativo : ""}`}
-                  // ✅ Agora chama a função de alternar
                   onClick={() => alternarTamanho(tam)}
                 >
                   {tam}

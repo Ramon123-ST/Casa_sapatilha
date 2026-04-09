@@ -8,7 +8,6 @@ import MaisProdutos from "./components/MaisProdutos/MaisProdutos";
 import Footer from "./components/Footer/Footer";
 import Admin from "./components/Admin/Admin"; 
 import DetalhesProduto from "./components/DetalhesProduto/DetalhesProduto"; 
-// 1. Importar o componente visual do Carrinho que criamos
 import Carrinho from "./components/Carrinho/Carrinho"; 
 
 export default function App() {
@@ -19,13 +18,13 @@ export default function App() {
 
   return (
     <>
-      {/* 2. O Header agora só precisa da função de abrir e a busca */}
+      {/* O Header recebe a função para abrir o modal do carrinho visual */}
       <Header 
         abrirCarrinho={abrirCarrinho} 
         aoBuscar={setTermoBusca} 
       />
 
-      {/* 3. O componente visual do Carrinho fica aqui, "escutando" o estado aberto/fechado */}
+      {/* O componente visual do Carrinho (Modal/Sidebar) */}
       <Carrinho aberto={carrinhoAberto} setAberto={setCarrinhoAberto} />
 
       <main>
@@ -37,7 +36,6 @@ export default function App() {
               </section>
 
               <section id="promocoes">
-                {/* Removido props de adicionarAoCarrinho pois os componentes usarão o Context */}
                 <Achadinho termoBusca={termoBusca} />
               </section>
 

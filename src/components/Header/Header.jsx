@@ -1,20 +1,19 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; 
-import { useCart } from "../context/CartContext";
+// ✅ Ajustado para 'context' minúsculo e caminho saindo de components/Header
+import { useCart } from ".../../context/CartContext"; 
 import styles from "./Header.module.css";
 
 export default function Header({ abrirCarrinho, aoBuscar }) {
   const [menuAberto, setMenuAberto] = useState(false);
-  const { carrinho } = useCart(); // 2. Pega os dados do carrinho
+  const { carrinho } = useCart(); 
   const navegar = useNavigate();
 
-  // Calcula a quantidade total de itens no carrinho
   const totalItens = carrinho.reduce((sum, item) => sum + item.quantidade, 0);
 
   const scrollToSection = (e, id) => {
     if (e) e.preventDefault();
     
-    // Se estivermos em outra página (ex: Detalhes), primeiro volta pra Home
     if (window.location.pathname !== "/") {
       navegar("/");
       setTimeout(() => {
@@ -42,7 +41,6 @@ export default function Header({ abrirCarrinho, aoBuscar }) {
   return (
     <header className={styles.header}>
       <div className={styles.contenedor_cmc}>
-        {/* Logotipo agora é um Link para a Home */}
         <Link to="/" className={styles.logotipo}>Casa da Sapatilha</Link>
 
         <input
@@ -60,7 +58,6 @@ export default function Header({ abrirCarrinho, aoBuscar }) {
           }}
         />
 
-        {/* Botão de Carrinho agora usa o totalItens do Contexto */}
         <button
           className={styles.butao_carr}
           onClick={abrirCarrinho}

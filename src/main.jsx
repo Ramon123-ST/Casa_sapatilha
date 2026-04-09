@@ -4,12 +4,13 @@ import App from "./App";
 import "./index.css";
 import { BrowserRouter } from "react-router-dom"; 
 
-// Ajuste de caminho: se 'components' está na mesma pasta que 'main.jsx'
-import { CartProvider } from "./components/context/CartContext"; 
+// ✅ Agora o caminho é direto, pois a pasta 'context' está na raiz da 'src'
+import { CartProvider } from "../context/CartContext"; 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
+      {/* O Provider envolve o App para o carrinho ser global */}
       <CartProvider>
         <App />
       </CartProvider>
