@@ -2,49 +2,52 @@
   width: 100%;
   overflow: hidden;
   position: relative;
+  background-color: #000;
 }
 
 .carrossel_heroi {
   position: relative;
-  height: 80vh;
+  height: 85vh;
   min-height: 500px;
-  
 }
-
 
 .lados {
   display: flex;
   width: 100%;
   height: 100%;
-  transition: transform 0.6s ease;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .lado {
   min-width: 100%;
   height: 100%;
   background-size: cover;
-  background-position: center;
   background-repeat: no-repeat;
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.6s ease;
 }
 
-.lado.active {
-  opacity: 1;
+/* Overlay escuro para garantir leitura do texto */
+.lado::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.6) 0%, transparent 70%);
+  pointer-events: none;
 }
-
 
 .conteudo_lado {
-  max-width: 700px;
-  padding: 2rem;
+  max-width: 650px;
+  padding: 3rem;
   color: white;
   text-align: left;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-  margin-right: 750px;
+  text-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+  margin-left: 8%;
+  z-index: 5;
 }
 
 .sobrancelha {
@@ -53,7 +56,7 @@
   text-transform: uppercase;
   letter-spacing: 2px;
   margin-bottom: 0.5rem;
-  opacity: 0.9;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 h1 {
@@ -64,106 +67,98 @@ h1 {
 }
 
 .silenciado {
-  font-size: 1.1rem;
-  margin-bottom: 1.5rem;
-  opacity: 0.85;
-  font-weight: 400;
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
 }
 
+/* --- BOTÃO --- */
 .botao {
   display: inline-block;
   background-color: #800020;
   color: white;
-  padding: 12px 28px;
+  padding: 14px 35px;
   border-radius: 50px;
   font-weight: bold;
-  font-size: 0.95rem;
+  font-size: 1rem;
   text-decoration: none;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(128, 0, 32, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 .botao:hover {
-  background-color: #9a0033;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(128, 0, 32, 0.4);
+  background-color: #ffffff;
+  color: #800020;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
-
-.typing {
-  overflow: hidden;
-  white-space: nowrap;
-  border-right: 3px solid white;
-  animation: blink 0.7s step-end infinite;
-}
-
-@keyframes blink {
-  50% {
-    border-color: transparent;
-  }
-}
-
-
-.pontos_carrossel {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 10px;
-}
-
-.ponto,
-.ponto_ativo {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.5);
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.ponto_ativo {
-  background-color: white;
-  transform: scale(1.2);
-}
-
-.ponto:hover {
-  background-color: white;
-}
-
-
+/* --- CONTROLES (SETAS) --- */
 .seta_esq,
 .seta_dir {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
   color: white;
-  border: none;
-  width: 50px;
-  height: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  width: 55px;
+  height: 55px;
   border-radius: 50%;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   cursor: pointer;
   transition: all 0.3s ease;
   z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.seta_esq {
-  left: 20px;
-}
-
-.seta_dir {
-  right: 20px;
-}
+.seta_esq { left: 30px; }
+.seta_dir { right: 30px; }
 
 .seta_esq:hover,
 .seta_dir:hover {
-  background-color: rgba(128, 0, 32, 0.8);
+  background-color: #800020;
+  border-color: #800020;
   transform: translateY(-50%) scale(1.1);
 }
 
+/* --- PONTOS --- */
+.pontos_carrossel {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  z-index: 10;
+}
+
+.ponto {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ponto_ativo {
+  width: 35px;
+  height: 12px;
+  border-radius: 10px;
+  background-color: #800020;
+  cursor: pointer;
+}
+
+/* Responsividade Básica */
+@media (max-width: 768px) {
+  h1 { font-size: 2.2rem; }
+  .conteudo_lado { margin-left: 5%; text-align: center; margin-right: 5%; }
+  .seta_esq, .seta_dir { display: none; }
+}
 
 /* Tablets e notebooks menores */
 @media (max-width: 1024px) {
