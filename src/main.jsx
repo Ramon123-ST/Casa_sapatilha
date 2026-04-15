@@ -6,7 +6,18 @@ import { BrowserRouter } from "react-router-dom";
 import { CartProvider } from "./Context/CartContext"; 
 import { AuthProvider } from "./Context/AuthContext"; 
 
-const baseName = import.meta.env.DEV ? "/" : "/Casa_sapatilha";
+// Lógica inteligente:
+// Se a URL contiver "github.io", usa "/Casa_sapatilha"
+// Se for Vercel ou Localhost, usa "/"
+const getBasename = () => {
+  const hostname = window.location.hostname;
+  if (hostname.includes("github.io")) {
+    return "/Casa_sapatilha";
+  }
+  return "/";
+};
+
+const baseName = getBasename();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
