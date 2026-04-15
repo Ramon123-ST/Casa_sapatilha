@@ -6,9 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import { CartProvider } from "./Context/CartContext"; 
 import { AuthProvider } from "./Context/AuthContext"; 
 
-const baseName = window.location.hostname.includes("github.io") 
-  ? "/CASA_DA_SAPATILHA" 
-  : "/";
+const baseName = import.meta.env.DEV ? "/" : "/Casa_sapatilha";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
