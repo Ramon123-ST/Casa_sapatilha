@@ -6,9 +6,11 @@ import { BrowserRouter } from "react-router-dom";
 import { CartProvider } from "./Context/CartContext"; 
 import { AuthProvider } from "./Context/AuthContext"; 
 
+const base = import.meta.env.DEV ? "/" : "/CASA_DA_SAPATILHA";
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={base}>
       <AuthProvider>
         <CartProvider>
           <App />

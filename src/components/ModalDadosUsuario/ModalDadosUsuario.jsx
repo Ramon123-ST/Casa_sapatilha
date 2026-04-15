@@ -34,20 +34,10 @@ export default function ModalDadosUsuario({ usuario, onClose, onLogout }) {
               <label>Sobrenome*</label>
               <input type="text" defaultValue={usuario?.nome?.split(' ').slice(1).join(' ')} />
             </div>
-            <div className={styles.campo}>
-              <label>CPF*</label>
-              <input type="text" placeholder="000.000.000-00" />
-            </div>
+            
             <div className={styles.campo}>
               <label>Celular*</label>
               <input type="text" defaultValue={usuario?.telefone} placeholder="(00) 00000-0000" />
-            </div>
-            <div className={styles.campo}>
-              <label>Tamanho do calçado</label>
-              <select>
-                <option>Selecione sua numeração</option>
-                {[34,35,36,37,38,39,40].map(n => <option key={n}>{n}</option>)}
-              </select>
             </div>
             <div className={styles.campo}>
               <label>E-mail</label>

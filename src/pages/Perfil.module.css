@@ -1,0 +1,81 @@
+.container {
+  padding: 40px 8%;
+  min-height: 60vh;
+  background-color: #fff;
+}
+
+.titulo {
+  color: #800020; 
+  font-size: 2rem;
+  font-weight: 800;
+  border-bottom: 2px solid #800020;
+  padding-bottom: 15px;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+}
+
+.conteudo_vazio {
+  text-align: center;
+  padding: 50px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border: 1px dashed #ccc;
+}
+
+.botao_perfil {
+  background-color: #800020;
+  color: white;
+  padding: 12px 25px;
+  border-radius: 50px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: transform 0.2s;
+}
+
+.botao_perfil:hover {
+  transform: scale(1.05);
+  background-color: #9a0033;
+}
+
+.menu_abas {
+  display: flex;
+  gap: 20px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 30px;
+  overflow-x: auto; 
+  padding-bottom: 5px;
+}
+
+.aba_item {
+  background: none;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #666;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.aba_item:hover {
+  color: #800020;
+}
+
+.aba_item_ativo {
+  background: none;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: 700;
+  color: #800020;
+  border-bottom: 3px solid #800020; 
+}
+
+/* Estilo para quando tiver pedidos */
+.lista_pedidos {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}

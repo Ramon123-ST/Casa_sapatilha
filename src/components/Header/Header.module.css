@@ -311,6 +311,19 @@ body {
   flex-direction: column;
 }
 
+
+.lista_menu li a {
+  text-decoration: none; 
+  color: inherit;      
+  display: block;        
+  width: 100%;
+}
+
+.lista_menu li:hover {
+  background-color: #f5f5f5; 
+  color: #800020;            
+}
+
 .menu_lateral.open {
   left: 0; 
 }

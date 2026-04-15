@@ -94,7 +94,7 @@ export default function Header({ abrirCarrinho, abrirCadastro, aoBuscar }) {
         </ul>
       </nav>
 
-      {/* --- MENU LATERAL  --- */}
+      {/* --- MENU LATERAL --- */}
       <div className={`${styles.menu_overlay} ${menuAberto ? styles.active : ""}`} onClick={() => setMenuAberto(false)}></div>
       <nav className={`${styles.menu_lateral} ${menuAberto ? styles.open : ""}`}>
         <div className={styles.menu_header}>
@@ -103,12 +103,27 @@ export default function Header({ abrirCarrinho, abrirCadastro, aoBuscar }) {
            </button>
         </div>
         <ul className={styles.lista_menu}>
-          <li>Meus pedidos</li>
-          <li>Trocas e devoluções</li>
-          <li>Meus endereços</li>
-          <li>Formas de pagamento</li>
-          <li>Lista de desejos</li>
-          {logado && <li onClick={logout} className={styles.menu_sair}>Sair</li>}
+          <li>
+            <Link to="/meus-pedidos" onClick={() => setMenuAberto(false)}>Meus pedidos</Link>
+          </li>
+          <li>
+            <Link to="/trocas" onClick={() => setMenuAberto(false)}>Trocas e devoluções</Link>
+          </li>
+          <li>
+            <Link to="/meus-enderecos" onClick={() => setMenuAberto(false)}>Meus endereços</Link>
+          </li>
+          <li>
+            <Link to="/formas-de-pagamento" onClick={() => setMenuAberto(false)}>Formas de pagamento</Link>
+          </li>
+          <li>
+            <Link to="/lista-de-desejos" onClick={() => setMenuAberto(false)}>Lista de desejos</Link>
+          </li>
+          
+          {logado && (
+            <li onClick={() => { logout(); setMenuAberto(false); }} className={styles.menu_sair}>
+              Sair
+            </li>
+          )}
         </ul>
       </nav>
 

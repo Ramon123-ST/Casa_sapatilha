@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
+
+// COMPONENTES BASE
 import Header from "./components/Header/Header";
 import Hero from "./components/Hero/Hero";
 import Achadinho from "./components/Achadinho/Achadinho";
@@ -10,12 +12,20 @@ import DetalhesProduto from "./components/DetalhesProduto/DetalhesProduto";
 import Carrinho from "./components/Carrinho/Carrinho"; 
 import Cadastro from "./components/Cadastro/Cadastro"; 
 
-// IMPORTS DE ADMINISTRAÇÃO (PASTA ADMIN)
+// IMPORTS DE ADMINISTRAÇÃO
 import AdminLayout from "./components/Admin/AdminLayout"; 
-import Dashboard from "./components/Admin/Dashboard"; // Agora é sua página principal de métricas
+import Dashboard from "./components/Admin/Dashboard"; 
 import GestaoPedidos from "./components/Admin/GestaoPedidos";
 import CadastroProduto from "./components/Admin/CadastroProduto";
 
+// --- NOVOS IMPORTS DE PERFIL DO CLIENTE ---
+import Pedidos from "./pages/Pedidos";
+import Trocas from "./pages/Trocas";
+import Enderecos from "./pages/Enderecos";
+import Pagamentos from "./pages/Pagamentos";
+import ListaDesejos from "./pages/ListaDesejos";
+
+// Função para resetar o scroll ao mudar de página
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
@@ -39,6 +49,7 @@ export default function App() {
     <>
       <ScrollToTop /> 
 
+      {/* Header e Modais só aparecem fora da área administrativa */}
       {!isAdminPath && (
         <>
           <Header 
@@ -51,10 +62,9 @@ export default function App() {
         </>
       )}
 
-      {/* 2. Container Principal */}
       <main style={{ 
         minHeight: '100vh', 
-        backgroundColor: isAdminPath ? '#f4f7fe' : 'transparent', // Cor de fundo profissional do Dashboard
+        backgroundColor: isAdminPath ? '#f4f7fe' : 'transparent', 
         display: 'flex',
         flexDirection: 'column'
       }}> 
@@ -70,18 +80,23 @@ export default function App() {
           } />
           
           <Route path="/produto/:id" element={<DetalhesProduto />} />
+
+          {/* --- ROTAS DE PERFIL (Conectadas ao seu Menu Lateral) --- */}
+          <Route path="/meus-pedidos" element={<Pedidos />} />
+          <Route path="/trocas" element={<Trocas />} />
+          <Route path="/meus-enderecos" element={<Enderecos />} />
+          <Route path="/formas-de-pagamento" element={<Pagamentos />} />
+          <Route path="/lista-de-desejos" element={<ListaDesejos />} />
           
           {/* --- ROTAS PRIVADAS (ADMINISTRAÇÃO) --- */}
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<Navigate to="dashboard" replace />} />
-            
             <Route path="dashboard" element={<Dashboard />} />
-            
             <Route path="pedidos" element={<GestaoPedidos />} />
-            
             <Route path="cadastrar" element={<CadastroProduto />} />
           </Route>
 
+          {/* Redireciona qualquer rota inexistente para a Home */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>

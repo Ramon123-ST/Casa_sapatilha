@@ -35,7 +35,6 @@ export default function Cadastro({ aberto, setAberto }) {
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
       const payload = JSON.parse(window.atob(base64));
 
-  
       if (modo === "cadastro") {
         setFormData({
           ...formData,
@@ -45,7 +44,6 @@ export default function Cadastro({ aberto, setAberto }) {
         });
         alert("Dados importados do Google! Confira seu nome e clique em Finalizar.");
       } else {
-        // Se estiver no modo LOGIN, entra direto para ser mais rápido
         const res = await fetch("http://localhost:3000/login-google", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -181,7 +179,11 @@ export default function Cadastro({ aberto, setAberto }) {
               className={styles.btn_olho} 
               onClick={() => setMostrarSenha(!mostrarSenha)}
             >
-              {mostrarSenha ? "🙈" : "👁️"}
+              <img 
+                src={mostrarSenha ? "/img/aberto.png" : "/img/olhofechado.png"} 
+                alt={mostrarSenha ? "Esconder senha" : "Mostrar senha"} 
+                className={styles.icone_olho_img}
+              />
             </button>
           </div>
 
