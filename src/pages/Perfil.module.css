@@ -22,6 +22,17 @@
   border: 1px dashed #ccc;
 }
 
+.status_badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.status_pago, .status_finalizado { background-color: #e6fffa; color: #2c7a7b; }
+.status_pendente { background-color: #fffaf0; color: #9c4221; }
+.status_cancelado { background-color: #fff5f5; color: #c53030; }
+
 .botao_perfil {
   background-color: #800020;
   color: white;

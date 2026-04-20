@@ -14,17 +14,18 @@ const pedidoController = require('./src/controllers/pedidoController');
 
 const app = express();
 
+// --- CONFIGURAÇÃO DO BANCO DE DADOS ---
 const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: '123456', // <--- SENHA DEFINIDA DIRETAMENTE AQUI
+  password: '123456', 
   database: 'loja_sapatilhas',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
 });
 
-// Teste de conexão imediato para conferir no terminal
+// Teste de conexão imediato
 pool.getConnection()
   .then(conn => {
     console.log("✅ Conexão SQL Direta (Pool/Robô) OK!");
@@ -35,7 +36,7 @@ pool.getConnection()
   });
 
 // --- MIDDLEWARES ---
-app.use(cors());
+app.use(cors()); // Libera o acesso para o React
 app.use(express.json());
 
 // --- CONFIGURAÇÃO DE UPLOAD (MULTER) ---
@@ -62,9 +63,46 @@ const upload = multer({
 });
 
 // --- SERVINDO ARQUIVOS ESTÁTICOS ---
+// Isso permite que o React acesse http://localhost:3000/img/nome-da-foto.jpg
 app.use('/img', express.static(pastaImagens));
 
-// --- ROTA DE CADASTRO PROFISSIONAL (PRODUTO + GRADE + FOTO) ---
+// --- ROTA DE PEDIDOS (PARA O COMPONENTE PEDIDOS.JSX) ---
+app.get('/pedidos/meus-pedidos', async (req, res) => {
+  try {
+    const query = `
+      SELECT 
+        p.id, 
+        p.status, 
+        p.total_geral, 
+        p.criado_em,
+        JSON_ARRAYAGG(
+          JSON_OBJECT(
+            'id', ip.id,
+            'quantidade', ip.quantidade,
+            'tamanho_escolhido', ip.tamanho_escolhido,
+            'preco_unitario', ip.preco_unitario,
+            'produto', JSON_OBJECT(
+              'nome', prod.nome, 
+              'imagem', prod.imagem
+            )
+          )
+        ) AS itens_pedido
+      FROM pedidos p
+      LEFT JOIN itens_pedido ip ON p.id = ip.pedido_id
+      LEFT JOIN produtos prod ON ip.produto_id = prod.id
+      GROUP BY p.id
+      ORDER BY p.criado_em DESC;
+    `;
+
+    const [rows] = await pool.execute(query);
+    res.json(rows);
+  } catch (err) {
+    console.error("❌ Erro ao buscar pedidos:", err);
+    res.status(500).json({ erro: "Erro ao buscar pedidos no banco." });
+  }
+});
+
+// --- ROTA DE CADASTRO DE PRODUTOS ---
 app.post('/produtos/cadastrar', upload.single('imagemFile'), async (req, res) => {
   let conn;
   try {
@@ -75,7 +113,6 @@ app.post('/produtos/cadastrar', upload.single('imagemFile'), async (req, res) =>
     conn = await pool.getConnection();
     await conn.beginTransaction(); 
 
-    // 1. Inserir o Produto (Ajustado para a tabela 'produtos' no plural)
     const [resProd] = await conn.execute(
       'INSERT INTO produtos (nome, preco, cor, descricao, imagem, status, categoria_id) VALUES (?, ?, ?, ?, ?, "Ativo", 1)',
       [nome, preco, cor, descricao, nomeImagem]
@@ -83,7 +120,6 @@ app.post('/produtos/cadastrar', upload.single('imagemFile'), async (req, res) =>
 
     const produtoId = resProd.insertId;
 
-    // 2. Inserir a Grade de Estoque
     if (gradeArray.length > 0) {
       for (const item of gradeArray) {
         await conn.execute(
@@ -105,10 +141,10 @@ app.post('/produtos/cadastrar', upload.single('imagemFile'), async (req, res) =>
   }
 });
 
-// --- DEMAIS ROTAS DA API ---
+// --- OUTRAS ROTAS ---
 app.use(routes);
 
-// --- 🤖 ROBÔ DE AGENDAMENTO (Cron Job) ---
+// --- ROBÔ DE CANCELAMENTO ---
 cron.schedule('*/5 * * * *', async () => {
   try {
     console.log("🤖 Robô: Verificando pedidos expirados...");
@@ -118,7 +154,7 @@ cron.schedule('*/5 * * * *', async () => {
   }
 });
 
-// --- INICIALIZAÇÃO DO SERVIDOR ---
+// --- INICIALIZAÇÃO ---
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
@@ -127,7 +163,7 @@ app.listen(PORT, () => {
   ---------------------------------------------------------
   🔥 Servidor: http://localhost:${PORT}
   📸 Uploads: Habilitado (Pasta: /img)
-  📦 Banco: MySQL (Porta 3306)
+  📦 Banco: lojado_sapatilhas (MySQL)
   ---------------------------------------------------------
   `);
 });

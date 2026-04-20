@@ -9,16 +9,19 @@ datasource db {
 
 // --- USUÁRIOS (CLIENTES E ADM) ---
 model usuarios {
-  id        Int       @id @default(autoincrement())
-  nome      String    @db.VarChar(100)
-  email     String    @unique(map: "email") @db.VarChar(150)
-  senha     String    @db.VarChar(255)
-  googleId  String?   @unique @db.VarChar(255) // Campo essencial para o login social
-  telefone  String?   @db.VarChar(20)
-  tipo      String?   @default("cliente") @db.VarChar(20)
-  criado_em DateTime? @default(now()) @db.Timestamp(0)
+  id               Int                @id @default(autoincrement())
+  nome             String             @db.VarChar(100)
+  email            String             @unique(map: "email") @db.VarChar(150)
+  senha            String             @db.VarChar(255)
+  googleId         String?            @unique @db.VarChar(255)
+  telefone         String?            @db.VarChar(20)
+  tipo             String?            @default("cliente") @db.VarChar(20)
+  criado_em        DateTime?          @default(now()) @db.Timestamp(0)
   
-  pedidos   pedidos[]
+  // Relações
+  pedidos          pedidos[]
+  wishlist         wishlist[]
+  formas_pagamento formas_pagamento[]
 
   @@map("usuarios")
 }
@@ -47,8 +50,10 @@ model produtos {
   categoria_id Int?
   criado_em    DateTime?      @default(now()) @db.Timestamp(0)
   
+  // Relações
   estoque      estoque[]
   itens_pedido itens_pedido[]
+  wishlist     wishlist[]
   categoria    categorias?    @relation(fields: [categoria_id], references: [id], onUpdate: NoAction, map: "produtos_ibfk_1")
 
   @@index([categoria_id], map: "produtos_ibfk_1")
@@ -71,8 +76,9 @@ model estoque {
 model pedidos {
   id             Int            @id @default(autoincrement())
   usuario_id     Int?
-  status         String?        @default("Pago") @db.VarChar(50)
+  status         String?        @default("Pago") @db.VarChar(50) // Pago, Finalizado, Cancelado
   
+  // Endereço de entrega (Snapshot do momento da compra)
   rua            String?        @db.VarChar(255)
   numero         String?        @db.VarChar(20)
   bairro         String?        @db.VarChar(100)
@@ -85,6 +91,7 @@ model pedidos {
   criado_em      DateTime?      @default(now()) @db.Timestamp(0)
   atualizado_em  DateTime?      @default(now()) @db.Timestamp(0)
   
+  // Relações
   itens_pedido   itens_pedido[]
   usuario        usuarios?      @relation(fields: [usuario_id], references: [id], onUpdate: NoAction, map: "pedidos_ibfk_1")
 
@@ -94,12 +101,12 @@ model pedidos {
 
 // --- ITENS DO PEDIDO (O QUE FOI COMPRADO) ---
 model itens_pedido {
-  id                Int       @id @default(autoincrement())
+  id                Int      @id @default(autoincrement())
   pedido_id         Int?
   produto_id        Int?
-  quantidade        Int?      @default(1)
-  preco_unitario    Decimal?  @db.Decimal(10, 2)
-  tamanho_escolhido String?   @db.VarChar(10)
+  quantidade        Int?     @default(1)
+  preco_unitario    Decimal? @db.Decimal(10, 2)
+  tamanho_escolhido String?  @db.VarChar(10)
   
   pedido            pedidos?  @relation(fields: [pedido_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "itens_pedido_ibfk_1")
   produto           produtos? @relation(fields: [produto_id], references: [id], onUpdate: NoAction, map: "itens_pedido_ibfk_2")
@@ -107,4 +114,34 @@ model itens_pedido {
   @@index([pedido_id], map: "itens_pedido_ibfk_1")
   @@index([produto_id], map: "itens_pedido_ibfk_2")
   @@map("itens_pedido")
+}
+
+// --- LISTA DE DESEJOS (WISH LIST) ---
+model wishlist {
+  id         Int      @id @default(autoincrement())
+  usuario_id Int
+  produto_id Int
+  criado_em  DateTime @default(now()) @db.Timestamp(0)
+
+  usuario    usuarios @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+  produto    produtos @relation(fields: [produto_id], references: [id], onDelete: Cascade)
+
+  @@index([usuario_id])
+  @@index([produto_id])
+  @@map("wishlist")
+}
+
+// --- FORMAS DE PAGAMENTO ---
+model formas_pagamento {
+  id           Int      @id @default(autoincrement())
+  usuario_id   Int
+  apelido      String   @db.VarChar(50) // Ex: "Cartão do Trabalho"
+  final_cartao String   @db.VarChar(4)  // Ex: "5544"
+  bandeira     String?  @db.VarChar(20) // Ex: "Visa", "Master"
+  token_pag    String?  @db.VarChar(255) // Para uso com gateways de pagamento
+
+  usuario      usuarios @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+
+  @@index([usuario_id])
+  @@map("formas_pagamento")
 }

@@ -7,55 +7,70 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// --- USUÁRIOS ---
 model usuarios {
-  id        Int       @id @default(autoincrement())
-  nome      String    @db.VarChar(100)
-  email     String    @unique @db.VarChar(150)
+  id               Int                @id @default(autoincrement())
+  nome             String             @db.VarChar(100)
+  email            String             @unique @db.VarChar(150)
+  senha            String?            @db.VarChar(255)
+  googleId         String?            @unique @db.VarChar(255)
+  telefone         String?            @db.VarChar(20)
+  tipo             String?            @default("cliente") @db.VarChar(20)
+  criado_em        DateTime?          @default(now()) @db.Timestamp(0)
   
-  // Senha agora é opcional (?) para aceitar login via Google
-  senha     String?   @db.VarChar(255) 
-  
-  // Campo para identificar o login social
-  googleId  String?   @unique @db.VarChar(255)
+  // Relações conectadas às suas novas telas
+  pedidos          pedidos[]
+  wishlist         wishlist[]
+  formas_pagamento formas_pagamento[]
+  enderecos        enderecos[]
 
-  telefone  String?   @db.VarChar(20)
-  tipo      String?   @default("cliente") @db.VarChar(20)
-  criado_em DateTime? @default(now()) @db.Timestamp(0)
-  pedidos   pedidos[]
+  @@map("usuarios")
 }
 
+// --- CATEGORIAS ---
 model categorias {
   id       Int        @id @default(autoincrement())
   nome     String     @db.VarChar(100)
   produtos produtos[]
+
+  @@map("categorias")
 }
 
+// --- PRODUTOS ---
 model produtos {
-  id            Int            @id @default(autoincrement())
-  nome          String         @db.VarChar(150)
-  descricao     String?        @db.Text
-  cor           String?        @default("Padrão") @db.VarChar(50)
-  preco         Decimal        @db.Decimal(10, 2)
-  preco_antigo  Decimal?       @db.Decimal(10, 2)
-  imagem        String?        @db.VarChar(255)
-  imagem_2      String?        @db.VarChar(255)
-  imagem_3      String?        @db.VarChar(255)
-  status        String?        @default("Ativo") @db.VarChar(20)
-  categoria_id  Int?
-  criado_em     DateTime?      @default(now()) @db.Timestamp(0)
-  estoque       estoque[]
-  itens_pedido  itens_pedido[]
-  categoria     categorias?    @relation(fields: [categoria_id], references: [id])
+  id           Int            @id @default(autoincrement())
+  nome         String         @db.VarChar(150)
+  descricao    String?        @db.Text
+  cor          String?        @default("Padrão") @db.VarChar(50)
+  preco        Decimal        @db.Decimal(10, 2)
+  preco_antigo Decimal?       @db.Decimal(10, 2)
+  imagem       String?        @db.VarChar(255)
+  imagem_2     String?        @db.VarChar(255)
+  imagem_3     String?        @db.VarChar(255)
+  status       String?        @default("Ativo") @db.VarChar(20)
+  categoria_id Int?
+  criado_em    DateTime?      @default(now()) @db.Timestamp(0)
+  
+  estoque      estoque[]
+  itens_pedido itens_pedido[]
+  wishlist     wishlist[]
+  categoria    categorias?    @relation(fields: [categoria_id], references: [id])
+
+  @@map("produtos")
 }
 
+// --- ESTOQUE ---
 model estoque {
   id         Int      @id @default(autoincrement())
   produto_id Int
   tamanho    String   @db.VarChar(10)
   quantidade Int?     @default(0)
   produto    produtos @relation(fields: [produto_id], references: [id], onDelete: Cascade)
+
+  @@map("estoque")
 }
 
+// --- PEDIDOS ---
 model pedidos {
   id             Int            @id @default(autoincrement())
   usuario_id     Int?
@@ -68,17 +83,65 @@ model pedidos {
   valor_frete    Decimal?       @db.Decimal(10, 2)
   total_geral    Decimal?       @db.Decimal(10, 2)
   criado_em      DateTime?      @default(now()) @db.Timestamp(0)
+  
   itens_pedido   itens_pedido[]
   usuario        usuarios?      @relation(fields: [usuario_id], references: [id])
+
+  @@map("pedidos")
 }
 
+// --- ITENS DO PEDIDO ---
 model itens_pedido {
-  id                Int       @id @default(autoincrement())
+  id                Int      @id @default(autoincrement())
   pedido_id         Int?
   produto_id        Int?
   quantidade        Int?
-  preco_unitario    Decimal?  @db.Decimal(10, 2)
-  tamanho_escolhido String?   @db.VarChar(10)
+  preco_unitario    Decimal? @db.Decimal(10, 2)
+  tamanho_escolhido String?  @db.VarChar(10)
   pedido            pedidos?  @relation(fields: [pedido_id], references: [id], onDelete: Cascade)
   produto           produtos? @relation(fields: [produto_id], references: [id])
+
+  @@map("itens_pedido")
+}
+
+// --- NOVAS TABELAS PARA O SEU PERFIL ---
+
+model wishlist {
+  id         Int      @id @default(autoincrement())
+  usuario_id Int
+  produto_id Int
+  criado_em  DateTime @default(now()) @db.Timestamp(0)
+
+  usuario    usuarios @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+  produto    produtos @relation(fields: [produto_id], references: [id], onDelete: Cascade)
+
+  @@map("wishlist")
+}
+
+model formas_pagamento {
+  id           Int      @id @default(autoincrement())
+  usuario_id   Int
+  apelido      String   @db.VarChar(50) // Ex: "Cartão Pessoal"
+  final_cartao String   @db.VarChar(4)  // Ex: "1234"
+  bandeira     String?  @db.VarChar(20) // Ex: "Visa"
+  
+  usuario      usuarios @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+
+  @@map("formas_pagamento")
+}
+
+model enderecos {
+  id         Int      @id @default(autoincrement())
+  usuario_id Int
+  titulo     String   @db.VarChar(50) // Ex: "Minha Casa"
+  rua        String   @db.VarChar(255)
+  numero     String   @db.VarChar(20)
+  bairro     String   @db.VarChar(100)
+  cidade     String   @db.VarChar(100)
+  estado     String   @db.VarChar(2)
+  cep        String   @db.VarChar(9)
+
+  usuario    usuarios @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+
+  @@map("enderecos")
 }
