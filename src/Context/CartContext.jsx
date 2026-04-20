@@ -56,7 +56,7 @@ export function CartProvider({ children }) {
       adicionarAoCarrinho, 
       removerDoCarrinho, 
       diminuirQuantidade,
-      limparCarrinho, // Exportando a nova função
+      limparCarrinho, 
       valorTotal,
       quantidadeTotal 
     }}>

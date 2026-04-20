@@ -14,7 +14,7 @@ export default function Cadastro({ aberto, setAberto }) {
     telefone: ""
   });
 
-  // --- LÓGICA DO GOOGLE (NATIVA) ---
+  // --- LÓGICA DO GOOGLE ---
   useEffect(() => {
     if (aberto && window.google) {
       window.google.accounts.id.initialize({

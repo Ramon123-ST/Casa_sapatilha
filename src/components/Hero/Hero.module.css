@@ -28,7 +28,7 @@
   align-items: center;
 }
 
-/* Overlay escuro para garantir leitura do texto */
+/* Overlay escuro */
 .lado::after {
   content: "";
   position: absolute;

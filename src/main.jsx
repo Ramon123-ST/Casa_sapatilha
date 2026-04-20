@@ -6,9 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import { CartProvider } from "./Context/CartContext"; 
 import { AuthProvider } from "./Context/AuthContext"; 
 
-// Lógica inteligente:
-// Se a URL contiver "github.io", usa "/Casa_sapatilha"
-// Se for Vercel ou Localhost, usa "/"
+// Lógica :
 const getBasename = () => {
   const hostname = window.location.hostname;
   if (hostname.includes("github.io")) {

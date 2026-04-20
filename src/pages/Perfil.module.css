@@ -73,7 +73,6 @@
   border-bottom: 3px solid #800020; 
 }
 
-/* Estilo para quando tiver pedidos */
 .lista_pedidos {
   display: flex;
   flex-direction: column;
