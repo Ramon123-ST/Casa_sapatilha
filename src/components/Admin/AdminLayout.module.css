@@ -1,9 +1,10 @@
 .admin_container {
   display: flex;
   min-height: 100vh;
-  background-color: #f4f7fe; /* Azul clarinho de fundo de sistema */
+  background-color: #f4fef6; 
   color: #2b3674;
   font-family: 'DM Sans', sans-serif;
+  margin-top: -160px; 
 }
 
 /* SIDEBAR */
@@ -184,7 +185,6 @@
   box-shadow: 0 4px 10px rgba(0,0,0,0.03);
 }
 
-/* EFEITO DE ENTRADA SUAVE */
 .fade_in_content {
   animation: fadeIn 0.5s ease-out;
 }

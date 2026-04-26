@@ -4,15 +4,14 @@ import styles from "./AdminLayout.module.css";
 
 export default function AdminLayout() {
   const navigate = useNavigate();
-  const location = useLocation(); // Para saber qual link está ativo
+  const location = useLocation();
 
-  // Função para verificar se a rota está ativa e aplicar estilo
-  const isActive = (path) => location.pathname === path ? styles.active : "";
+  // Função atualizada para lidar com rotas dinâmicas (como /editar/1)
+  const isActive = (path) => location.pathname.startsWith(path) ? styles.active : "";
 
   return (
     <div id="admin-root" className={styles.admin_container}>
       
-      {/* SIDEBAR PROFISSIONAL */}
       <aside className={styles.sidebar}>
         <div className={styles.logo_section}>
           <div className={styles.logo_icon}>👟</div>
@@ -30,7 +29,12 @@ export default function AdminLayout() {
           </Link>
           
           <Link to="/admin/pedidos" className={`${styles.link} ${isActive("/admin/pedidos")}`}>
-            <span className={styles.icon}>📦</span> Gestão de Pedidos
+            <span className={styles.icon}>📋</span> Gestão de Pedidos
+          </Link>
+
+          {/* NOVO LINK: Gerenciar Estoque (onde fica a sua tabela de produtos) */}
+          <Link to="/admin/produtos" className={`${styles.link} ${isActive("/admin/produtos")}`}>
+            <span className={styles.icon}>📦</span> Edição/Estoque
           </Link>
           
           <Link to="/admin/cadastrar" className={`${styles.link} ${isActive("/admin/cadastrar")}`}>

@@ -16,7 +16,8 @@ import Cadastro from "./components/Cadastro/Cadastro";
 import AdminLayout from "./components/Admin/AdminLayout"; 
 import Dashboard from "./components/Admin/Dashboard"; 
 import GestaoPedidos from "./components/Admin/GestaoPedidos";
-import CadastroProduto from "./components/Admin/CadastroProduto";
+import CadastroProduto from "./components/Admin/CadastroProduto"; 
+import GerenciarProdutos from "./components/Admin/GerenciarProdutos"; // Onde fica a tabela de todos os produtos
 
 // --- NOVOS IMPORTS DE PERFIL DO CLIENTE ---
 import Pedidos from "./pages/Pedidos";
@@ -49,7 +50,7 @@ export default function App() {
     <>
       <ScrollToTop /> 
 
-      {/* Header e Modais só aparecem fora da área administrativa */}
+      {/* Interface do Cliente: Só aparece se NÃO estiver no admin */}
       {!isAdminPath && (
         <>
           <Header 
@@ -64,7 +65,7 @@ export default function App() {
 
       <main style={{ 
         minHeight: '100vh', 
-        backgroundColor: isAdminPath ? '#f4f7fe' : 'transparent', 
+        backgroundColor: isAdminPath ? '#0b1437' : 'transparent', 
         display: 'flex',
         flexDirection: 'column'
       }}> 
@@ -81,7 +82,7 @@ export default function App() {
           
           <Route path="/produto/:id" element={<DetalhesProduto />} />
 
-          {/* --- ROTAS DE PERFIL (Conectadas ao seu Menu Lateral) --- */}
+          {/* --- ROTAS DE PERFIL --- */}
           <Route path="/meus-pedidos" element={<Pedidos />} />
           <Route path="/trocas" element={<Trocas />} />
           <Route path="/meus-enderecos" element={<Enderecos />} />
@@ -90,13 +91,23 @@ export default function App() {
           
           {/* --- ROTAS PRIVADAS (ADMINISTRAÇÃO) --- */}
           <Route path="/admin" element={<AdminLayout />}>
+            {/* Redireciona /admin direto para o dashboard */}
             <Route index element={<Navigate to="dashboard" replace />} />
+            
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="pedidos" element={<GestaoPedidos />} />
-            <Route path="cadastrar" element={<CadastroProduto />} />
+            
+            {/* LISTAGEM: Onde você vê a tabela com todos os produtos */}
+            <Route path="produtos" element={<GerenciarProdutos />} /> 
+            
+            {/* FORMULÁRIO: Novo cadastro */}
+            <Route path="cadastrar" element={<CadastroProduto />} /> 
+            
+            {/* EDIÇÃO: Usa o mesmo formulário, mas carrega os dados pelo ID */}
+            <Route path="editar/:id" element={<CadastroProduto />} /> 
           </Route>
 
-          {/* Redireciona qualquer rota inexistente para a Home */}
+          {/* Fallback: Se a rota não existir, volta para a home */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
