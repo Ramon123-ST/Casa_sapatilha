@@ -12,25 +12,24 @@ const pedidoController = require('./src/controllers/pedidoController');
 
 const app = express();
 
-// --- CONFIGURAÇÃO DO BANCO DE DADOS ---
 const pool = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: '123456', 
-  database: 'loja_sapatilhas',
+  host: process.env.DB_HOST || 'localhost',
+  user: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD || '123456', 
+  database: process.env.DB_NAME || 'loja_sapatilhas',
+  port: process.env.DB_PORT || 3306,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
 });
 
-// Teste de conexão
 pool.getConnection()
   .then(conn => {
     console.log("✅ Conexão SQL OK!");
     conn.release();
   })
   .catch(err => {
-    console.error("❌ ERRO NO BANCO:", err.message);
+    console.error("⚠️ Aviso: Banco de dados offline ou em configuração:", err.message);
   });
 
 // --- MIDDLEWARES ---
@@ -41,7 +40,9 @@ app.use(express.json());
 const pastaImagens = path.resolve(__dirname, 'img');
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    if (!fs.existsSync(pastaImagens)) fs.mkdirSync(pastaImagens, { recursive: true });
+    if (process.env.NODE_ENV !== 'production') {
+      if (!fs.existsSync(pastaImagens)) fs.mkdirSync(pastaImagens, { recursive: true });
+    }
     cb(null, pastaImagens);
   },
   filename: (req, file, cb) => {
@@ -50,95 +51,29 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ 
-  storage,
-  limits: { fileSize: 5 * 1024 * 1024 },
-  fileFilter: (req, file, cb) => {
-    if (file.mimetype.startsWith('image/')) cb(null, true);
-    else cb(new Error('Apenas imagens são permitidas!'));
-  }
-});
+const upload = multer({ storage });
 
 // --- SERVINDO ARQUIVOS ESTÁTICOS ---
 app.use('/img', express.static(pastaImagens));
 
-// --- ROTA DE PEDIDOS ---
-app.get('/pedidos/meus-pedidos', async (req, res) => {
-  try {
-    const query = `
-      SELECT p.id, p.status, p.total_geral, p.criado_em,
-        JSON_ARRAYAGG(
-          JSON_OBJECT(
-            'id', ip.id, 'quantidade', ip.quantidade, 'tamanho_escolhido', ip.tamanho_escolhido,
-            'preco_unitario', ip.preco_unitario,
-            'produto', JSON_OBJECT('nome', prod.nome, 'imagem', prod.imagem)
-          )
-        ) AS itens_pedido
-      FROM pedidos p
-      LEFT JOIN itens_pedido ip ON p.id = ip.pedido_id
-      LEFT JOIN produtos prod ON ip.produto_id = prod.id
-      GROUP BY p.id
-      ORDER BY p.criado_em DESC;
-    `;
-    const [rows] = await pool.execute(query);
-    res.json(rows);
-  } catch (err) {
-    res.status(500).json({ erro: "Erro ao buscar pedidos." });
-  }
-});
+// --- ROTAS ---
+app.use(routes); 
 
-// --- ROTA DE CADASTRO DE PRODUTOS ---
-app.post('/produtos/cadastrar', upload.single('imagemFile'), async (req, res) => {
-  let conn;
-  try {
-    const { nome, preco, cor, descricao, grade } = req.body;
-    const gradeArray = JSON.parse(grade || '[]'); 
-    const nomeImagem = req.file ? req.file.filename : 'placeholder.webp';
-
-    conn = await pool.getConnection();
-    await conn.beginTransaction(); 
-
-    const [resProd] = await conn.execute(
-      'INSERT INTO produtos (nome, preco, cor, descricao, imagem, status, categoria_id) VALUES (?, ?, ?, ?, ?, "Ativo", 1)',
-      [nome, preco, cor, descricao, nomeImagem]
-    );
-
-    const produtoId = resProd.insertId;
-
-    for (const item of gradeArray) {
-      await conn.execute(
-        'INSERT INTO estoque (produto_id, tamanho, quantidade) VALUES (?, ?, ?)',
-        [produtoId, String(item.tamanho), Number(item.quantidade)]
-      );
+// --- ROBÔ DE CANCELAMENTO ---
+if (process.env.NODE_ENV !== 'production') {
+  cron.schedule('*/5 * * * *', async () => {
+    try {
+      if (pedidoController?.cancelarPedidosExpirados) {
+        await pedidoController.cancelarPedidosExpirados();
+      }
+    } catch (err) {
+      console.error("❌ Erro no robô:", err.message);
     }
-
-    await conn.commit(); 
-    res.status(201).json({ mensagem: "Sucesso!", id: produtoId });
-  } catch (err) {
-    if (conn) await conn.rollback(); 
-    res.status(500).json({ erro: "Erro ao cadastrar produto." });
-  } finally {
-    if (conn) conn.release();
-  }
-});
-
-// --- CENTRAL DE ROTAS (LOGIN, RECUPERAÇÃO, ETC) ---
-app.use(routes);
-
-// --- ROBÔ DE CANCELAMENTO DE PRODUTOS ---
-cron.schedule('*/5 * * * *', async () => {
-  try {
-    if (pedidoController && pedidoController.cancelarPedidosExpirados) {
-      console.log("🤖 Robô: Verificando pedidos expirados...");
-      await pedidoController.cancelarPedidosExpirados();
-    }
-  } catch (err) {
-    console.error("❌ Erro no robô:", err.message);
-  }
-});
+  });
+}
 
 // --- INICIALIZAÇÃO ---
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor rodando em: http://localhost:${PORT}`);
+  console.log(`🚀 Servidor pronto na porta: ${PORT}`);
 });
