@@ -7,9 +7,7 @@ const fs = require('fs');
 const cron = require('node-cron'); 
 const multer = require('multer'); 
 const { v4: uuidv4 } = require('uuid'); 
-
-// Importação de Rotas e Controllers
-const routes = require('./src/routes');
+const routes = require('./src/routes'); 
 const pedidoController = require('./src/controllers/pedidoController'); 
 
 const app = express();
@@ -25,23 +23,22 @@ const pool = mysql.createPool({
   queueLimit: 0
 });
 
-// Teste de conexão imediato
+// Teste de conexão
 pool.getConnection()
   .then(conn => {
-    console.log("✅ Conexão SQL Direta (Pool/Robô) OK!");
+    console.log("✅ Conexão SQL OK!");
     conn.release();
   })
   .catch(err => {
-    console.error("❌ ERRO CRÍTICO NO BANCO:", err.message);
+    console.error("❌ ERRO NO BANCO:", err.message);
   });
 
 // --- MIDDLEWARES ---
-app.use(cors()); // Libera o acesso para o React
-app.use(express.json());
+app.use(cors()); 
+app.use(express.json()); 
 
-// --- CONFIGURAÇÃO DE UPLOAD (MULTER) ---
+// --- CONFIGURAÇÃO DE UPLOAD  ---
 const pastaImagens = path.resolve(__dirname, 'img');
-
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     if (!fs.existsSync(pastaImagens)) fs.mkdirSync(pastaImagens, { recursive: true });
@@ -63,28 +60,18 @@ const upload = multer({
 });
 
 // --- SERVINDO ARQUIVOS ESTÁTICOS ---
-// Isso permite que o React acesse http://localhost:3000/img/nome-da-foto.jpg
 app.use('/img', express.static(pastaImagens));
 
-// --- ROTA DE PEDIDOS (PARA O COMPONENTE PEDIDOS.JSX) ---
+// --- ROTA DE PEDIDOS ---
 app.get('/pedidos/meus-pedidos', async (req, res) => {
   try {
     const query = `
-      SELECT 
-        p.id, 
-        p.status, 
-        p.total_geral, 
-        p.criado_em,
+      SELECT p.id, p.status, p.total_geral, p.criado_em,
         JSON_ARRAYAGG(
           JSON_OBJECT(
-            'id', ip.id,
-            'quantidade', ip.quantidade,
-            'tamanho_escolhido', ip.tamanho_escolhido,
+            'id', ip.id, 'quantidade', ip.quantidade, 'tamanho_escolhido', ip.tamanho_escolhido,
             'preco_unitario', ip.preco_unitario,
-            'produto', JSON_OBJECT(
-              'nome', prod.nome, 
-              'imagem', prod.imagem
-            )
+            'produto', JSON_OBJECT('nome', prod.nome, 'imagem', prod.imagem)
           )
         ) AS itens_pedido
       FROM pedidos p
@@ -93,12 +80,10 @@ app.get('/pedidos/meus-pedidos', async (req, res) => {
       GROUP BY p.id
       ORDER BY p.criado_em DESC;
     `;
-
     const [rows] = await pool.execute(query);
     res.json(rows);
   } catch (err) {
-    console.error("❌ Erro ao buscar pedidos:", err);
-    res.status(500).json({ erro: "Erro ao buscar pedidos no banco." });
+    res.status(500).json({ erro: "Erro ao buscar pedidos." });
   }
 });
 
@@ -120,50 +105,40 @@ app.post('/produtos/cadastrar', upload.single('imagemFile'), async (req, res) =>
 
     const produtoId = resProd.insertId;
 
-    if (gradeArray.length > 0) {
-      for (const item of gradeArray) {
-        await conn.execute(
-          'INSERT INTO estoque (produto_id, tamanho, quantidade) VALUES (?, ?, ?)',
-          [produtoId, String(item.tamanho), Number(item.quantidade)]
-        );
-      }
+    for (const item of gradeArray) {
+      await conn.execute(
+        'INSERT INTO estoque (produto_id, tamanho, quantidade) VALUES (?, ?, ?)',
+        [produtoId, String(item.tamanho), Number(item.quantidade)]
+      );
     }
 
     await conn.commit(); 
-    res.status(201).json({ mensagem: "Sapatilha cadastrada com sucesso!", id: produtoId });
-
+    res.status(201).json({ mensagem: "Sucesso!", id: produtoId });
   } catch (err) {
     if (conn) await conn.rollback(); 
-    console.error("❌ Erro ao cadastrar:", err);
-    res.status(500).json({ erro: "Erro ao salvar no banco.", detalhes: err.message });
+    res.status(500).json({ erro: "Erro ao cadastrar produto." });
   } finally {
     if (conn) conn.release();
   }
 });
 
-// --- OUTRAS ROTAS ---
+// --- CENTRAL DE ROTAS (LOGIN, RECUPERAÇÃO, ETC) ---
 app.use(routes);
 
 // --- ROBÔ DE CANCELAMENTO ---
 cron.schedule('*/5 * * * *', async () => {
   try {
-    console.log("🤖 Robô: Verificando pedidos expirados...");
-    await pedidoController.cancelarPedidosExpirados();
+    if (pedidoController && pedidoController.cancelarPedidosExpirados) {
+      console.log("🤖 Robô: Verificando pedidos expirados...");
+      await pedidoController.cancelarPedidosExpirados();
+    }
   } catch (err) {
-    console.error("❌ Erro no robô de cancelamento:", err.message);
+    console.error("❌ Erro no robô:", err.message);
   }
 });
 
 // --- INICIALIZAÇÃO ---
 const PORT = process.env.PORT || 3000;
-
 app.listen(PORT, () => {
-  console.log(`
-  🚀 API da Casa da Sapatilha v2.0 Ativa!
-  ---------------------------------------------------------
-  🔥 Servidor: http://localhost:${PORT}
-  📸 Uploads: Habilitado (Pasta: /img)
-  📦 Banco: lojado_sapatilhas (MySQL)
-  ---------------------------------------------------------
-  `);
+  console.log(`🚀 Servidor rodando em: http://localhost:${PORT}`);
 });

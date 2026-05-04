@@ -24,6 +24,31 @@
   text-align: center; 
 }
 
+.btn_esqueci {
+  background: none;
+  border: none;
+  color: #3374d6; 
+  text-decoration: underline;
+  font-size: 0.85rem;
+  cursor: pointer;
+  margin-bottom: 15px;
+  text-align: right;
+  display: block;
+  width: 100%;
+}
+
+.container_recuperacao {
+  padding: 10px;
+}
+
+.btn_voltar {
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
 @keyframes modalEntrada {
   from {
     transform: translateY(-30px);

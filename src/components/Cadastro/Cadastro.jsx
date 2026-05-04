@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Cadastro.module.css";
 import { useAuth } from "../../Context/AuthContext"; 
+import EsqueciSenha from "../RecuperarSenha/EsqueciSenha";
+import RedefinirSenha from "../RecuperarSenha/RedefinirSenha";
 
 export default function Cadastro({ aberto, setAberto }) {
   const { login, usuario } = useAuth(); 
   const [modo, setModo] = useState("login"); 
   const [mostrarSenha, setMostrarSenha] = useState(false);
+  const [emailRecuperacao, setEmailRecuperacao] = useState("");
 
   const [formData, setFormData] = useState({
     nome: "",
@@ -14,9 +17,8 @@ export default function Cadastro({ aberto, setAberto }) {
     telefone: ""
   });
 
-  // --- LÓGICA DO GOOGLE ---
   useEffect(() => {
-    if (aberto && window.google) {
+    if (aberto && window.google && (modo === "login" || modo === "cadastro")) {
       window.google.accounts.id.initialize({
         client_id: "274377688121-0e2f7ugbt4gbbj7m30norh7s4jj7pri7.apps.googleusercontent.com",
         callback: handleGoogleResponse,
@@ -48,7 +50,6 @@ export default function Cadastro({ aberto, setAberto }) {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ 
-            token: response.credential,
             googleId: payload.sub,
             email: payload.email,
             nome: payload.name
@@ -66,7 +67,6 @@ export default function Cadastro({ aberto, setAberto }) {
     }
   };
 
-  // --- LÓGICA DO MODAL ---
   useEffect(() => {
     const jaVisitou = localStorage.getItem("jaVisitou");
     if (!jaVisitou) {
@@ -86,6 +86,7 @@ export default function Cadastro({ aberto, setAberto }) {
   const fecharModalManual = () => {
     setAberto(false);
     sessionStorage.setItem("modalFechado", "true");
+    setModo("login"); 
   };
 
   const trocarModo = (novoModo) => {
@@ -96,7 +97,6 @@ export default function Cadastro({ aberto, setAberto }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     const isGoogleSocial = formData.senha === "GOOGLE_USER";
     const rota = isGoogleSocial ? "login-google" : (modo === "cadastro" ? "usuarios" : "login");
 
@@ -126,79 +126,114 @@ export default function Cadastro({ aberto, setAberto }) {
         
         <button className={styles.btn_fechar} onClick={fecharModalManual}>&times;</button>
         
-        <div className={styles.cabecalho_modal}>
-            <h2>{modo === "cadastro" ? "Criar minha Conta" : "Bem-vindo de volta!"}</h2>
-            <p className={styles.subtitulo}>
-            {modo === "cadastro" 
-                ? "Crie sua conta para garantir as melhores sapatilhas." 
-                : "Acesse sua conta para ver seus pedidos."}
-            </p>
-        </div>
+        
+        {(modo === "login" || modo === "cadastro") && (
+          <>
+            <div className={styles.cabecalho_modal}>
+                <h2>{modo === "cadastro" ? "Criar minha Conta" : "Bem-vindo de volta!"}</h2>
+                <p className={styles.subtitulo}>
+                {modo === "cadastro" 
+                    ? "Crie sua conta para garantir as melhores sapatilhas." 
+                    : "Acesse sua conta para ver seus pedidos."}
+                </p>
+            </div>
 
-        <div className={styles.google_container}>
-          <div id="btnGoogle"></div>
-        </div>
+            <div className={styles.google_container}>
+              <div id="btnGoogle"></div>
+            </div>
 
-        <div className={styles.divisor}>
-          <span>ou use seu e-mail</span>
-        </div>
+            <div className={styles.divisor}>
+              <span>ou use seu e-mail</span>
+            </div>
 
-        <form onSubmit={handleSubmit} className={styles.form}>
-          {modo === "cadastro" && (
-            <input 
-              type="text" 
-              placeholder="Nome Completo" 
-              className={styles.input_padrao}
-              value={formData.nome}
-              onChange={(e) => setFormData({...formData, nome: e.target.value})} 
-              required 
-            />
-          )}
+            <form onSubmit={handleSubmit} className={styles.form}>
+              {modo === "cadastro" && (
+                <input 
+                  type="text" 
+                  placeholder="Nome Completo" 
+                  className={styles.input_padrao}
+                  value={formData.nome}
+                  onChange={(e) => setFormData({...formData, nome: e.target.value})} 
+                  required 
+                />
+              )}
 
-          <input 
-            type="email" 
-            placeholder="E-mail" 
-            className={styles.input_padrao}
-            value={formData.email}
-            onChange={(e) => setFormData({...formData, email: e.target.value})} 
-            required 
-          />
-
-          <div className={styles.senha_wrapper}>
-            <input 
-              type={mostrarSenha ? "text" : "password"} 
-              placeholder="Senha" 
-              className={styles.input_padrao}
-              value={formData.senha}
-              disabled={formData.senha === "GOOGLE_USER"}
-              onChange={(e) => setFormData({...formData, senha: e.target.value})} 
-              required 
-            />
-            <button 
-              type="button" 
-              className={styles.btn_olho} 
-              onClick={() => setMostrarSenha(!mostrarSenha)}
-            >
-              <img 
-                src={mostrarSenha ? "/img/aberto.png" : "/img/olhofechado.png"} 
-                alt={mostrarSenha ? "Esconder senha" : "Mostrar senha"} 
-                className={styles.icone_olho_img}
+              <input 
+                type="email" 
+                placeholder="E-mail" 
+                className={styles.input_padrao}
+                value={formData.email}
+                onChange={(e) => setFormData({...formData, email: e.target.value})} 
+                required 
               />
-            </button>
+
+              <div className={styles.senha_wrapper}>
+                <input 
+                  type={mostrarSenha ? "text" : "password"} 
+                  placeholder="Senha" 
+                  className={styles.input_padrao}
+                  value={formData.senha}
+                  disabled={formData.senha === "GOOGLE_USER"}
+                  onChange={(e) => setFormData({...formData, senha: e.target.value})} 
+                  required 
+                />
+                <button 
+                  type="button" 
+                  className={styles.btn_olho} 
+                  onClick={() => setMostrarSenha(!mostrarSenha)}
+                >
+                  <img 
+                    src={mostrarSenha ? "/img/aberto.png" : "/img/olhofechado.png"} 
+                    alt="Ver senha" 
+                    className={styles.icone_olho_img}
+                  />
+                </button>
+              </div>
+
+              {/* LINK PARA ESQUECI MINHA SENHA */}
+              {modo === "login" && (
+                <button 
+                  type="button" 
+                  className={styles.btn_esqueci}
+                  onClick={() => setModo("esqueci")}
+                >
+                  Esqueci minha senha
+                </button>
+              )}
+
+              <button type="submit" className={styles.btn_enviar}>
+                {modo === "cadastro" ? "Finalizar Cadastro " : "Entrar na Conta"}
+              </button>
+            </form>
+
+            <div className={styles.switch}>
+              {modo === "cadastro" ? (
+                <p>Já tem uma conta? <button type="button" onClick={() => trocarModo("login")}>Fazer Login</button></p>
+              ) : (
+                <p>Novo por aqui? <button type="button" onClick={() => trocarModo("cadastro")}>Criar uma conta</button></p>
+              )}
+            </div>
+          </>
+        )}
+
+        {/* MODO ESQUECI SENHA */}
+        {modo === "esqueci" && (
+          <div className={styles.container_recuperacao}>
+            <button onClick={() => setModo("login")} className={styles.btn_voltar}>← Voltar para o Login</button>
+            <EsqueciSenha aoEnviarSucesso={(email) => {
+              setEmailRecuperacao(email);
+              setModo("redefinir");
+            }} />
           </div>
+        )}
 
-          <button type="submit" className={styles.btn_enviar}>
-            {modo === "cadastro" ? "Finalizar Cadastro 👟" : "Entrar na Conta"}
-          </button>
-        </form>
+        {/* MODO REDEFINIR SENHA */}
+        {modo === "redefinir" && (
+          <div className={styles.container_recuperacao}>
+             <RedefinirSenha email={emailRecuperacao} aoSucesso={() => setModo("login")} />
+          </div>
+        )}
 
-        <div className={styles.switch}>
-          {modo === "cadastro" ? (
-            <p>Já tem uma conta? <button type="button" onClick={() => trocarModo("login")}>Fazer Login</button></p>
-          ) : (
-            <p>Novo por aqui? <button type="button" onClick={() => trocarModo("cadastro")}>Criar uma conta</button></p>
-          )}
-        </div>
       </div>
     </div>
   );
