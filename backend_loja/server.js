@@ -125,7 +125,7 @@ app.post('/produtos/cadastrar', upload.single('imagemFile'), async (req, res) =>
 // --- CENTRAL DE ROTAS (LOGIN, RECUPERAÇÃO, ETC) ---
 app.use(routes);
 
-// --- ROBÔ DE CANCELAMENTO ---
+// --- ROBÔ DE CANCELAMENTO DE PRODUTOS ---
 cron.schedule('*/5 * * * *', async () => {
   try {
     if (pedidoController && pedidoController.cancelarPedidosExpirados) {
