@@ -59,7 +59,7 @@ app.use('/img', express.static(pastaImagens));
 // --- ROTAS ---
 app.use(routes); 
 
-// --- ROBÔ DE CANCELAMENTO ---
+// --- ROBÔ DE CANCELAMENTO DE PRODUTOS ---
 if (process.env.NODE_ENV !== 'production') {
   cron.schedule('*/5 * * * *', async () => {
     try {
