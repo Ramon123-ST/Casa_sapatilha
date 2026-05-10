@@ -7,6 +7,8 @@ const fs = require('fs');
 const cron = require('node-cron'); 
 const multer = require('multer'); 
 const { v4: uuidv4 } = require('uuid'); 
+
+// Importação das rotas e controllers
 const routes = require('./src/routes'); 
 const pedidoController = require('./src/controllers/pedidoController'); 
 
@@ -36,7 +38,7 @@ pool.getConnection()
 app.use(cors()); 
 app.use(express.json()); 
 
-// --- CONFIGURAÇÃO DE UPLOAD  ---
+// --- CONFIGURAÇÃO DE UPLOAD ---
 const pastaImagens = path.resolve(__dirname, 'img');
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -56,18 +58,20 @@ const upload = multer({ storage });
 // --- SERVINDO ARQUIVOS ESTÁTICOS ---
 app.use('/img', express.static(pastaImagens));
 
-// --- ROTAS ---
+// --- ROTAS CENTRALIZADAS ---
 app.use(routes); 
 
-// --- ROBÔ DE CANCELAMENTO DE PRODUTOS ---
+// --- ROBÔ DE CANCELAMENTO (LIMPEZA DE ESTOQUE) ---
 if (process.env.NODE_ENV !== 'production') {
+  // Roda a cada 5 minutos
   cron.schedule('*/5 * * * *', async () => {
     try {
+      console.log("🤖 Robô verificando pedidos expirados...");
       if (pedidoController?.cancelarPedidosExpirados) {
         await pedidoController.cancelarPedidosExpirados();
       }
     } catch (err) {
-      console.error("❌ Erro no robô:", err.message);
+      console.error("❌ Erro no robô de cancelamento:", err.message);
     }
   });
 }
@@ -76,4 +80,5 @@ if (process.env.NODE_ENV !== 'production') {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Servidor pronto na porta: ${PORT}`);
+  console.log(`🔗 Endereço local: http://localhost:${PORT}`);
 });

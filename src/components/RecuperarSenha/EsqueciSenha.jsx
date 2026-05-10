@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './EsqueciSenha.css';
 
 const EsqueciSenha = ({ aoEnviarSucesso }) => {
   const [email, setEmail] = useState('');
@@ -8,37 +9,78 @@ const EsqueciSenha = ({ aoEnviarSucesso }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     setCarregando(true);
+    setMensagem('');
+
     try {
-      const response = await axios.post('http://localhost:3000/recuperar-senha', { email });
-      setMensagem(response.data.mensagem);
-      setTimeout(() => aoEnviarSucesso(email), 2000);
+      const response = await axios.post(
+        'http://localhost:3000/recuperar-senha',
+        {
+          email: email.trim().toLowerCase(),
+        }
+      );
+
+      setMensagem(
+        response.data.mensagem || 'Código enviado com sucesso!'
+      );
+
+      setTimeout(() => {
+        if (aoEnviarSucesso) {
+          aoEnviarSucesso(email.trim().toLowerCase());
+        }
+      }, 2000);
+
     } catch (error) {
-      setMensagem(error.response?.data?.erro || "Erro ao solicitar recuperação.");
+      const erroMsg =
+        error.response?.data?.erro ||
+        'Erro ao solicitar recuperação.';
+
+      setMensagem(erroMsg);
+
     } finally {
       setCarregando(false);
     }
   };
 
   return (
-    <div style={{ padding: '20px', textAlign: 'center' }}>
-      <h2>Recuperar Senha</h2>
-      <p>Digite seu e-mail para receber um código de verificação.</p>
+    <div className="esqueci-container">
+      <h2 className="esqueci-titulo">Recuperar Senha</h2>
+
+      <p className="esqueci-texto">
+        Digite seu e-mail para receber um código de verificação.
+      </p>
+
       <form onSubmit={handleSubmit}>
-        <input 
-          type="email" 
-          placeholder="Seu e-mail cadastrado" 
+        <input
+          type="email"
+          placeholder="Seu e-mail cadastrado"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          style={{ padding: '10px', width: '80%', marginBottom: '10px' }}
+          className="esqueci-input"
         />
-        <br />
-        <button type="submit" disabled={carregando} style={{ padding: '10px 20px', background: '#d63384', color: '#fff', border: 'none', cursor: 'pointer' }}>
+
+        <button
+          type="submit"
+          disabled={carregando}
+          className="esqueci-btn"
+        >
           {carregando ? 'Enviando...' : 'Enviar Código'}
         </button>
       </form>
-      {mensagem && <p style={{ marginTop: '10px', color: '#d63384' }}>{mensagem}</p>}
+
+      {mensagem && (
+        <p
+          className={`esqueci-mensagem ${
+            mensagem.toLowerCase().includes('erro')
+              ? 'esqueci-erro'
+              : 'esqueci-sucesso'
+          }`}
+        >
+          {mensagem}
+        </p>
+      )}
     </div>
   );
 };
